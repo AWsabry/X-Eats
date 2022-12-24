@@ -212,7 +212,7 @@ class Xeatscubit extends Cubit<XeatsStates> {
   }
 
   // function to add item to the cart
-  void addToCart({
+  Future<void> addToCart({
     int? productId,
     int? quantity,
     int? cartItemId,
@@ -245,12 +245,11 @@ class Xeatscubit extends Cubit<XeatsStates> {
         print("Not the Same Rest");
       }
     });
-    ;
   }
 
   void updateCartPrice() async {
     await Dio().put("$BASEURL/get_carts_by_id/$EmailInforamtion", data: {
-      "total_price": FoodItem().price!.toDouble(),
+      "total_price": FoodItem.getSubtotal(),
       "total_after_delivery":
           (FoodItem.deliveryFee + FoodItem.getSubtotal()).toDouble()
     }).then((value) {
@@ -355,7 +354,7 @@ class Xeatscubit extends Cubit<XeatsStates> {
         .catchError((onError) => print(onError));
   }
 
-  void deleteCartItem(BuildContext context, String cartItemId) async {
+  Future<void> deleteCartItem(BuildContext context, String cartItemId) async {
     await Dio().delete("$BASEURL/delete_cartItems/$cartItemId").then((value) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           backgroundColor: Colors.green,

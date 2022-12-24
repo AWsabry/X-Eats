@@ -7,7 +7,6 @@ import 'package:xeats/controllers/Components/ItemClass.dart';
 import 'package:xeats/controllers/Cubit.dart';
 import 'package:xeats/controllers/States.dart';
 import 'package:xeats/views/Animations/EmptyCart.dart';
-import 'package:xeats/views/Checkout/CheckOut.dart';
 import 'package:xeats/views/Layout/Layout.dart';
 
 List<Widget> allWhatInCart = [];
@@ -17,8 +16,6 @@ class Cart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.height;
     return BlocProvider(
       create: (context) => Xeatscubit()
         ..CartData()
@@ -27,7 +24,6 @@ class Cart extends StatelessWidget {
         listener: (context, state) {},
         builder: (context, state) {
           var cubit = Xeatscubit.get(context);
-          var cartId = cubit.cartID;
           return Scaffold(
             backgroundColor: Colors.white,
             appBar: AppBar(
@@ -52,7 +48,6 @@ class Cart extends StatelessWidget {
                         email: cubit.EmailInforamtion,
                       ),
                       builder: (ctx, AsyncSnapshot snapshot) {
-                        print(snapshot.connectionState);
                         if (snapshot.hasData) {
                           if (!snapshot.data.isEmpty) {
                             allWhatInCart = snapshot.data;

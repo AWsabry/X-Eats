@@ -9,9 +9,9 @@ import 'package:xeats/controllers/Components/AppBarCustomized.dart';
 import 'package:xeats/controllers/Cubit.dart';
 import 'package:xeats/controllers/States.dart';
 import 'package:xeats/controllers/Components/Components.dart';
-import 'package:xeats/views/Cart/cart.dart';
 import 'package:xeats/views/CheckOut/CheckOut.dart';
-import 'package:http/http.dart';
+
+import '../../views/Cart/Cart.dart';
 
 class FoodItem extends StatelessWidget {
   final bool? isMostPopular, isNewProduct, isBestOffer;
@@ -78,29 +78,34 @@ class FoodItem extends StatelessWidget {
         onTap: () {
           NavigateAndRemov(
             context,
-            this.productDetails(
+            productDetails(
               context,
-              image: this.itemImage,
+              image: itemImage,
               restaurantName: '',
             ),
           );
         },
         child: Dismissible(
-          onDismissed: (direction) {
+          onDismissed: (direction) async {
             if (direction == DismissDirection.startToEnd) {
-              NavigateAndRemov(context, CheckOut());
+              NavigateAndRemov(context, const CheckOut());
             } else {
-              Xeatscubit.get(context).deleteCartItem(context, "$cartItemId");
-              FoodItem.CartItems.remove(this);
+              await Xeatscubit.get(context)
+                  .deleteCartItem(context, "$cartItemId")
+                  .then((value) {
+                FoodItem.CartItems.remove(this);
+
+                Xeatscubit.get(context).updateCartPrice();
+              });
             }
           },
-          key: Key(""),
+          key: const Key(""),
           background: Container(
             color: Colors.blue,
             child: Padding(
               padding: const EdgeInsets.all(15),
               child: Row(
-                children: <Widget>[
+                children: const [
                   Icon(Icons.arrow_forward_rounded, color: Colors.white),
                   Text('Move to CheckOut',
                       style: TextStyle(color: Colors.white)),
@@ -114,7 +119,7 @@ class FoodItem extends StatelessWidget {
               padding: const EdgeInsets.all(15),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
-                children: <Widget>[
+                children: const [
                   Icon(Icons.delete, color: Colors.white),
                   Text('Move to trash', style: TextStyle(color: Colors.white)),
                 ],
@@ -143,28 +148,26 @@ class FoodItem extends StatelessWidget {
                 ),
                 Column(
                   children: [
-                    Container(
-                      child: Text(
-                        "${this.englishName}",
-                        textAlign: TextAlign.left,
-                        style: GoogleFonts.poppins(
-                            fontSize: 13,
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold),
-                      ),
+                    Text(
+                      "$englishName",
+                      textAlign: TextAlign.left,
+                      style: GoogleFonts.poppins(
+                          fontSize: 13,
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold),
                     ),
                     SizedBox(
                       height: height / 30,
                     ),
-                    Container(
+                    SizedBox(
                       width: MediaQuery.of(context).size.width / 1.6,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text("QTY : ${this.quantity}"),
+                          Text("QTY : $quantity"),
                           Text(
                             "$totalPrice EGP",
-                            style: TextStyle(fontSize: 16),
+                            style: const TextStyle(fontSize: 16),
                           )
                         ],
                       ),
@@ -292,7 +295,7 @@ class FoodItem extends StatelessWidget {
             print('Ad failed to load: $error');
           },
         ),
-        request: AdRequest());
+        request: const AdRequest());
     bannerAd.load();
 
     return BlocProvider(
@@ -314,17 +317,22 @@ class FoodItem extends StatelessWidget {
             floatingActionButton: FloatingActionButton(
               backgroundColor: const Color.fromARGB(255, 9, 134, 211),
               //add to cart button
-              onPressed: () {
-                Xeatscubit.get(context).addToCart(
+              onPressed: () async {
+                await Xeatscubit.get(context)
+                    .addToCart(
                   productId: id,
                   quantity: quantity,
                   price: price,
                   totalPrice: totalPrice,
                   restaurantId: restaurant,
                   timeShift: currentTiming,
-                );
-                // cubit.updateCartPrice();
-                // Navigation(context, const Cart());
+                )
+                    .then((value) {
+                  CartItems.add(this);
+                  cubit.updateCartPrice();
+                });
+
+                Navigation(context, const Cart());
               },
 
               child: const Icon(Icons.add_shopping_cart_rounded),
