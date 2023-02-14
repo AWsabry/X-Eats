@@ -3,6 +3,8 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:new_version_plus/new_version_plus.dart';
+import 'package:xeats/controllers/Components/UpdateDialog/UpdateDialogCustmize.dart';
 import 'package:xeats/controllers/Cubit.dart';
 import 'package:xeats/controllers/Components/Components.dart';
 import 'package:xeats/controllers/States.dart';
@@ -17,7 +19,23 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  bool? Check;
+  Future<bool> checkVersion() async {
+    final newVersion = NewVersionPlus(
+      androidId: "com.xeats.egy",
+    );
+    final status = await newVersion.getVersionStatus();
+
+    Check = status!.canUpdate;
+    if (status.canUpdate) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   void initState() {
+    print("Check Version Method is ${checkVersion()}");
     super.initState();
     inittiken();
     FirebaseMessaging.onMessage.listen(
@@ -78,10 +96,14 @@ class _SplashScreenState extends State<SplashScreen> {
     print(Xeatscubit.get(context).GettingUserData());
 
     Future.delayed(const Duration(seconds: 6)).then((value) {
-      if (Xeatscubit.get(context).EmailInforamtion != null) {
-        NavigateAndRemov(context, Layout());
+      if (Check == true) {
+        NavigateAndRemov(context, UpdateDialog());
       } else {
-        NavigateAndRemov(context, SignIn());
+        if (Xeatscubit.get(context).EmailInforamtion != null) {
+          NavigateAndRemov(context, Layout());
+        } else {
+          NavigateAndRemov(context, SignIn());
+        }
       }
     });
   }
