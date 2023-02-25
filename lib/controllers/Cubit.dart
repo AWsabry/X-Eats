@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -10,10 +12,7 @@ import 'package:xeats/controllers/Dio/DioHelper.dart';
 import 'package:xeats/controllers/States.dart';
 import 'package:xeats/controllers/Components/Components.dart';
 import 'package:xeats/views/CategoryView/categoryView.dart';
-import 'package:xeats/views/HomePage/HomePage.dart';
-import 'package:xeats/views/Layout/Layout.dart';
 import 'package:xeats/views/SignIn/SignIn.dart';
-
 import 'package:xeats/views/ThankYou/thankyou.dart';
 import '../views/Cart/Cart.dart';
 import 'Components/Categories Components/CategoryCard.dart';
@@ -292,18 +291,12 @@ class Xeatscubit extends Cubit<XeatsStates> {
       "$BASEURL/get_user_cartItems/$EmailInforamtion",
       data: {
         "user": idInformation,
-        // "product_name": productName,
-        // "phone_number": phoneNumber,
-        // "email": email,
-        // "image": image,
         "cart": cartID,
         "product": productId,
         "price": price,
         "quantity": quantity,
         "totalOrderItemPrice": totalPrice,
         "Restaurant": restaurantId,
-        // "restaurant_name": resturantName,
-        "order_shift": timeShift
       },
     ).then((value) async {
       if (value.statusCode == 202) {
@@ -416,6 +409,18 @@ class Xeatscubit extends Cubit<XeatsStates> {
         var status = dioException.response!.statusCode;
         var resp = dioException.response!.data;
         print(resp);
+        print(e);
+        print("User $idInformation");
+        print("Product Id $productId");
+        print("q $quantity");
+        print("CartId $cartID");
+        print("Cart Item Id $cartItemId");
+        print("price $price");
+        print("Total Price $totalPrice");
+        print("Restaurants Id $restaurantId");
+        print("Time Shift $timeShift");
+        print("Food Item $foodItemObject");
+
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             duration: const Duration(milliseconds: 1500),
@@ -618,12 +623,12 @@ class Xeatscubit extends Cubit<XeatsStates> {
                     Navigation(
                       context,
                       CategoriesView(
-                        category: value.data["Names"][index]['display_name'],
-                        categoryId: value.data["Names"][index]['id'].toString(),
-                        image: value.data["Names"][index]["image"],
-                        restaurantName: restaurantName,
-                        restaurantId,
-                      ),
+                          category: value.data["Names"][index]['display_name'],
+                          categoryId:
+                              value.data["Names"][index]['id'].toString(),
+                          image: value.data["Names"][index]["image"],
+                          restaurantName: restaurantName,
+                          restaurantID: restaurantId),
                     );
                   },
                   category:
@@ -653,6 +658,139 @@ class Xeatscubit extends Cubit<XeatsStates> {
     return result;
   }
 
+//         );
+
+  List<String> EnglishName = [];
+  List<String> ArabicName = [];
+  TextEditingController searchController = TextEditingController();
+  Future<void> ClearId() async {
+    ProductId.clear();
+    EnglishName.clear();
+    ArabicName.clear();
+    price.clear();
+    id.clear();
+    restaurant.clear();
+    description.clear();
+    isBestOffer.clear();
+    isMostPopular.clear();
+    isNewProduct.clear();
+    creationDate.clear();
+    emit(ClearProductId());
+  }
+
+  var data;
+  Future getListOfProducts(
+    BuildContext context, {
+    required String? CatId,
+    required String? image,
+    required String? category,
+    required String? restaurantName,
+  }) async {
+    await Dio()
+        .get("$BASEURL/get_products_of_restaurant_by_category/$id/$CatId")
+        .then((value) {})
+        .catchError((onError) {});
+    data = Expanded(
+      child: ListView.separated(
+          separatorBuilder: ((context, index) {
+            return Divider();
+          }),
+          itemBuilder: (context, index) {
+            return FoodItem(
+              itemImage: image,
+              englishName: EnglishName[index],
+              arabicName: ArabicName[index],
+              price: price[index],
+              id: id[index],
+              description: description[index],
+              creationDate: creationDate[index],
+              restaurant: restaurant[index],
+              isBestOffer: isBestOffer[index],
+              isMostPopular: isMostPopular[index],
+              isNewProduct: isNewProduct[index],
+            ).Search(context,
+                image: image,
+                category: category,
+                CatId: CatId,
+                restaurantName: restaurantName,
+                price: price[index]);
+          },
+          itemCount: ProductId.length),
+    );
+
+    return data;
+  }
+
+  List<double> price = [];
+  List<int> id = [];
+  List<int> restaurant = [];
+  List<String> creationDate = [];
+  List<String> description = [];
+  List<bool> isBestOffer = [];
+  List<bool> isMostPopular = [];
+  List<bool> isNewProduct = [];
+  Future<void> SearchOnListOfProduct(
+    BuildContext context, {
+    required String? CatId,
+    required String? image,
+    required String? category,
+    required String? restaurantName,
+  }) async {
+    for (var i = 0; i < ProductId.length; i++) {
+      await Dio()
+          .get("$BASEURL/get_products_by_id/${ProductId[i]}")
+          .then((value) async {
+        isNewProduct.add(value.data["Names"][0]["New_Products"]);
+        isMostPopular.add(value.data["Names"][0]["Most_Popular"]);
+        isBestOffer.add(value.data["Names"][0]["Best_Offer"]);
+        creationDate.add(value.data["Names"][0]["created"]);
+        description.add(value.data["Names"][0]["description"]);
+        restaurant.add(value.data["Names"][0]["Restaurant"]);
+        id.add(value.data["Names"][0]["id"]);
+        price.add(value.data["Names"][0]["price"]);
+        EnglishName.add(value.data["Names"][0]["name"]);
+        ArabicName.add(value.data["Names"][0]["ArabicName"]);
+      }).catchError((e) {
+        print("The error is $e");
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          duration: Duration(milliseconds: 1500),
+          content: Text("Something error try again later !!"),
+          backgroundColor: Colors.red,
+        ));
+      });
+      emit(SearhOnProductSuccessfull());
+    }
+  }
+
+  List<int> ProductId = [];
+  var ProductName;
+  Future GetIdOfProducts(
+    BuildContext context, {
+    required String? id,
+    required String? CatId,
+  }) async {
+    await Dio()
+        .get("$BASEURL/get_products_of_restaurant_by_category/$id/$CatId")
+        .then((value) async {
+      for (var i = 0; i < value.data["Names"].length; i++) {
+        if (value.data["Names"][i]["name"]
+                .toString()
+                .toLowerCase()
+                .contains(searchController.text.toLowerCase()) ||
+            value.data["Names"][i]["ArabicName"]
+                .toString()
+                .toLowerCase()
+                .contains(searchController.text.toLowerCase())) {
+          if (value.data["Names"][i]["id"] is int) {
+            ProductId.add(value.data["Names"][i]["id"]);
+            print(ProductId);
+          }
+        }
+      }
+    });
+    emit(ProductIdSuccefull());
+  }
+
   Future getCurrentProducts(
     BuildContext context, {
     required String? id,
@@ -665,31 +803,33 @@ class Xeatscubit extends Cubit<XeatsStates> {
     await Dio()
         .get("$BASEURL/get_products_of_restaurant_by_category/$id/$CatId")
         .then((value) async {
-      data = ListView.separated(
-          itemBuilder: (context, index) {
-            return FoodItem(
-              itemImage: image,
-              englishName: value.data["Names"][index]["name"],
-              arabicName: value.data["Names"][index]["ArabicName"],
-              price: value.data["Names"][index]["price"],
-              id: value.data["Names"][index]["id"],
-              description: value.data["Names"][index]["description"],
-              creationDate: value.data["Names"][index]["created"],
-              restaurant: value.data["Names"][index]["Restaurant"],
-              isBestOffer: value.data["Names"][index]["Best_Offer"],
-              isMostPopular: value.data["Names"][index]["Most_Popular"],
-              isNewProduct: value.data["Names"][index]["New_Products"],
-            ).productsOfCategory(context,
-                image: image,
-                category: category,
-                CatId: CatId,
-                restaurantName: restaurantName,
-                price: value.data["Names"][index]["price"]);
-          },
-          separatorBuilder: ((context, index) {
-            return Divider();
-          }),
-          itemCount: value.data["Names"].length);
+      data = Expanded(
+        child: ListView.separated(
+            itemBuilder: (context, index) {
+              return FoodItem(
+                itemImage: image,
+                englishName: value.data["Names"][index]["name"],
+                arabicName: value.data["Names"][index]["ArabicName"],
+                price: value.data["Names"][index]["price"],
+                id: value.data["Names"][index]["id"],
+                description: value.data["Names"][index]["description"],
+                creationDate: value.data["Names"][index]["created"],
+                restaurant: value.data["Names"][index]["Restaurant"],
+                isBestOffer: value.data["Names"][index]["Best_Offer"],
+                isMostPopular: value.data["Names"][index]["Most_Popular"],
+                isNewProduct: value.data["Names"][index]["New_Products"],
+              ).productsOfCategory(context,
+                  image: image,
+                  category: category,
+                  CatId: CatId,
+                  restaurantName: restaurantName,
+                  price: value.data["Names"][index]["price"]);
+            },
+            separatorBuilder: ((context, index) {
+              return Divider();
+            }),
+            itemCount: value.data["Names"].length),
+      );
     }).catchError((e) {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         duration: Duration(milliseconds: 1500),
@@ -727,7 +867,7 @@ class Xeatscubit extends Cubit<XeatsStates> {
                             .toString(),
                         image: value.data["Names"][index]["image"].toString(),
                         restaurantName: restaurantName,
-                        restaurantId,
+                        restaurantID: restaurantId,
                       ),
                     );
                   },

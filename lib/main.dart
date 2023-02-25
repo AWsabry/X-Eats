@@ -138,8 +138,8 @@ class _MyAppState extends State<MyApp> {
               title: 'X-Eats',
               theme: ThemeData(
                 primarySwatch: Colors.blue,
-                textTheme:
-                    Typography.englishLike2018.apply(fontSizeFactor: 1.sp),
+                textTheme: Typography.englishLike2018
+                    .apply(fontSizeFactor: 1.sp, bodyColor: Colors.black),
               ),
               home: child,
             );

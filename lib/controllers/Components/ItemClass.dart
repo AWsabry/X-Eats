@@ -268,6 +268,8 @@ class FoodItem extends StatelessWidget {
               child: Row(
                 children: [
                   FutureBuilder(
+                    future: Dio()
+                        .get("https://x-eats.com/get_category_by_id/$CatId"),
                     builder: ((context, AsyncSnapshot snapshot) {
                       if (snapshot.hasData) {
                         return Container(
@@ -300,8 +302,117 @@ class FoodItem extends StatelessWidget {
                         return Loading();
                       }
                     }),
+                  ),
+                  SizedBox(
+                    width: 20.w,
+                  ),
+                  Expanded(
+                    child: Container(
+                      height: MediaQuery.of(context).size.height / 9,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            child: Text(
+                              englishName!,
+                              style: GoogleFonts.poppins(
+                                  fontSize: 13, fontWeight: FontWeight.bold),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                          Text(
+                            category.toString(),
+                            style: GoogleFonts.poppins(
+                                color: Colors.grey, fontSize: 11),
+                          ),
+                          Text(
+                            price.toString() + "  EGP",
+                            style: GoogleFonts.poppins(
+                                color: Colors.black, fontSize: 14),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget Search(
+    BuildContext context, {
+    required String? image,
+    required String? category,
+    required String? CatId,
+    required String? restaurantName,
+    required double? price,
+  }) {
+    return SafeArea(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          InkWell(
+            onTap: () {
+              Navigation(
+                  context,
+                  productDetails(context,
+                      image: '${image}',
+                      id: id,
+                      restaurant: restaurant,
+                      restaurantName: restaurantName,
+                      price: price,
+                      arabicName: arabicName,
+                      description:
+                          description ?? "No Description for this Product",
+                      englishName: englishName,
+                      productName: productName),
+                  duration: Duration(seconds: 2));
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(8),
+              child: Row(
+                children: [
+                  FutureBuilder(
                     future: Dio()
                         .get("https://x-eats.com/get_category_by_id/$CatId"),
+                    builder: ((context, AsyncSnapshot snapshot) {
+                      if (snapshot.hasData) {
+                        return Container(
+                          height: 130.h,
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                                color: Color.fromARGB(74, 158, 158, 158)),
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Hero(
+                              tag: this.englishName.toString(),
+                              child: Image(
+                                image: NetworkImage(
+                                  "https://x-eats.com${snapshot.data.data["Names"][0]["image"]}",
+                                ),
+                                loadingBuilder:
+                                    (context, child, loadingProgress) {
+                                  if (loadingProgress == null) return child;
+                                  return Center(
+                                    child: Loading(),
+                                  );
+                                },
+                              ),
+                            ),
+                          ),
+                        );
+                      } else {
+                        return Loading();
+                      }
+                    }),
                   ),
                   SizedBox(
                     width: 20.w,

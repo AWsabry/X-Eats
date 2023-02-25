@@ -43,3 +43,17 @@ class SuccessEmailProfile extends SuperXeats {}
 class Cleared extends SuperXeats {}
 
 class ButtonPressedLoading extends SuperXeats {}
+
+class SearhOnProductSuccessfull extends SuperXeats {}
+
+class ProductIdSuccefull extends SuperXeats {}
+
+class SearhOnProductFail extends SuperXeats {
+  final String error;
+
+  SearhOnProductFail(this.error);
+}
+
+class ClearProductId extends SuperXeats {}
+
+class GetListOfProductsSuccefully extends SuperXeats {}
