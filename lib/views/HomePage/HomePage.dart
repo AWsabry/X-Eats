@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
@@ -18,10 +20,16 @@ import 'package:xeats/controllers/States.dart';
 import 'package:xeats/views/Profile/Profile.dart';
 import 'package:xeats/views/Resturants/Resturants.dart';
 import 'package:xeats/views/ResturantsMenu/ResturantsMenu.dart';
+import 'package:xeats/views/Search/SearchRestaurants.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
   Future<bool> check() async {
     var connectivityResult = await (Connectivity().checkConnectivity());
     if (connectivityResult == ConnectivityResult.mobile) {
@@ -80,14 +88,78 @@ class HomePage extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    SizedBox(
-                      height: height / 20,
-                    ),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Container(
+                                width: MediaQuery.of(context).size.width * 0.8,
+                                decoration: BoxDecoration(
+                                  color: Colors.black.withOpacity(0.1),
+                                  borderRadius: BorderRadius.circular(15),
+                                ),
+                                child: TextField(
+                                  decoration: const InputDecoration(
+                                      contentPadding: EdgeInsets.symmetric(
+                                          horizontal: 20, vertical: 9),
+                                      border: InputBorder.none,
+                                      focusedBorder: InputBorder.none,
+                                      enabledBorder: InputBorder.none,
+                                      hintText: "Search For Restaurants",
+                                      prefixIcon: Icon(Icons.search)),
+                                  controller: Xeatscubit.get(context)
+                                      .searchRestaurantsController,
+                                  onSubmitted: (value) async {
+                                    await Xeatscubit.get(context)
+                                        .clearRestaurantId();
+                                    await Xeatscubit.get(context)
+                                        .GetIdOfResutarant(context);
+                                    await Xeatscubit.get(context)
+                                        .SearchOnListOfRestuarant(context);
+                                    if (Xeatscubit.get(context)
+                                        .restaurant_nameFromSearching
+                                        .toString()
+                                        .toLowerCase()
+                                        .contains(Xeatscubit.get(context)
+                                            .searchRestaurantsController
+                                            .text
+                                            .toLowerCase())) {
+                                      Navigation(
+                                          context,
+                                          SearchRestaurantsScreen(
+                                            Restuarantsdata:
+                                                Xeatscubit.get(context)
+                                                    .Restuarantsdata,
+                                            RestaurantId:
+                                                Xeatscubit.get(context)
+                                                    .RestaurantId,
+                                            imageOfRestaurant:
+                                                Xeatscubit.get(context)
+                                                    .imageOfRestaurant,
+                                            restaurant_nameFromSearching:
+                                                Xeatscubit.get(context)
+                                                    .restaurant_nameFromSearching,
+                                          ));
+                                      print(
+                                          Xeatscubit.get(context).RestaurantId);
+                                      print(Xeatscubit.get(context)
+                                          .restaurant_nameFromSearching);
+                                    } else {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(SnackBar(
+                                        duration:
+                                            const Duration(milliseconds: 1500),
+                                        content: Text(
+                                            "There isn't Restuarant called ${Xeatscubit.get(context).searchController.text}"),
+                                        backgroundColor: Colors.red,
+                                      ));
+                                    }
+                                  },
+                                )),
+                          ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
@@ -138,7 +210,9 @@ class HomePage extends StatelessWidget {
                                       Navigation(
                                           context,
                                           ResturantsMenu(
-                                              data: restaurant_api[index]));
+                                              data: restaurant_api[index],
+                                              RestaurantId:
+                                                  restaurant_api[index]['id']));
                                     },
                                     child: RestaurantView(
                                       data: restaurant_api[index]['Name'] ??

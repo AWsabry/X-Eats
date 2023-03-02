@@ -17,10 +17,11 @@ import 'package:xeats/views/CheckOut/CheckOut.dart';
 import 'package:xeats/views/Layout/Layout.dart';
 import 'package:xeats/views/Profile/Profile.dart';
 import 'package:xeats/views/Resturants/Resturants.dart';
+import 'package:xeats/views/ResturantsMenu/ResturantsMenu.dart';
 
 class FoodItem extends StatelessWidget {
   final bool? isMostPopular, isNewProduct, isBestOffer;
-  static double deliveryFee = 10;
+  final double? deliveryFee;
   final double? price;
   final int? restaurant, category, id;
   final String? englishName, productSlug, creationDate, arabicName;
@@ -34,6 +35,7 @@ class FoodItem extends StatelessWidget {
   static List<Widget> CartItems = [];
 
   FoodItem({
+    this.deliveryFee,
     this.id,
     this.productName,
     this.quantity = 1,
@@ -331,6 +333,166 @@ class FoodItem extends StatelessWidget {
                             price.toString() + "  EGP",
                             style: GoogleFonts.poppins(
                                 color: Colors.black, fontSize: 14),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget SearchForRestaurant(
+    BuildContext context, {
+    required String? image,
+    required int? restaurantId,
+    required String? restaurantName,
+  }) {
+    return SafeArea(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          InkWell(
+            onTap: () {
+              Navigation(
+                  context,
+                  ResturantsMenu(
+                    data: Padding(
+                      padding: const EdgeInsets.all(8),
+                      child: Row(
+                        children: [
+                          FutureBuilder(
+                            future: Dio().get(
+                                "https://x-eats.com/get_restaurants_by_id/$restaurantId"),
+                            builder: ((context, AsyncSnapshot snapshot) {
+                              if (snapshot.hasData) {
+                                return Container(
+                                  height: 130.h,
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                        color:
+                                            Color.fromARGB(74, 158, 158, 158)),
+                                    borderRadius: BorderRadius.circular(10.0),
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(16.0),
+                                    child: Hero(
+                                      tag: restaurantName.toString(),
+                                      child: Image(
+                                        image: NetworkImage(
+                                          "https://x-eats.com${snapshot.data.data["Names"][0]["image"]}",
+                                        ),
+                                        loadingBuilder:
+                                            (context, child, loadingProgress) {
+                                          if (loadingProgress == null)
+                                            return child;
+                                          return Center(
+                                            child: Loading(),
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              } else {
+                                return Loading();
+                              }
+                            }),
+                          ),
+                          SizedBox(
+                            width: 20.w,
+                          ),
+                          Expanded(
+                            child: Container(
+                              height: MediaQuery.of(context).size.height / 9,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Expanded(
+                                    child: Text(
+                                      restaurantName,
+                                      style: GoogleFonts.poppins(
+                                          fontSize: 13,
+                                          fontWeight: FontWeight.bold),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    RestaurantId: restaurantId!,
+                  ),
+                  duration: Duration(seconds: 2));
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(8),
+              child: Row(
+                children: [
+                  FutureBuilder(
+                    future: Dio().get(
+                        "https://x-eats.com/get_restaurants_by_id/$restaurantId"),
+                    builder: ((context, AsyncSnapshot snapshot) {
+                      if (snapshot.hasData) {
+                        return Container(
+                          height: 130.h,
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                                color: Color.fromARGB(74, 158, 158, 158)),
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Hero(
+                              tag: restaurantName.toString(),
+                              child: Image(
+                                image: NetworkImage(
+                                  "https://x-eats.com${snapshot.data.data["Names"][0]["image"]}",
+                                ),
+                                loadingBuilder:
+                                    (context, child, loadingProgress) {
+                                  if (loadingProgress == null) return child;
+                                  return Center(
+                                    child: Loading(),
+                                  );
+                                },
+                              ),
+                            ),
+                          ),
+                        );
+                      } else {
+                        return Loading();
+                      }
+                    }),
+                  ),
+                  SizedBox(
+                    width: 20.w,
+                  ),
+                  Expanded(
+                    child: Container(
+                      height: MediaQuery.of(context).size.height / 9,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            child: Text(
+                              restaurantName!,
+                              style: GoogleFonts.poppins(
+                                  fontSize: 13, fontWeight: FontWeight.bold),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
                           ),
                         ],
                       ),

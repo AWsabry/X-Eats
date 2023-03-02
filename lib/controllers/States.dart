@@ -56,4 +56,22 @@ class SearhOnProductFail extends SuperXeats {
 
 class ClearProductId extends SuperXeats {}
 
+class ClearRestaurantsIdState extends SuperXeats {}
+
 class GetListOfProductsSuccefully extends SuperXeats {}
+
+class RestaurantIdSuccefull extends SuperXeats {}
+
+class SearhOnRestaurantSuccessfull extends SuperXeats {}
+
+class SearchOnRestaurantFail extends SuperXeats {
+  final String error;
+
+  SearchOnRestaurantFail(this.error);
+}
+
+class ClearRestaurantId extends SuperXeats {}
+
+class GetListOfRestaurantsSuccefully extends SuperXeats {}
+
+class GetDeliveryFeesState extends SuperXeats {}

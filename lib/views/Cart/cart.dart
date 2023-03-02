@@ -185,7 +185,9 @@ class _CartState extends State<Cart> {
                                                   borderRadius:
                                                       BorderRadius.circular(
                                                           20))),
-                                          onPressed: () {
+                                          onPressed: () async {
+                                            await Xeatscubit.get(context)
+                                                .deliveryFees();
                                             Navigation(
                                                 context, const CheckOut());
                                           },

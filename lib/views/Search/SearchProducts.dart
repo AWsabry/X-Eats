@@ -18,8 +18,8 @@ import 'package:xeats/views/CategoryView/categoryView.dart';
 import 'package:xeats/views/Layout/Layout.dart';
 import 'package:xeats/views/Profile/Profile.dart';
 
-class SearchScreen extends StatefulWidget {
-  SearchScreen({
+class SearchProductsScreen extends StatefulWidget {
+  SearchProductsScreen({
     super.key,
     this.restaurantID,
     required this.image,
@@ -35,10 +35,10 @@ class SearchScreen extends StatefulWidget {
   final String? restaurantName;
 
   @override
-  State<SearchScreen> createState() => _SearchScreenState();
+  State<SearchProductsScreen> createState() => _SearchScreenState();
 }
 
-class _SearchScreenState extends State<SearchScreen> {
+class _SearchScreenState extends State<SearchProductsScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<Xeatscubit, XeatsStates>(
@@ -73,22 +73,13 @@ class _SearchScreenState extends State<SearchScreen> {
                         await Xeatscubit.get(context)
                             .ClearId()
                             .then((value) async {
-                          await Xeatscubit.get(context).GetIdOfProducts(context,
-                              id: widget.restaurantID,
-                              CatId: widget.categoryId);
-
+                          await Xeatscubit.get(context).GetIdOfProducts(
+                            context,
+                            id: widget.restaurantID,
+                          );
                           await Xeatscubit.get(context).SearchOnListOfProduct(
-                              context,
-                              CatId: widget.categoryId,
-                              image: widget.image,
-                              category: widget.category,
-                              restaurantName: widget.restaurantName);
-                          print("Khaled1${Xeatscubit.get(context).ArabicName}");
-                          print(
-                              "Khaled2${Xeatscubit.get(context).EnglishName}");
-                          print(
-                              "Khaled3${Xeatscubit.get(context).searchController.text}");
-
+                            context,
+                          );
                           if (Xeatscubit.get(context)
                                   .ArabicName
                                   .toString()

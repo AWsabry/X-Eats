@@ -16,6 +16,14 @@ void Navigation(context, widget,
           pageBuilder: (context, a1, a2) => widget,
           transitionDuration: duration),
     );
+void NavigationToSameScreen(context, widget,
+        {Duration duration = const Duration(seconds: 1)}) =>
+    Navigator.pushReplacement(
+      context,
+      PageRouteBuilder(
+          pageBuilder: (context, a1, a2) => widget,
+          transitionDuration: duration),
+    );
 
 // Widget CircularNotchBottom(
 //         {required List<BottomNavigationBarItem> Items,

@@ -1,5 +1,6 @@
 // ignore_for_file: file_names
 
+import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -8,10 +9,12 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:xeats/controllers/Components/ItemClass.dart';
 import 'package:xeats/controllers/Components/Requests%20Loading%20Components/RequstsLoading.dart';
+import 'package:xeats/controllers/Components/Restaurant%20Components/RestaurantView.dart';
 import 'package:xeats/controllers/Dio/DioHelper.dart';
 import 'package:xeats/controllers/States.dart';
 import 'package:xeats/controllers/Components/Components.dart';
 import 'package:xeats/views/CategoryView/categoryView.dart';
+import 'package:xeats/views/ResturantsMenu/ResturantsMenu.dart';
 import 'package:xeats/views/SignIn/SignIn.dart';
 import 'package:xeats/views/ThankYou/thankyou.dart';
 import '../views/Cart/Cart.dart';
@@ -152,17 +155,17 @@ class Xeatscubit extends Cubit<XeatsStates> {
       )
     ];
     await Dio().get("$BASEURL/get_order_timing").then((value) {
-      String timing_id_1 = value.data["Names"][0]["end_order"];
-      if (timing_id_1 == "11:00:00") {
+      String timingId1 = value.data["Names"][0]["end_order"];
+      if (timingId1 == "11:00:00") {
         availableTimings.add(timings[0]);
-      } else if (timing_id_1 == "13:00:00") {
+      } else if (timingId1 == "13:00:00") {
         availableTimings.add(timings[0]);
         availableTimings.add(timings[1]);
-      } else if (timing_id_1 == "15:00:00") {
+      } else if (timingId1 == "15:00:00") {
         availableTimings.add(timings[0]);
         availableTimings.add(timings[1]);
         availableTimings.add(timings[2]);
-      } else if (int.parse("${timing_id_1[0]}${timing_id_1[1]}") < 11) {
+      } else if (int.parse("${timingId1[0]}${timingId1[1]}") < 11) {
       } else {
         availableTimings = timings;
       }
@@ -451,16 +454,19 @@ class Xeatscubit extends Cubit<XeatsStates> {
   }
 
   void updateCartPrice() async {
-    await Dio().put("$BASEURL/get_carts_by_id/$EmailInforamtion", data: {
-      "total_price": FoodItem.getSubtotal(),
-      "total_after_delivery":
-          (FoodItem.deliveryFee + FoodItem.getSubtotal()).toDouble()
-    }).then((value) {
-      print(value);
-    }).catchError((e) {
-      var dioException = e as DioError;
-      var status = dioException.response!.statusCode;
-      print("CARTITEM ERROR" + " " + '$status');
+    await Dio().get("$BASEURL/get_Delivery_Fees").then((value) async {
+      await Dio().put("$BASEURL/get_carts_by_id/$EmailInforamtion", data: {
+        "total_price": FoodItem.getSubtotal(),
+        "total_after_delivery":
+            (value.data["Names"][0]["delivery_fees"] + FoodItem.getSubtotal())
+                .toDouble()
+      }).then((value) {
+        print(value);
+      }).catchError((e) {
+        var dioException = e as DioError;
+        var status = dioException.response!.statusCode;
+        print("CARTITEM ERROR" + " " + '$status');
+      });
     });
   }
 
@@ -543,19 +549,21 @@ class Xeatscubit extends Cubit<XeatsStates> {
   void confirmOrder(
     context,
   ) async {
-    await Dio().post("$BASEURL/get_orders_by_email/$EmailInforamtion", data: {
-      "user": idInformation,
-      "total_price_after_delivery":
-          FoodItem.deliveryFee + FoodItem.getSubtotal(),
-      "totalPrice": FoodItem.getSubtotal(),
-      "cart": cartID,
-      "first_name": FirstName,
-      "last_name": LastName,
-      "phone_number": PhoneNumber,
-      "flag": "Mobile"
-    }).then((value) {
-      NavigateAndRemov(context, const ThankYou());
-    }).catchError((onError) => print(onError));
+    await Dio().get("$BASEURL/get_Delivery_Fees").then((value) async {
+      await Dio().post("$BASEURL/get_orders_by_email/$EmailInforamtion", data: {
+        "user": idInformation,
+        "total_price_after_delivery":
+            value.data["Names"][0]["delivery_fees"] + FoodItem.getSubtotal(),
+        "totalPrice": FoodItem.getSubtotal(),
+        "cart": cartID,
+        "first_name": FirstName,
+        "last_name": LastName,
+        "phone_number": PhoneNumber,
+        "flag": "Mobile"
+      }).then((value) {
+        NavigateAndRemov(context, const ThankYou());
+      }).catchError((onError) => print(onError));
+    });
   }
 
   Future<void> deleteCartItem(BuildContext context, String cartItemId) async {
@@ -663,6 +671,8 @@ class Xeatscubit extends Cubit<XeatsStates> {
   List<String> EnglishName = [];
   List<String> ArabicName = [];
   TextEditingController searchController = TextEditingController();
+  TextEditingController searchRestaurantsController = TextEditingController();
+
   Future<void> ClearId() async {
     ProductId.clear();
     EnglishName.clear();
@@ -679,6 +689,144 @@ class Xeatscubit extends Cubit<XeatsStates> {
   }
 
   var data;
+  var RestuarantsUI;
+  Future getListOfRestuarants(
+    BuildContext context, {
+    required List<dynamic>? Restuarantsdata,
+    required List<int>? RestaurantId,
+    required List<String>? imageOfRestaurant,
+    required List<String>? restaurant_nameFromSearching,
+  }) async {
+    await Dio()
+        .get("$BASEURL/get_restaurants")
+        .then((value) {})
+        .catchError((onError) {});
+    RestuarantsUI = Column(
+      children: [
+        Row(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: Text(
+                'Restaurants Founded',
+                style: GoogleFonts.poppins(
+                    fontSize: 16, fontWeight: FontWeight.bold),
+              ),
+            ),
+          ],
+        ),
+        ListView.separated(
+          shrinkWrap: true,
+          physics: const BouncingScrollPhysics(),
+          itemBuilder: (context, index) {
+            if (imageOfRestaurant![index] == null) {
+              return Loading();
+            } else {
+              return InkWell(
+                onTap: () {
+                  Navigation(
+                      context,
+                      ResturantsMenu(
+                        data: Restuarantsdata![index],
+                        RestaurantId: RestaurantId[index],
+                      ));
+                },
+                child: Row(children: [
+                  Container(
+                    height: 130.h,
+                    decoration: BoxDecoration(
+                      border:
+                          Border.all(color: Color.fromARGB(74, 158, 158, 158)),
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    child: Padding(
+                        padding: EdgeInsets.all(16.0),
+                        child: Image.network(
+                          'https://www.x-eats.com' + imageOfRestaurant[index],
+                          loadingBuilder: (context, child, loadingProgress) {
+                            if (loadingProgress == null) {
+                              return child;
+                            }
+                            return Center(
+                              child: Loading(),
+                            );
+                          },
+                        )),
+                  ),
+                  SizedBox(
+                    width: 20.w,
+                  ),
+                  Expanded(
+                    child: Container(
+                      height: MediaQuery.of(context).size.height / 7,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Column(children: [
+                            Text(
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                                '${restaurant_nameFromSearching![index]}',
+                                style: GoogleFonts.poppins(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18,
+                                )),
+                          ]),
+                          SizedBox(
+                            height: 10.h,
+                          ),
+                          Row(children: [
+                            Icon(
+                              Icons.star,
+                              color: Colors.amber,
+                            ),
+                            Text(' 4.1'),
+                            Text(' (100+)')
+                          ]),
+                          SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: Row(
+                              children: [
+                                Icon(Icons.timer_sharp),
+                                Text(
+                                  ' 45 mins',
+                                  style: GoogleFonts.poppins(
+                                      fontWeight: FontWeight.w400),
+                                ),
+                                SizedBox(
+                                  width: 15.w,
+                                ),
+                                Icon(Icons.delivery_dining_outlined),
+                                SizedBox(
+                                  width: 2.w,
+                                ),
+                                Text(
+                                  'X-Eats Delivery',
+                                  style: GoogleFonts.poppins(
+                                      fontWeight: FontWeight.w400),
+                                ),
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                ]),
+              );
+            }
+          },
+          separatorBuilder: (context, index) {
+            return Divider();
+          },
+          itemCount: RestaurantId!.length,
+        )
+      ],
+    );
+    return RestuarantsUI;
+  }
+
   Future getListOfProducts(
     BuildContext context, {
     required String? CatId,
@@ -729,17 +877,21 @@ class Xeatscubit extends Cubit<XeatsStates> {
   List<bool> isBestOffer = [];
   List<bool> isMostPopular = [];
   List<bool> isNewProduct = [];
+  List<String> restaurant_name = [];
+  List<int> category = [];
+  List<String> category_name = [];
+  List<String> image = [];
   Future<void> SearchOnListOfProduct(
-    BuildContext context, {
-    required String? CatId,
-    required String? image,
-    required String? category,
-    required String? restaurantName,
-  }) async {
+    BuildContext context,
+  ) async {
     for (var i = 0; i < ProductId.length; i++) {
       await Dio()
           .get("$BASEURL/get_products_by_id/${ProductId[i]}")
           .then((value) async {
+        image.add(value.data["Names"][0]["image"]);
+        restaurant_name.add(value.data["Names"][0]["restaurant_name"]);
+        category_name.add(value.data["Names"][0]["category_name"]);
+        category.add(value.data["Names"][0]["category"]);
         isNewProduct.add(value.data["Names"][0]["New_Products"]);
         isMostPopular.add(value.data["Names"][0]["Most_Popular"]);
         isBestOffer.add(value.data["Names"][0]["Best_Offer"]);
@@ -767,10 +919,9 @@ class Xeatscubit extends Cubit<XeatsStates> {
   Future GetIdOfProducts(
     BuildContext context, {
     required String? id,
-    required String? CatId,
   }) async {
     await Dio()
-        .get("$BASEURL/get_products_of_restaurant_by_category/$id/$CatId")
+        .get("$BASEURL/get_products_by_restaurant_id/$id")
         .then((value) async {
       for (var i = 0; i < value.data["Names"].length; i++) {
         if (value.data["Names"][i]["name"]
@@ -789,6 +940,59 @@ class Xeatscubit extends Cubit<XeatsStates> {
       }
     });
     emit(ProductIdSuccefull());
+  }
+
+  List<int> RestaurantId = [];
+  List<dynamic> Restuarantsdata = [];
+  Future GetIdOfResutarant(
+    BuildContext context,
+  ) async {
+    await Dio().get("$BASEURL/get_restaurants").then((value) async {
+      for (var i = 0; i < value.data["Names"].length; i++) {
+        if (value.data["Names"][i]["Name"]
+            .toString()
+            .toLowerCase()
+            .contains(searchRestaurantsController.text.toLowerCase())) {
+          if (value.data["Names"][i]["id"] is int) {
+            RestaurantId.add(value.data["Names"][i]["id"]);
+            Restuarantsdata.add(value.data["Names"][i]);
+            print(RestaurantId);
+          }
+        }
+      }
+    });
+    emit(RestaurantIdSuccefull());
+  }
+
+  Future<void> clearRestaurantId() async {
+    imageOfRestaurant.clear();
+    restaurant_nameFromSearching.clear();
+    RestaurantId.clear();
+    emit(ClearRestaurantsIdState());
+  }
+
+  List<String> restaurant_nameFromSearching = [];
+
+  List<String> imageOfRestaurant = [];
+  Future<void> SearchOnListOfRestuarant(
+    BuildContext context,
+  ) async {
+    for (var i = 0; i < RestaurantId.length; i++) {
+      await Dio()
+          .get("$BASEURL/get_restaurants_by_id/${RestaurantId[i]}")
+          .then((value) async {
+        imageOfRestaurant.add(value.data["Names"][0]["image"]);
+        restaurant_nameFromSearching.add(value.data["Names"][0]["Name"]);
+      }).catchError((e) {
+        print("The error is $e");
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          duration: Duration(milliseconds: 1500),
+          content: Text("Something error try again later !!"),
+          backgroundColor: Colors.red,
+        ));
+      });
+      emit(SearhOnRestaurantSuccessfull());
+    }
   }
 
   Future getCurrentProducts(
@@ -838,6 +1042,16 @@ class Xeatscubit extends Cubit<XeatsStates> {
       ));
     });
     return data;
+  }
+
+  double? deliveryfees;
+  Future<void> deliveryFees() async {
+    await Dio().get("$BASEURL/get_Delivery_Fees").then((value) {
+      deliveryfees = value.data["Names"][0]["delivery_fees"];
+      emit(GetDeliveryFeesState());
+    }).catchError((onError) {
+      print(onError);
+    });
   }
 
   Future<Widget> getMostSoldData(

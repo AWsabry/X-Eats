@@ -30,6 +30,8 @@ class _SplashScreenState extends State<SplashScreen> {
     if (status.canUpdate) {
       return true;
     } else {
+      print(status.localVersion);
+      print(status.storeVersion);
       return false;
     }
   }
