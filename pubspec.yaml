@@ -59,13 +59,13 @@ dependencies:
   pull_to_refresh:
   url_launcher:
   firebase_auth:
-  pinput: ^2.2.30
+  pinput:
   json_annotation:
   json_helper:
-  google_maps_flutter: ^2.1.10
-  geolocator: ^9.0.2
-  flutter_polyline_points: ^1.0.0
-  cached_network_image: ^3.2.3
+  google_maps_flutter:
+  geolocator: 
+  flutter_polyline_points: 
+  cached_network_image:
 
   flutter:
     sdk: flutter

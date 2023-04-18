@@ -15,6 +15,7 @@ import 'package:xeats/controllers/Cubits/OrderCubit/OrderStates.dart';
 import 'package:xeats/controllers/Dio/DioHelper.dart';
 import 'package:xeats/views/CategoryView/categoryView.dart';
 import 'package:xeats/views/ThankYou/thankyou.dart';
+import 'package:xeats/views/WaitingRoom/waitingRoom.dart';
 
 import '../../../views/Cart/cart.dart';
 
@@ -337,9 +338,40 @@ class OrderCubit extends Cubit<OrderStates> {
             "cart": cartID,
             "deliver_to": 1
           }).then((value) {
-        NavigateAndRemov(context, const ThankYou());
+        NavigateAndRemov(context, const WaitingRoom());
       }).catchError((onError) {});
     });
+  }
+
+  void getLocation(
+    context,
+  ) async {
+    await Dio()
+        .get(
+      "$BASEURL/get_locations/",
+    )
+        .then((value) {
+      for (var i in value.data["Names"]) {
+        print(i['id']);
+      }
+    });
+  }
+
+  void feesDistribution(
+    context,
+  ) async {
+    await Dio()
+        .get(
+      "$BASEURL/get_24_orders/",
+    )
+        .then((value) {
+      for (var i in value.data["Names"]) {
+        if (i['status'] == 'Pending') {
+          print(i['id']);
+        }
+      }
+    });
+    // NavigateAndRemov(context, const ThankYou());
   }
 
   Future<void> deleteCartItem(BuildContext context, String cartItemId) async {
