@@ -1,12 +1,15 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:xeats/controllers/Components/AppBarCustomized.dart';
-import 'package:xeats/controllers/Components/Components.dart';
+import 'package:xeats/controllers/Components/AppBar/AppBarCustomized.dart';
+import 'package:xeats/controllers/Components/General%20Components/Components.dart';
 import 'package:xeats/controllers/Components/Global%20Components/loading.dart';
 import 'package:xeats/controllers/Components/Restaurant%20Components/RestaurantView.dart';
-import 'package:xeats/controllers/Cubit.dart';
-import 'package:xeats/controllers/States.dart';
+import 'package:xeats/controllers/Cubits/AuthCubit/cubit.dart';
+import 'package:xeats/controllers/Cubits/OrderCubit/OrderCubit.dart';
+import 'package:xeats/controllers/Cubits/RestauratsCubit/RestaurantsStates.dart';
+import 'package:xeats/controllers/Cubits/RestauratsCubit/RestuarantsCubit.dart';
 import 'package:xeats/views/Animations/EmptyCart.dart';
 import 'package:xeats/views/Checkout/CheckOut.dart';
 import 'package:xeats/views/Layout/Layout.dart';
@@ -26,24 +29,26 @@ late List<Widget> allWhatInCart = [];
 class _CartState extends State<Cart> {
   @override
   void initState() {
-    FutureRestaurants =
-        Xeatscubit.get(context).getCurrentAvailableOrderRestauant();
-    getCartItemsFuture = Xeatscubit.get(context).getCartItems(
+    FutureRestaurants = RestuarantsCubit.get(context)
+        .getCurrentAvailableOrderRestauant(context);
+    getCartItemsFuture = OrderCubit.get(context).getCartItems(
       context,
-      email: Xeatscubit.get(context).EmailInforamtion,
+      email: AuthCubit.get(context).EmailInforamtion,
     );
   }
 
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
-    return BlocConsumer<Xeatscubit, XeatsStates>(
+    return BlocConsumer<RestuarantsCubit, RestuarantsStates>(
       listener: (context, state) {},
       builder: (context, state) {
-        var cubit = Xeatscubit.get(context);
+        var cubit = AuthCubit.get(context);
         return Scaffold(
-          appBar:
-              appBar(context, subtitle: "${cubit.FirstName}'s", title: "Cart"),
+          appBar: appBar(context,
+              subtitle: "${cubit.FirstName}'s",
+              title: "Cart",
+              SameScreen: true),
           backgroundColor: Colors.white,
           body: SafeArea(
             child: Column(
@@ -51,7 +56,7 @@ class _CartState extends State<Cart> {
                 FutureBuilder(
                   builder: (ctx, AsyncSnapshot snapshot) {
                     if (snapshot.connectionState == ConnectionState.done &&
-                        Xeatscubit.currentRestaurant["Name"] != null) {
+                        RestuarantsCubit.currentRestaurant["Name"] != null) {
                       return Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
@@ -95,8 +100,8 @@ class _CartState extends State<Cart> {
                                     borderRadius: BorderRadius.circular(20),
                                     child: GestureDetector(
                                       child: Image(
-                                        image: NetworkImage(
-                                            "https://x-eats.com${Xeatscubit.currentRestaurant["image"]}"),
+                                        image: CachedNetworkImageProvider(
+                                            "https://x-eats.com${RestuarantsCubit.currentRestaurant["image"]}"),
                                         loadingBuilder:
                                             (context, child, loadingProgress) {
                                           if (loadingProgress == null)
@@ -111,7 +116,7 @@ class _CartState extends State<Cart> {
                                   ),
                                 ),
                                 Text(
-                                  "${Xeatscubit.currentRestaurant["Name"]}",
+                                  "${RestuarantsCubit.currentRestaurant["Name"]}",
                                   style: const TextStyle(
                                     fontSize: 18,
                                     fontWeight: FontWeight.bold,
@@ -186,7 +191,7 @@ class _CartState extends State<Cart> {
                                                       BorderRadius.circular(
                                                           20))),
                                           onPressed: () async {
-                                            await Xeatscubit.get(context)
+                                            await OrderCubit.get(context)
                                                 .deliveryFees();
                                             Navigation(
                                                 context, const CheckOut());

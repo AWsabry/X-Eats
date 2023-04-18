@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:xeats/controllers/Cubits/AuthCubit/States.dart';
-import 'package:xeats/controllers/Components/Components.dart';
+import 'package:xeats/controllers/Components/General%20Components/Components.dart';
 import 'package:xeats/controllers/Dio/DioHelper.dart';
 import 'package:xeats/views/HomePage/HomePage.dart';
 import 'package:xeats/views/Layout/Layout.dart';
@@ -15,6 +15,10 @@ import 'package:xeats/views/Verification/Verification.dart';
 class AuthCubit extends Cubit<AuthStates> {
   AuthCubit() : super(AuthInitState());
   static AuthCubit get(context) => BlocProvider.of(context);
+
+  //----------------Authentication--------//
+
+  var XeatOtp1 = TextEditingController();
 
   //----------------Signin form Variables ------------------------//
 
@@ -32,11 +36,10 @@ class AuthCubit extends Cubit<AuthStates> {
   //---------------Complete Profile Form Variables---------------//
 
   TextEditingController datecontroller = TextEditingController();
-  TextEditingController email = TextEditingController();
-  TextEditingController first_name = TextEditingController();
-  TextEditingController last_name = TextEditingController();
-  TextEditingController PhoneNumber = TextEditingController();
-  TextEditingController nu_id = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController first_nameController = TextEditingController();
+  TextEditingController last_nameController = TextEditingController();
+  TextEditingController PhoneNumberController = TextEditingController();
   String? Value;
   String? ValueTitle;
   String? Gender;
@@ -118,5 +121,59 @@ class AuthCubit extends Cubit<AuthStates> {
   void changepasswordVisablityConfirmSignup() {
     isPassword_confirm_signup = !isPassword_confirm_signup;
     emit(ShowPassState());
+  }
+
+  //-----------------Sign In------------//
+  //This Function Will Call when user Sign In Succefuly
+  List<dynamic> EmailInList = [];
+  Future<List> getEmail(
+    context, {
+    // The Function Will Get The email of user and take it as EndPoint to show his information
+    String? email,
+  }) async {
+    await DioHelper.getdata(url: "get_user_by_id/$email", query: {})
+        .then((value) async {
+      //EmailInformationList
+      EmailInList = value.data['Names'];
+      SharedPreferences userInf = await SharedPreferences.getInstance();
+      userInf.setString('EmailInf', EmailInList[0]['email']);
+      userInf.setString('FirstName', EmailInList[0]['first_name']);
+      userInf.setString('LastName', EmailInList[0]['last_name']);
+      userInf.setInt("Id", EmailInList[0]['id']);
+      userInf.setDouble("wallet", EmailInList[0]['Wallet']);
+      userInf.setString("phonenumber", EmailInList[0]['PhoneNumber']);
+
+      emit(SuccessGetInformation());
+    }).catchError((onError) {
+      emit(FailgetInformation());
+      print(FailgetInformation());
+    });
+    return EmailInList;
+  }
+
+//-------------------- Function Separated to get his email if his email null then it will go to login if not then it will go to home page
+  String? EmailInforamtion;
+  String? FirstName;
+  String? LastName;
+  int? idInformation;
+  double? wallet;
+  String? PhoneNumber;
+
+  Future<void> GettingUserData() async {
+    SharedPreferences User = await SharedPreferences.getInstance();
+    EmailInforamtion = User.getString('EmailInf');
+    FirstName = User.getString('FirstName');
+    LastName = User.getString('LastName');
+    idInformation = User.getInt('Id');
+    wallet = User.getDouble('wallet');
+    PhoneNumber = User.getString('phonenumber');
+    emit(SuccessEmailProfile());
+  }
+
+  Future<void> signOut(context) async {
+    SharedPreferences userInformation = await SharedPreferences.getInstance();
+    userInformation.clear();
+    NavigateAndRemov(context, SignIn());
+    emit(Cleared());
   }
 }

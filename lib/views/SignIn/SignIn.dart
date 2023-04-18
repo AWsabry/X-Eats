@@ -2,12 +2,14 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:xeats/controllers/Components/Components.dart';
+import 'package:xeats/controllers/Components/General%20Components/Components.dart';
 import 'package:xeats/controllers/Components/Global%20Components/DefaultButton.dart';
 import 'package:xeats/controllers/Components/Global%20Components/defaultFormField.dart';
-import 'package:xeats/controllers/Cubit.dart';
 import 'package:xeats/controllers/Cubits/AuthCubit/States.dart';
 import 'package:xeats/controllers/Cubits/AuthCubit/cubit.dart';
+import 'package:xeats/controllers/Cubits/OrderCubit/OrderCubit.dart';
+import 'package:xeats/controllers/Cubits/ProductsCubit/ProductsCubit.dart';
+import 'package:xeats/controllers/Cubits/RestauratsCubit/RestuarantsCubit.dart';
 import 'package:xeats/views/LoginSuccess/loginSuccess.dart';
 import 'package:xeats/views/SignUp/SignUp.dart';
 
@@ -22,20 +24,20 @@ class SignIn extends StatelessWidget {
 
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (context) => AuthCubit()),
+        BlocProvider(create: (context) => AuthCubit()..GettingUserData()),
         BlocProvider(
-            create: (context) => Xeatscubit()
+            create: (context) => ProductsCubit()
               ..GetMostSoldProducts()
-              ..getPoster()
-              ..GetResturants()
-              ..GettingUserData()
-              ..getCartID())
+              ..getPoster()),
+        BlocProvider(
+          create: (context) => RestuarantsCubit()..GetResturants(),
+        ),
+        BlocProvider(create: (context) => OrderCubit()..getCartID(context))
       ],
       child: BlocConsumer<AuthCubit, AuthStates>(
         listener: ((context, state) {}),
         builder: (context, state) {
           var cubit = AuthCubit.get(context);
-          var cubit1 = Xeatscubit.get(context);
           return Scaffold(
             backgroundColor: const Color(0xff0986d3),
             body: Container(
@@ -74,7 +76,7 @@ class SignIn extends StatelessWidget {
                           DefaultFormField(
                               isPassword: false,
                               prefix: Icons.email_outlined,
-                              controller: cubit.email,
+                              controller: cubit.emailController,
                               label: 'Email',
                               type: TextInputType.emailAddress,
                               validator: (value) => value!.isEmpty
@@ -108,7 +110,7 @@ class SignIn extends StatelessWidget {
                                       .login(
                                     context,
                                     password: cubit.password.text,
-                                    email: cubit.email.text,
+                                    email: cubit.emailController.text,
                                   )
                                       .catchError((e) {
                                     var dioException = e as DioError;
@@ -119,8 +121,8 @@ class SignIn extends StatelessWidget {
                                       // print(dioException.response!.statusCode);
                                     }
                                     if (status == 302) {
-                                      cubit1.getEmail(context,
-                                          email: cubit.email.text);
+                                      cubit.getEmail(context,
+                                          email: cubit.emailController.text);
                                       NavigateAndRemov(context, LoginSuccess());
                                     } else if (status == 404) {
                                       const snackBar = SnackBar(

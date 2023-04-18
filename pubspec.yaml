@@ -30,6 +30,7 @@ environment:
 # versions available, run `flutter pub outdated`.
 dependencies:
   new_version_plus: ^0.0.9
+  launch_review: ^3.0.1
   bloc:
   flutter_bloc:
   intl:
@@ -61,6 +62,10 @@ dependencies:
   pinput: ^2.2.30
   json_annotation:
   json_helper:
+  google_maps_flutter: ^2.1.10
+  geolocator: ^9.0.2
+  flutter_polyline_points: ^1.0.0
+  cached_network_image: ^3.2.3
 
   flutter:
     sdk: flutter

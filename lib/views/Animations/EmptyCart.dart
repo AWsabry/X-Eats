@@ -1,7 +1,7 @@
 import "package:flutter/material.dart";
 import 'package:xeats/views/Layout/Layout.dart';
 
-import '../../controllers/Components/Components.dart';
+import '../../controllers/Components/General Components/Components.dart';
 
 class EmptyCart extends StatefulWidget {
   const EmptyCart({super.key});

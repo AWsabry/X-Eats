@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:xeats/controllers/Components/Components.dart';
+import 'package:xeats/controllers/Components/General%20Components/Components.dart';
 
 class Product extends StatefulWidget {
   Product({

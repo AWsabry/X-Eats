@@ -22,6 +22,22 @@
           }
         },
         {
+          "client_id": "258167260360-ltvn9kidt11oa909ksobn9cbcm5nf23i.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.xeats.egy",
+            "certificate_hash": "431b81379885efa3a9af7ac1d37d2543349ddb5c"
+          }
+        },
+        {
+          "client_id": "258167260360-o2vf7u7rvga2q99mp4iaapltui66986t.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.xeats.egy",
+            "certificate_hash": "bdd82dad7bbf691331e9a6b94ce6dc8f77801a83"
+          }
+        },
+        {
           "client_id": "258167260360-q0dprtvuajdfbbbi8tua8nuntjsmn8qj.apps.googleusercontent.com",
           "client_type": 3
         }

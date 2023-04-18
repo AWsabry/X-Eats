@@ -6,9 +6,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:new_version_plus/new_version_plus.dart';
 import 'package:xeats/controllers/Cubits/AuthCubit/cubit.dart';
-import 'package:xeats/controllers/Cubit.dart';
 import 'package:xeats/controllers/Cubits/ButtomNavigationBarCubit/navigationCubit.dart';
+import 'package:xeats/controllers/Cubits/OrderCubit/OrderCubit.dart';
+import 'package:xeats/controllers/Cubits/ProductsCubit/ProductsCubit.dart';
+import 'package:xeats/controllers/Cubits/RestauratsCubit/RestuarantsCubit.dart';
 import 'package:xeats/controllers/Dio/DioHelper.dart';
+import 'package:xeats/views/Resturants/Resturants.dart';
 import 'package:xeats/views/Splash%20Screen/Splach%20Screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
@@ -118,15 +121,18 @@ class _MyAppState extends State<MyApp> {
     return MultiBlocProvider(
         providers: [
           BlocProvider(
-              create: (context) => Xeatscubit()
-                ..GetMostSoldProducts()
-                ..getPoster()
-                ..GetResturants()
-                ..GettingUserData()
-                ..getCartID()
-                ..NewProducts()),
-          BlocProvider(create: (context) => AuthCubit()),
+              create: (context) => RestuarantsCubit()..GetResturants()),
+          BlocProvider(create: (context) => AuthCubit()..GettingUserData()),
           BlocProvider(create: (context) => NavBarCubitcubit()),
+          BlocProvider(
+            create: (context) => ProductsCubit()
+              ..GetMostSoldProducts()
+              ..getPoster()
+              ..NewProducts(),
+          ),
+          BlocProvider(
+            create: (context) => OrderCubit()..getCartID(context),
+          )
         ],
         child: ScreenUtilInit(
           designSize: const Size(415, 900),

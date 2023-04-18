@@ -7,13 +7,12 @@ import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:xeats/controllers/Components/AppBarCustomized.dart';
-import 'package:xeats/controllers/Components/Components.dart';
+import 'package:xeats/controllers/Components/AppBar/AppBarCustomized.dart';
+import 'package:xeats/controllers/Components/General%20Components/Components.dart';
 import 'package:xeats/controllers/Components/Global%20Components/loading.dart';
-import 'package:xeats/controllers/Components/ItemClass.dart';
-import 'package:xeats/controllers/Cubit.dart';
 import 'package:xeats/controllers/Cubits/ButtomNavigationBarCubit/navigationCubit.dart';
-import 'package:xeats/controllers/States.dart';
+import 'package:xeats/controllers/Cubits/ProductsCubit/ProductsCubit.dart';
+import 'package:xeats/controllers/Cubits/ProductsCubit/ProductsStates.dart';
 import 'package:xeats/views/CategoryView/categoryView.dart';
 import 'package:xeats/views/Layout/Layout.dart';
 import 'package:xeats/views/Profile/Profile.dart';
@@ -22,14 +21,12 @@ class SearchProductsScreen extends StatefulWidget {
   SearchProductsScreen({
     super.key,
     this.restaurantID,
-    required this.image,
     required this.category,
     required this.categoryId,
     required this.restaurantName,
   });
   final String? restaurantID;
 
-  final String? image;
   final String? category;
   final String? categoryId;
   final String? restaurantName;
@@ -41,7 +38,7 @@ class SearchProductsScreen extends StatefulWidget {
 class _SearchScreenState extends State<SearchProductsScreen> {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<Xeatscubit, XeatsStates>(
+    return BlocBuilder<ProductsCubit, ProductsStates>(
       builder: (context, state) {
         var navcubit = NavBarCubitcubit.get(context);
 
@@ -67,32 +64,33 @@ class _SearchScreenState extends State<SearchProductsScreen> {
                         enabledBorder: InputBorder.none,
                         hintText: "Search For Products",
                         prefixIcon: Icon(Icons.search)),
-                    controller: Xeatscubit.get(context).searchController,
+                    controller: ProductsCubit.get(context).searchController,
                     onSubmitted: (value) async {
                       setState(() async {
-                        await Xeatscubit.get(context)
-                            .ClearId()
+                        await ProductsCubit.get(context)
+                            .ClearProductsId()
                             .then((value) async {
-                          await Xeatscubit.get(context).GetIdOfProducts(
+                          await ProductsCubit.get(context).GetIdOfProducts(
                             context,
                             id: widget.restaurantID,
                           );
-                          await Xeatscubit.get(context).SearchOnListOfProduct(
+                          await ProductsCubit.get(context)
+                              .SearchOnListOfProduct(
                             context,
                           );
-                          if (Xeatscubit.get(context)
+                          if (ProductsCubit.get(context)
                                   .ArabicName
                                   .toString()
                                   .toLowerCase()
-                                  .contains(Xeatscubit.get(context)
+                                  .contains(ProductsCubit.get(context)
                                       .searchController
                                       .text
                                       .toLowerCase()) ||
-                              Xeatscubit.get(context)
+                              ProductsCubit.get(context)
                                   .EnglishName
                                   .toString()
                                   .toLowerCase()
-                                  .contains(Xeatscubit.get(context)
+                                  .contains(ProductsCubit.get(context)
                                       .searchController
                                       .text
                                       .toLowerCase())) {
@@ -101,7 +99,7 @@ class _SearchScreenState extends State<SearchProductsScreen> {
                             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                               duration: const Duration(milliseconds: 1500),
                               content: Text(
-                                  "There isn't product called ${Xeatscubit.get(context).searchController.text}"),
+                                  "There isn't product called ${ProductsCubit.get(context).searchController.text}"),
                               backgroundColor: Colors.red,
                             ));
                           }
@@ -111,14 +109,14 @@ class _SearchScreenState extends State<SearchProductsScreen> {
                   ),
                 ),
                 FutureBuilder(
-                    future: Xeatscubit.get(context).getListOfProducts(context,
+                    future: ProductsCubit.get(context).getListOfProducts(
+                        context,
                         restaurantName: widget.restaurantName,
                         CatId: widget.categoryId,
-                        image: widget.image,
                         category: widget.category),
                     builder: ((context, snapshot) {
                       if (snapshot.hasData &&
-                          Xeatscubit.get(context).data != null) {
+                          ProductsCubit.get(context).data != null) {
                         return snapshot.data!;
                       } else {
                         return Center(
@@ -136,14 +134,14 @@ class _SearchScreenState extends State<SearchProductsScreen> {
             currentIndex: 1,
             onTap: (index) async {
               Navigator.pop(context);
-              await Xeatscubit.get(context).ClearId();
+              await ProductsCubit.get(context).ClearProductsId();
               if (index == 1) {
-                await Xeatscubit.get(context).ClearId();
+                await ProductsCubit.get(context).ClearProductsId();
               } else if (index == 0) {
-                await Xeatscubit.get(context).ClearId();
+                await ProductsCubit.get(context).ClearProductsId();
                 Navigation(context, Layout());
               } else {
-                await Xeatscubit.get(context).ClearId();
+                await ProductsCubit.get(context).ClearProductsId();
                 Navigation(context, Profile());
               }
             },

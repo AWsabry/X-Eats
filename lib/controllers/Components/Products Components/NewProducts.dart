@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:xeats/controllers/Components/Global%20Components/loading.dart';
@@ -43,8 +44,8 @@ class _NewProductsState extends State<NewProducts> {
               onPressed: widget.Navigate,
               child: Image(
                 width: 200,
-                image: NetworkImage(
-                  'https://x-eats.com' + widget.image!,
+                image: CachedNetworkImageProvider(
+                  'https://x-eats.com/uploads/' + widget.image!,
                 ),
                 loadingBuilder: (context, child, loadingProgress) {
                   if (loadingProgress == null) return child;

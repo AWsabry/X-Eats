@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:xeats/controllers/Components/General%20Components/Components.dart';
 import 'package:xeats/controllers/Cubits/AuthCubit/States.dart';
 import 'package:xeats/controllers/Cubits/AuthCubit/cubit.dart';
 import 'package:xeats/controllers/Components/Global%20Components/DefaultButton.dart';
 import 'package:xeats/controllers/Components/Global%20Components/defaultFormField.dart';
-import 'package:xeats/controllers/Components/Components.dart';
 import 'package:xeats/views/CompleteProfile/Complete_Profile.dart';
 import 'package:xeats/views/SignIn/SignIn.dart';
 
@@ -65,7 +65,7 @@ class _SignupState extends State<Signup> {
                         DefaultFormField(
                             isPassword: false,
                             prefix: Icons.email_outlined,
-                            controller: cubit.email,
+                            controller: cubit.emailController,
                             label: 'Email',
                             type: TextInputType.emailAddress,
                             validator: (value) => value!.isEmpty
@@ -114,7 +114,7 @@ class _SignupState extends State<Signup> {
                         DefaultButton(
                             function: () {
                               cubit.CheckExistEmail(context,
-                                      Email: cubit.email.text)
+                                      Email: cubit.emailController.text)
                                   .then((value) {
                                 if (formkey.currentState!.validate()) {
                                   if (cubit.EmailExist.length == 0) {

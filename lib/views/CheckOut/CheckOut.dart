@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:xeats/controllers/Components/Components.dart';
+import 'package:xeats/controllers/Components/General%20Components/Components.dart';
 import 'package:xeats/controllers/Components/Global%20Components/DefaultButton.dart';
-import 'package:xeats/controllers/Components/ItemClass.dart';
-import 'package:xeats/controllers/Cubit.dart';
-import 'package:xeats/controllers/States.dart';
+import 'package:xeats/controllers/Components/Product%20Class/Products_Class.dart';
+import 'package:xeats/controllers/Cubits/OrderCubit/OrderCubit.dart';
+import 'package:xeats/controllers/Cubits/OrderCubit/OrderStates.dart';
 import 'package:xeats/views/Cart/cart.dart';
 
 class CheckOut extends StatelessWidget {
@@ -12,8 +12,8 @@ class CheckOut extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<Xeatscubit, XeatsStates>(builder: (context, state) {
-      double deliveryFees = Xeatscubit.get(context).deliveryfees!;
+    return BlocBuilder<OrderCubit, OrderStates>(builder: (context, state) {
+      double deliveryFees = OrderCubit.get(context).deliveryfees!;
       return Scaffold(
         appBar: AppBar(
           actions: [Image.asset("assets/Images/shopping-cart.png")],
@@ -46,7 +46,7 @@ class CheckOut extends StatelessWidget {
                     style: TextStyle(fontSize: 20),
                   ),
                   Text(
-                    "EGP ${FoodItem.getSubtotal()}",
+                    "EGP ${ProductClass.getSubtotal()}",
                     style: const TextStyle(fontSize: 20),
                   )
                 ],
@@ -72,7 +72,7 @@ class CheckOut extends StatelessWidget {
                     style: TextStyle(fontSize: 24),
                   ),
                   Text(
-                    "EGP ${deliveryFees + FoodItem.getSubtotal()}",
+                    "EGP ${deliveryFees + ProductClass.getSubtotal()}",
                     style: const TextStyle(fontSize: 24),
                   )
                 ],
@@ -99,7 +99,7 @@ class CheckOut extends StatelessWidget {
                       )),
                   DefaultButton(
                       function: () {
-                        Xeatscubit.get(context).confirmOrder(
+                        OrderCubit.get(context).confirmOrder(
                           context,
                         );
                       },
@@ -113,3 +113,5 @@ class CheckOut extends StatelessWidget {
     });
   }
 }
+
+void _moveToScreen2(BuildContext context) => Navigation(context, const Cart());

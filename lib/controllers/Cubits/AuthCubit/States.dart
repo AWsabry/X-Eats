@@ -14,6 +14,8 @@ class SuccessEmailProfile extends AuthStates {}
 
 class CheckEmailExistSuccess extends AuthStates {}
 
+class Cleared extends AuthStates {}
+
 class CheckEmailFailed extends AuthStates {
   final String error;
 

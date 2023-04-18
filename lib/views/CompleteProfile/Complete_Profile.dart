@@ -2,9 +2,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:xeats/controllers/Components/General%20Components/Components.dart';
 import 'package:xeats/controllers/Cubits/AuthCubit/States.dart';
 import 'package:xeats/controllers/Cubits/AuthCubit/cubit.dart';
-import 'package:xeats/controllers/Components/Components.dart';
 import 'package:xeats/views/Verification/Verification.dart';
 import '../../controllers/Components/Auth Components/DropDownListTitle.dart';
 import '../../controllers/Components/Global Components/defaultFormField.dart';
@@ -59,7 +59,7 @@ class Complete_Profile extends StatelessWidget {
                           width: double.infinity,
                           child: DefaultFormField(
                               isPassword: false,
-                              controller: cubit.first_name,
+                              controller: cubit.first_nameController,
                               label: 'First Name',
                               type: TextInputType.name,
                               validator: (value) => value!.isEmpty
@@ -73,7 +73,7 @@ class Complete_Profile extends StatelessWidget {
                           width: double.infinity,
                           child: DefaultFormField(
                               isPassword: false,
-                              controller: cubit.last_name,
+                              controller: cubit.last_nameController,
                               label: 'Last Name',
                               type: TextInputType.name,
                               validator: (value) =>
@@ -87,7 +87,7 @@ class Complete_Profile extends StatelessWidget {
                           child: DefaultFormField(
                               isPassword: false,
                               prefix: Icons.phone_android,
-                              controller: cubit.PhoneNumber,
+                              controller: cubit.PhoneNumberController,
                               label: 'Phone No.',
                               type: TextInputType.phone,
                               validator: (value) => value!.isEmpty
@@ -118,11 +118,12 @@ class Complete_Profile extends StatelessWidget {
                             FloatingActionButton(
                                 onPressed: () async {
                                   if (formkey.currentState!.validate()) {
-                                    print('+2' + '${cubit.PhoneNumber.text}');
+                                    print('+2' +
+                                        '${cubit.PhoneNumberController.text}');
                                     await FirebaseAuth.instance
                                         .verifyPhoneNumber(
-                                      phoneNumber:
-                                          '+2' + '${cubit.PhoneNumber.text}',
+                                      phoneNumber: '+2' +
+                                          '${cubit.PhoneNumberController.text}',
                                       verificationCompleted:
                                           (PhoneAuthCredential credential) {},
                                       verificationFailed:

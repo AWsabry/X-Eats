@@ -2,13 +2,13 @@ import 'package:conditional_builder_null_safety/conditional_builder_null_safety.
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:xeats/controllers/Components/AppBarCustomized.dart';
+import 'package:xeats/controllers/Components/AppBar/AppBarCustomized.dart';
 import 'package:xeats/controllers/Components/Auth%20Components/ProfileMenu.dart';
-import 'package:xeats/controllers/Components/Components.dart';
-import 'package:xeats/controllers/Cubit.dart';
+import 'package:xeats/controllers/Components/General%20Components/Components.dart';
 import 'package:xeats/controllers/Components/Global%20Components/loading.dart';
+import 'package:xeats/controllers/Cubits/AuthCubit/States.dart';
+import 'package:xeats/controllers/Cubits/AuthCubit/cubit.dart';
 import 'package:xeats/controllers/Cubits/ButtomNavigationBarCubit/navigationCubit.dart';
-import 'package:xeats/controllers/States.dart';
 import 'package:xeats/views/Layout/Layout.dart';
 import 'package:xeats/views/Resturants/Resturants.dart';
 
@@ -19,10 +19,10 @@ class Profile extends StatelessWidget {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
-    return BlocConsumer<Xeatscubit, XeatsStates>(
+    return BlocConsumer<AuthCubit, AuthStates>(
         listener: (context, state) {},
         builder: (context, state) {
-          var cubit = Xeatscubit.get(context);
+          var cubit = AuthCubit.get(context);
           var navcubit = NavBarCubitcubit.get(context);
           return ConditionalBuilder(
             fallback: (context) => Center(child: Loading()),

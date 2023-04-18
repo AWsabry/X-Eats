@@ -5,12 +5,11 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:xeats/controllers/Components/AppBarCustomized.dart';
-import 'package:xeats/controllers/Components/Components.dart';
-import 'package:xeats/controllers/Components/ItemClass.dart';
-import 'package:xeats/controllers/Cubit.dart';
+import 'package:xeats/controllers/Components/AppBar/AppBarCustomized.dart';
+import 'package:xeats/controllers/Components/General%20Components/Components.dart';
 import 'package:xeats/controllers/Cubits/ButtomNavigationBarCubit/navigationCubit.dart';
-import 'package:xeats/controllers/States.dart';
+import 'package:xeats/controllers/Cubits/RestauratsCubit/RestaurantsStates.dart';
+import 'package:xeats/controllers/Cubits/RestauratsCubit/RestuarantsCubit.dart';
 import 'package:xeats/views/Layout/Layout.dart';
 import 'package:xeats/views/Profile/Profile.dart';
 import 'package:xeats/views/Resturants/Resturants.dart';
@@ -39,7 +38,7 @@ class SearchRestaurantsScreen extends StatefulWidget {
 class _SearchRestaurantsScreenState extends State<SearchRestaurantsScreen> {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<Xeatscubit, XeatsStates>(
+    return BlocBuilder<RestuarantsCubit, RestuarantsStates>(
       builder: (context, state) {
         var navcubit = NavBarCubitcubit.get(context);
 
@@ -47,7 +46,7 @@ class _SearchRestaurantsScreenState extends State<SearchRestaurantsScreen> {
           appBar: appBar(context,
               title: "Restaurants Searching", subtitle: "Restarants Names"),
           body: Padding(
-            padding: EdgeInsets.all(15.0),
+            padding: const EdgeInsets.all(15.0),
             child: SingleChildScrollView(
               child: Column(
                 children: [
@@ -66,22 +65,22 @@ class _SearchRestaurantsScreenState extends State<SearchRestaurantsScreen> {
                             enabledBorder: InputBorder.none,
                             hintText: "Search For Restaurants",
                             prefixIcon: Icon(Icons.search)),
-                        controller:
-                            Xeatscubit.get(context).searchRestaurantsController,
+                        controller: RestuarantsCubit.get(context)
+                            .searchRestaurantsController,
                         onSubmitted: (value) async {
                           setState(() async {
-                            await Xeatscubit.get(context)
+                            await RestuarantsCubit.get(context)
                                 .clearRestaurantId()
                                 .then((value) async {
-                              await Xeatscubit.get(context)
+                              await RestuarantsCubit.get(context)
                                   .GetIdOfResutarant(context);
-                              await Xeatscubit.get(context)
+                              await RestuarantsCubit.get(context)
                                   .SearchOnListOfRestuarant(context);
-                              if (Xeatscubit.get(context)
+                              if (RestuarantsCubit.get(context)
                                   .restaurant_nameFromSearching
                                   .toString()
                                   .toLowerCase()
-                                  .contains(Xeatscubit.get(context)
+                                  .contains(RestuarantsCubit.get(context)
                                       .searchRestaurantsController
                                       .text
                                       .toLowerCase())) {
@@ -89,21 +88,24 @@ class _SearchRestaurantsScreenState extends State<SearchRestaurantsScreen> {
                                     context,
                                     SearchRestaurantsScreen(
                                       restaurant_nameFromSearching:
-                                          Xeatscubit.get(context)
+                                          RestuarantsCubit.get(context)
                                               .restaurant_nameFromSearching,
                                       RestaurantId:
-                                          Xeatscubit.get(context).RestaurantId,
-                                      Restuarantsdata: Xeatscubit.get(context)
-                                          .Restuarantsdata,
-                                      imageOfRestaurant: Xeatscubit.get(context)
-                                          .imageOfRestaurant,
+                                          RestuarantsCubit.get(context)
+                                              .RestaurantId,
+                                      Restuarantsdata:
+                                          RestuarantsCubit.get(context)
+                                              .Restuarantsdata,
+                                      imageOfRestaurant:
+                                          RestuarantsCubit.get(context)
+                                              .imageOfRestaurant,
                                     ));
                               } else {
                                 ScaffoldMessenger.of(context)
                                     .showSnackBar(SnackBar(
                                   duration: const Duration(milliseconds: 1500),
                                   content: Text(
-                                      "There isn't Restaurant called ${Xeatscubit.get(context).searchController.text}"),
+                                      "There isn't Restaurant called ${RestuarantsCubit.get(context).searchRestaurantsController}"),
                                   backgroundColor: Colors.red,
                                 ));
                               }
@@ -112,7 +114,8 @@ class _SearchRestaurantsScreenState extends State<SearchRestaurantsScreen> {
                         },
                       )),
                   FutureBuilder(
-                      future: Xeatscubit.get(context).getListOfRestuarants(
+                      future:
+                          RestuarantsCubit.get(context).getListOfRestuarants(
                         context,
                         RestaurantId: widget.RestaurantId,
                         restaurant_nameFromSearching:
@@ -121,8 +124,7 @@ class _SearchRestaurantsScreenState extends State<SearchRestaurantsScreen> {
                         imageOfRestaurant: widget.imageOfRestaurant,
                       ),
                       builder: ((context, snapshot) {
-                        if (snapshot.hasData &&
-                            Xeatscubit.get(context).Restuarantsdata != null) {
+                        if (snapshot.hasData) {
                           return snapshot.data!;
                         } else {
                           return Center(
@@ -141,15 +143,15 @@ class _SearchRestaurantsScreenState extends State<SearchRestaurantsScreen> {
             currentIndex: 0,
             onTap: (index) async {
               Navigator.pop(context);
-              await Xeatscubit.get(context).clearRestaurantId();
+              await RestuarantsCubit.get(context).clearRestaurantId();
               if (index == 0) {
-                await Xeatscubit.get(context).clearRestaurantId();
+                await RestuarantsCubit.get(context).clearRestaurantId();
               } else if (index == 1) {
-                await Xeatscubit.get(context).clearRestaurantId();
-                Navigation(context, Restaurants());
+                await RestuarantsCubit.get(context).clearRestaurantId();
+                Navigation(context, const Restaurants());
               } else {
-                await Xeatscubit.get(context).clearRestaurantId();
-                Navigation(context, Profile());
+                await RestuarantsCubit.get(context).clearRestaurantId();
+                Navigation(context, const Profile());
               }
             },
           ),

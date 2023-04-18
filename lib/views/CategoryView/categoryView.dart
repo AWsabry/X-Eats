@@ -5,13 +5,13 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:xeats/controllers/Components/AppBarCustomized.dart';
-import 'package:xeats/controllers/Components/Components.dart';
+import 'package:xeats/controllers/Components/AppBar/AppBarCustomized.dart';
+import 'package:xeats/controllers/Components/General%20Components/Components.dart';
 import 'package:xeats/controllers/Components/Global%20Components/loading.dart';
-import 'package:xeats/controllers/Components/ItemClass.dart';
-import 'package:xeats/controllers/Cubit.dart';
+
 import 'package:xeats/controllers/Cubits/ButtomNavigationBarCubit/navigationCubit.dart';
-import 'package:xeats/controllers/States.dart';
+import 'package:xeats/controllers/Cubits/ProductsCubit/ProductsCubit.dart';
+import 'package:xeats/controllers/Cubits/ProductsCubit/ProductsStates.dart';
 import 'package:xeats/views/Layout/Layout.dart';
 import 'package:xeats/views/Profile/Profile.dart';
 import 'package:xeats/views/Search/SearchProducts.dart';
@@ -34,7 +34,7 @@ class CategoriesView extends StatelessWidget {
   final String? restaurantID;
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<Xeatscubit, XeatsStates>(
+    return BlocBuilder<ProductsCubit, ProductsStates>(
       builder: ((context, state) {
         var navcubit = NavBarCubitcubit.get(context);
         return Scaffold(
@@ -44,7 +44,7 @@ class CategoriesView extends StatelessWidget {
             child: Column(
               children: [
                 FutureBuilder(
-                  future: Xeatscubit.get(context).getCurrentProducts(context,
+                  future: ProductsCubit.get(context).getCurrentProducts(context,
                       restaurantName: restaurantName,
                       id: restaurantID,
                       CatId: categoryId,
@@ -68,14 +68,14 @@ class CategoriesView extends StatelessWidget {
             currentIndex: 1,
             onTap: (index) async {
               Navigator.pop(context);
-              await Xeatscubit.get(context).ClearId();
+              await ProductsCubit.get(context).ClearProductsId();
               if (index == 1) {
-                await Xeatscubit.get(context).ClearId();
+                await ProductsCubit.get(context).ClearProductsId();
               } else if (index == 0) {
-                await Xeatscubit.get(context).ClearId();
+                await ProductsCubit.get(context).ClearProductsId();
                 Navigation(context, Layout());
               } else {
-                await Xeatscubit.get(context).ClearId();
+                await ProductsCubit.get(context).ClearProductsId();
                 Navigation(context, Profile());
               }
             },

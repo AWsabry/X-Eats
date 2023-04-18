@@ -1,15 +1,17 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:xeats/controllers/Components/Components.dart';
+import 'package:xeats/controllers/Components/General%20Components/Components.dart';
 import 'package:xeats/controllers/Components/Global%20Components/loading.dart';
-import 'package:xeats/controllers/Components/AppBarCustomized.dart';
-import 'package:xeats/controllers/Cubit.dart';
+import 'package:xeats/controllers/Components/AppBar/AppBarCustomized.dart';
+import 'package:xeats/controllers/Cubits/ProductsCubit/ProductsCubit.dart';
+import 'package:xeats/controllers/Cubits/RestauratsCubit/RestaurantsStates.dart';
+import 'package:xeats/controllers/Cubits/RestauratsCubit/RestuarantsCubit.dart';
 import 'package:xeats/controllers/Dio/DioHelper.dart';
-import 'package:xeats/controllers/States.dart';
 import 'package:xeats/views/Layout/Layout.dart';
 import 'package:xeats/views/Profile/Profile.dart';
 import 'package:xeats/views/Resturants/Resturants.dart';
@@ -38,10 +40,9 @@ class ResturantsMenu extends StatelessWidget {
         ),
         request: const AdRequest());
     bannerAd.load();
-    return BlocConsumer<Xeatscubit, XeatsStates>(
+    return BlocConsumer<RestuarantsCubit, RestuarantsStates>(
       listener: (context, state) {},
       builder: (context, state) {
-        var cubit = Xeatscubit.get(context);
         var navcubit = NavBarCubitcubit.get(context);
         return Scaffold(
           appBar: appBar(context, subtitle: 'Products Of', title: data['Name']),
@@ -52,8 +53,8 @@ class ResturantsMenu extends StatelessWidget {
                   builder: (context, snapshot) {
                     return Container();
                   },
-                  future: Xeatscubit.get(context)
-                      .getCurrentAvailableOrderRestauant(),
+                  future: RestuarantsCubit.get(context)
+                      .getCurrentAvailableOrderRestauant(context),
                 ),
                 SafeArea(
                   child: Stack(children: [
@@ -77,30 +78,31 @@ class ResturantsMenu extends StatelessWidget {
                                   hintText: "Search For Products",
                                   prefixIcon: Icon(Icons.search)),
                               controller:
-                                  Xeatscubit.get(context).searchController,
+                                  ProductsCubit.get(context).searchController,
                               onSubmitted: (value) async {
-                                await Xeatscubit.get(context).GetIdOfProducts(
+                                await ProductsCubit.get(context)
+                                    .GetIdOfProducts(
                                   context,
                                   id: RestaurantId.toString(),
                                 );
-                                await Xeatscubit.get(context)
+                                await ProductsCubit.get(context)
                                     .SearchOnListOfProduct(
                                   context,
                                 );
 
-                                if (Xeatscubit.get(context)
+                                if (ProductsCubit.get(context)
                                         .ArabicName
                                         .toString()
                                         .toLowerCase()
-                                        .contains(Xeatscubit.get(context)
+                                        .contains(ProductsCubit.get(context)
                                             .searchController
                                             .text
                                             .toLowerCase()) ||
-                                    Xeatscubit.get(context)
+                                    ProductsCubit.get(context)
                                         .EnglishName
                                         .toString()
                                         .toLowerCase()
-                                        .contains(Xeatscubit.get(context)
+                                        .contains(ProductsCubit.get(context)
                                             .searchController
                                             .text
                                             .toLowerCase())) {
@@ -108,19 +110,18 @@ class ResturantsMenu extends StatelessWidget {
                                       context,
                                       SearchProductsScreen(
                                         restaurantID: RestaurantId.toString(),
-                                        image:
-                                            Xeatscubit.get(context).image.first,
-                                        category: Xeatscubit.get(context)
+                                        category: ProductsCubit.get(context)
                                             .category_name
                                             .first
                                             .toString(),
-                                        categoryId: Xeatscubit.get(context)
+                                        categoryId: ProductsCubit.get(context)
                                             .category
                                             .first
                                             .toString(),
-                                        restaurantName: Xeatscubit.get(context)
-                                            .restaurant_name
-                                            .first,
+                                        restaurantName:
+                                            ProductsCubit.get(context)
+                                                .restaurant_name
+                                                .first,
                                       ));
                                 } else {
                                   ScaffoldMessenger.of(context)
@@ -128,7 +129,7 @@ class ResturantsMenu extends StatelessWidget {
                                     duration:
                                         const Duration(milliseconds: 1500),
                                     content: Text(
-                                        "There isn't product called ${Xeatscubit.get(context).searchController.text}"),
+                                        "There isn't product called ${ProductsCubit.get(context).searchController.text}"),
                                     backgroundColor: Colors.red,
                                   ));
                                 }
@@ -158,7 +159,7 @@ class ResturantsMenu extends StatelessWidget {
                                           borderRadius:
                                               BorderRadius.circular(20),
                                           child: Image(
-                                            image: NetworkImage(
+                                            image: CachedNetworkImageProvider(
                                                 DioHelper.dio!.options.baseUrl +
                                                     data['image']),
                                           ),
@@ -242,7 +243,8 @@ class ResturantsMenu extends StatelessWidget {
                         return Loading();
                       }
                     }),
-                    future: Xeatscubit.get(context).getRestaurantCategories(
+                    future:
+                        RestuarantsCubit.get(context).getRestaurantCategories(
                       context,
                       image: data["image"].toString(),
                       restaurantId: data["id"].toString(),

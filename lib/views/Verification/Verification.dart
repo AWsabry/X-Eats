@@ -7,11 +7,9 @@ import 'package:pinput/pinput.dart';
 import 'package:xeats/controllers/Cubits/AuthCubit/States.dart';
 import 'package:xeats/controllers/Cubits/AuthCubit/cubit.dart';
 
-import 'package:xeats/controllers/Components/Components.dart';
+import 'package:xeats/controllers/Components/General%20Components/Components.dart';
 import 'package:xeats/views/CompleteProfile/Complete_Profile.dart';
 import 'package:xeats/views/SignIn/SignIn.dart';
-
-import '../../controllers/Cubit.dart';
 
 class Verify extends StatelessWidget {
   Verify({super.key});
@@ -104,7 +102,7 @@ class Verify extends StatelessWidget {
                                   onChanged: (value) {
                                     code = value;
                                   },
-                                  controller: Xeatscubit.get(context).XeatOtp1,
+                                  controller: AuthCubit.get(context).XeatOtp1,
                                 ),
                               ),
                             ],
@@ -135,13 +133,14 @@ class Verify extends StatelessWidget {
                                   cubit.CreateUser(
                                     context,
                                     password: cubit.password.text,
-                                    email: cubit.email.text,
-                                    first_name: cubit.first_name.text,
-                                    last_name: cubit.last_name.text,
+                                    email: cubit.emailController.text,
+                                    first_name: cubit.first_nameController.text,
+                                    last_name: cubit.last_nameController.text,
                                     title: cubit.title,
-                                    PhoneNumber: cubit.PhoneNumber.text,
+                                    PhoneNumber:
+                                        cubit.PhoneNumberController.text,
                                   );
-                                  Navigation(context, SignIn());
+                                  NavigateAndRemov(context, SignIn());
                                 } on FirebaseAuthException catch (e) {
                                   const snackBar = SnackBar(
                                     backgroundColor: Colors.red,
