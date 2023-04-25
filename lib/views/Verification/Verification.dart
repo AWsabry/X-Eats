@@ -17,6 +17,8 @@ class Verify extends StatelessWidget {
   var formkey = GlobalKey<FormState>();
   final FirebaseAuth auth = FirebaseAuth.instance;
   var code = "";
+  String _verificationId = "";
+  int? _resendToken;
   @override
   Widget build(BuildContext context) {
     final defaultPinTheme = PinTheme(
@@ -111,7 +113,34 @@ class Verify extends StatelessWidget {
                         Row(
                           children: [
                             TextButton(
-                                onPressed: () {},
+                                onPressed: () async {
+                                  PhoneAuthCredential credential =
+                                      PhoneAuthProvider.credential(
+                                    verificationId: Complete_Profile.verify,
+                                    smsCode: code,
+                                  );
+                                  try {
+                                    await FirebaseAuth.instance
+                                        .verifyPhoneNumber(
+                                      timeout: const Duration(seconds: 5),
+                                      phoneNumber: '+2' +
+                                          '${cubit.PhoneNumberController.text}',
+                                      verificationCompleted:
+                                          (PhoneAuthCredential credential) {},
+                                      verificationFailed:
+                                          (FirebaseAuthException e) {},
+                                      codeSent: (String verificationId,
+                                          int? resendToken) {
+                                        Complete_Profile.verify =
+                                            verificationId;
+                                      },
+                                      codeAutoRetrievalTimeout:
+                                          (String verificationId) {},
+                                    );
+                                  } on FirebaseAuthException catch (e) {
+                                    print(e);
+                                  }
+                                },
                                 child: Text(
                                   'Resend Code',
                                   style: GoogleFonts.poppins(

@@ -161,7 +161,7 @@ class ResturantsMenu extends StatelessWidget {
                                           child: Image(
                                             image: CachedNetworkImageProvider(
                                                 DioHelper.dio!.options.baseUrl +
-                                                    data['image']),
+                                                    data['logo']),
                                           ),
                                         ),
                                       ),

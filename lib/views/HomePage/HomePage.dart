@@ -244,7 +244,7 @@ class _HomePageState extends State<HomePage> {
                                         },
                                         image: CachedNetworkImageProvider(
                                             DioHelper.dio!.options.baseUrl +
-                                                restaurant_api[index]['image']),
+                                                restaurant_api[index]['logo']),
                                       ),
                                     ),
                                   );

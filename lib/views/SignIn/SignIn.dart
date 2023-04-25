@@ -10,6 +10,7 @@ import 'package:xeats/controllers/Cubits/AuthCubit/cubit.dart';
 import 'package:xeats/controllers/Cubits/OrderCubit/OrderCubit.dart';
 import 'package:xeats/controllers/Cubits/ProductsCubit/ProductsCubit.dart';
 import 'package:xeats/controllers/Cubits/RestauratsCubit/RestuarantsCubit.dart';
+import 'package:xeats/views/ForgetPassword/forgetpassword.dart';
 import 'package:xeats/views/LoginSuccess/loginSuccess.dart';
 import 'package:xeats/views/SignUp/SignUp.dart';
 
@@ -117,6 +118,7 @@ class SignIn extends StatelessWidget {
 
                                     var status =
                                         dioException.response!.statusCode;
+                                    print(status);
                                     if (e.runtimeType == DioError) {
                                       // print(dioException.response!.statusCode);
                                     }

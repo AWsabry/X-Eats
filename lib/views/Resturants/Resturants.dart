@@ -131,7 +131,7 @@ class Restaurants extends StatelessWidget {
                           shrinkWrap: true,
                           physics: const NeverScrollableScrollPhysics(),
                           itemBuilder: (context, index) {
-                            if (data_from_api[index]['image'] == null) {
+                            if (data_from_api[index]['logo'] == null) {
                               return Loading();
                             } else {
                               return InkWell(
@@ -167,7 +167,7 @@ class Restaurants extends StatelessWidget {
                                             ),
                                           ),
                                           imageUrl: 'https://www.x-eats.com' +
-                                              data_from_api[index]['image'],
+                                              data_from_api[index]['logo'],
                                         ),
                                       ),
                                     ),
