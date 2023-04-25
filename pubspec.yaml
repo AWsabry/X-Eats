@@ -59,7 +59,7 @@ dependencies:
   pull_to_refresh:
   url_launcher:
   firebase_auth:
-  pinput: ^2.2.30
+  pinput:
   json_annotation:
   json_helper:
   google_maps_flutter:
