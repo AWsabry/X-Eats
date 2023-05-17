@@ -1,28 +1,23 @@
+// ignore_for_file: must_be_immutable, invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:xeats/controllers/Components/Global%20Components/loading.dart';
 import 'package:xeats/controllers/Components/AppBar/AppBarCustomized.dart';
 import 'package:xeats/controllers/Components/Requests%20Loading%20Components/RequstsLoading.dart';
-import 'package:xeats/controllers/Cubits/AuthCubit/cubit.dart';
 import 'package:xeats/controllers/Cubits/ButtomNavigationBarCubit/navigationCubit.dart';
 import 'package:xeats/controllers/Cubits/OrderCubit/OrderCubit.dart';
 import 'package:xeats/controllers/Cubits/OrderCubit/OrderStates.dart';
-import 'package:xeats/controllers/Cubits/ProductsCubit/ProductsCubit.dart';
-import 'package:xeats/controllers/Cubits/RestauratsCubit/RestaurantsStates.dart';
-import 'package:xeats/controllers/Cubits/RestauratsCubit/RestuarantsCubit.dart';
 import 'package:xeats/controllers/Components/General%20Components/Components.dart';
-import 'package:xeats/views/Cart/cart.dart';
 import 'package:xeats/views/CheckOut/CheckOut.dart';
 import 'package:xeats/views/Layout/Layout.dart';
 import 'package:xeats/views/Profile/Profile.dart';
 import 'package:xeats/views/Resturants/Resturants.dart';
-import 'package:xeats/views/ResturantsMenu/ResturantsMenu.dart';
 
 class ProductClass extends StatelessWidget {
   final bool? isMostPopular, isNewProduct, isBestOffer;
@@ -474,8 +469,6 @@ class ProductClass extends StatelessWidget {
       required String? englishName,
       required int? id,
       required int? restaurant}) {
-    String? shift;
-
     final BannerAd bannerAd = BannerAd(
         size: AdSize.banner,
         adUnitId: "ca-app-pub-5674432343391353/3216382829",

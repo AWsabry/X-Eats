@@ -5,7 +5,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:xeats/controllers/Components/AppBar/AppBarCustomized.dart';
 import 'package:xeats/controllers/Components/General%20Components/Components.dart';
 import 'package:xeats/controllers/Components/Global%20Components/loading.dart';
-import 'package:xeats/controllers/Components/Restaurant%20Components/RestaurantView.dart';
 import 'package:xeats/controllers/Cubits/AuthCubit/cubit.dart';
 import 'package:xeats/controllers/Cubits/OrderCubit/OrderCubit.dart';
 import 'package:xeats/controllers/Cubits/RestauratsCubit/RestaurantsStates.dart';
@@ -13,7 +12,6 @@ import 'package:xeats/controllers/Cubits/RestauratsCubit/RestuarantsCubit.dart';
 import 'package:xeats/views/Animations/EmptyCart.dart';
 import 'package:xeats/views/Checkout/CheckOut.dart';
 import 'package:xeats/views/Layout/Layout.dart';
-import 'package:xeats/views/ResturantsMenu/ResturantsMenu.dart';
 
 class Cart extends StatefulWidget {
   const Cart({super.key});
@@ -29,6 +27,7 @@ late List<Widget> allWhatInCart = [];
 class _CartState extends State<Cart> {
   @override
   void initState() {
+    super.initState();
     FutureRestaurants = RestuarantsCubit.get(context)
         .getCurrentAvailableOrderRestauant(context);
     getCartItemsFuture = OrderCubit.get(context).getCartItems(

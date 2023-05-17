@@ -1,16 +1,10 @@
-import 'dart:convert';
-
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:xeats/controllers/Cubits/AuthCubit/States.dart';
 import 'package:xeats/controllers/Components/General%20Components/Components.dart';
 import 'package:xeats/controllers/Dio/DioHelper.dart';
-import 'package:xeats/views/HomePage/HomePage.dart';
-import 'package:xeats/views/Layout/Layout.dart';
 import 'package:xeats/views/SignIn/SignIn.dart';
-import 'package:xeats/views/Verification/Verification.dart';
 
 class AuthCubit extends Cubit<AuthStates> {
   AuthCubit() : super(AuthInitState());
@@ -46,11 +40,6 @@ class AuthCubit extends Cubit<AuthStates> {
   String? title;
 
   //---------------Complete Profile Methods-------------//
-
-  void changegender() {
-    Gender = Value;
-    emit(ChangeGenderState());
-  }
 
   void changetitle() {
     title = ValueTitle;

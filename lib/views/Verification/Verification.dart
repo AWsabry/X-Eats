@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable, use_build_context_synchronously
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -17,8 +19,7 @@ class Verify extends StatelessWidget {
   var formkey = GlobalKey<FormState>();
   final FirebaseAuth auth = FirebaseAuth.instance;
   var code = "";
-  String _verificationId = "";
-  int? _resendToken;
+
   @override
   Widget build(BuildContext context) {
     final defaultPinTheme = PinTheme(
@@ -114,11 +115,6 @@ class Verify extends StatelessWidget {
                           children: [
                             TextButton(
                                 onPressed: () async {
-                                  PhoneAuthCredential credential =
-                                      PhoneAuthProvider.credential(
-                                    verificationId: Complete_Profile.verify,
-                                    smsCode: code,
-                                  );
                                   try {
                                     await FirebaseAuth.instance
                                         .verifyPhoneNumber(
@@ -170,7 +166,7 @@ class Verify extends StatelessWidget {
                                         cubit.PhoneNumberController.text,
                                   );
                                   NavigateAndRemov(context, SignIn());
-                                } on FirebaseAuthException catch (e) {
+                                } on FirebaseAuthException {
                                   const snackBar = SnackBar(
                                     backgroundColor: Colors.red,
                                     content: Text('The otp is wrong'),

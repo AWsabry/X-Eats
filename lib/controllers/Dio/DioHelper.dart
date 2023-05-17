@@ -1,9 +1,6 @@
 // ignore_for_file: unused_element
 
-import 'dart:convert';
-
 import 'package:dio/dio.dart';
-import 'package:flutter/cupertino.dart';
 
 Map<String, String> _headers = <String, String>{
   'Content-Type': 'application/json',

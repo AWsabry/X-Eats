@@ -1,16 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:xeats/controllers/Components/AppBar/AppBarCustomized.dart';
-import 'package:xeats/controllers/Components/General%20Components/Components.dart';
-import 'package:xeats/controllers/Cubits/AuthCubit/States.dart';
-import 'package:xeats/controllers/Cubits/AuthCubit/cubit.dart';
 import 'package:xeats/controllers/Cubits/OrderCubit/OrderCubit.dart';
 import 'package:xeats/controllers/Cubits/OrderCubit/OrderStates.dart';
-import 'package:xeats/views/Layout/Layout.dart';
 
 import '../../controllers/Components/Global Components/DefaultButton.dart';
-import '../../controllers/Components/Global Components/loading.dart';
 
 class WaitingRoom extends StatelessWidget {
   const WaitingRoom({

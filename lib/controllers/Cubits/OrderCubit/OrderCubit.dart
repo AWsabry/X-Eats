@@ -1,3 +1,5 @@
+// ignore_for_file: invalid_return_type_for_catch_error, body_might_complete_normally_catch_error
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,12 +13,9 @@ import 'package:xeats/controllers/Components/Product%20Class/Products_Class.dart
 import 'package:xeats/controllers/Components/Requests%20Loading%20Components/RequstsLoading.dart';
 import 'package:xeats/controllers/Cubits/AuthCubit/cubit.dart';
 import 'package:xeats/controllers/Cubits/OrderCubit/OrderStates.dart';
-
 import 'package:xeats/controllers/Dio/DioHelper.dart';
 import 'package:xeats/views/CategoryView/categoryView.dart';
-import 'package:xeats/views/ThankYou/thankyou.dart';
 import 'package:xeats/views/WaitingRoom/waitingRoom.dart';
-
 import '../../../views/Cart/cart.dart';
 
 class OrderCubit extends Cubit<OrderStates> {
@@ -181,7 +180,6 @@ class OrderCubit extends Cubit<OrderStates> {
         isRequestFinished = true;
         emit(ButtonPressedLoading());
         var dioException = e as DioError;
-        var status = dioException.response!.statusCode;
         var resp = dioException.response!.data;
         print("${AuthCubit.get(context).EmailInforamtion}");
         // print(resp);
@@ -309,6 +307,7 @@ class OrderCubit extends Cubit<OrderStates> {
 
         ProductClass.CartItems.add(theItem!);
       }
+      // ignore: avoid_print
     }).catchError((onError) => print(onError));
     print(ProductClass.CartItems);
     return ProductClass.CartItems;

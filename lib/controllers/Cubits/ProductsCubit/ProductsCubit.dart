@@ -19,8 +19,6 @@ class ProductsCubit extends Cubit<ProductsStates> {
     DioHelper.getdata(url: 'get_products_mostSold_products/', query: {})
         .then((value) async {
       MostSold = value.data['Names'];
-      var data;
-      ProductClass? theItem;
 
       emit(ProductsSuccess());
     }).catchError((error) {});

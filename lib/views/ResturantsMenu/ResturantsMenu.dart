@@ -1,4 +1,4 @@
-// ignore_for_file: use_build_context_synchronously
+// ignore_for_file: use_build_context_synchronously, must_be_immutable
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -81,14 +81,14 @@ class ResturantsMenu extends StatelessWidget {
                                   ProductsCubit.get(context).searchController,
                               onSubmitted: (value) async {
                                 await ProductsCubit.get(context)
-                                    .GetIdOfProducts(
-                                  context,
-                                  id: RestaurantId.toString(),
-                                );
-                                await ProductsCubit.get(context)
-                                    .SearchOnListOfProduct(
-                                  context,
-                                );
+                                        .GetIdOfProducts(
+                                      context,
+                                      id: RestaurantId.toString(),
+                                    ) &
+                                    ProductsCubit.get(context)
+                                        .SearchOnListOfProduct(
+                                      context,
+                                    );
 
                                 if (ProductsCubit.get(context)
                                         .ArabicName

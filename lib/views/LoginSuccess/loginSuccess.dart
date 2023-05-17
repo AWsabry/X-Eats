@@ -7,7 +7,6 @@ import 'package:xeats/controllers/Components/General%20Components/Components.dar
 import 'package:xeats/controllers/Cubits/OrderCubit/OrderCubit.dart';
 import 'package:xeats/controllers/Cubits/ProductsCubit/ProductsCubit.dart';
 import 'package:xeats/controllers/Cubits/RestauratsCubit/RestuarantsCubit.dart';
-import 'package:xeats/views/Layout/Layout.dart';
 import 'package:xeats/views/Splash%20Screen/Splach%20Screen.dart';
 
 class LoginSuccess extends StatelessWidget {

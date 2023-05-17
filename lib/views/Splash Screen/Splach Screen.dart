@@ -5,7 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:new_version_plus/new_version_plus.dart';
 import 'package:xeats/controllers/Components/General%20Components/Components.dart';
-import 'package:xeats/controllers/Components/UpdateDialog/UpdateDialogCustmize.dart';
 import 'package:xeats/controllers/Cubits/AuthCubit/States.dart';
 import 'package:xeats/controllers/Cubits/AuthCubit/cubit.dart';
 import 'package:xeats/controllers/Cubits/OrderCubit/OrderCubit.dart';
@@ -85,7 +84,7 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   void inittiken() async {
-    var token = await FirebaseMessaging.instance.getToken().then(
+    await FirebaseMessaging.instance.getToken().then(
       (value) {
         print("Token is Passed to the POST FUNCTION: $value");
         OrderCubit.get(context).postToken(token: "$value");

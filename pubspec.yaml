@@ -41,7 +41,6 @@ dependencies:
   carousel_slider:
   flutter_spinkit:
   connectivity_plus:
-  data_connection_checker:
   internet_connection_checker:
   google_mobile_ads: 
   flutter_svg:
@@ -51,7 +50,6 @@ dependencies:
   firebase_messaging: 
   cloud_firestore: 
   awesome_notifications:
-  flutter_icons:
   cupertino_icons:
   conditional_builder_null_safety:
   flutter_launcher_icons:
@@ -61,7 +59,7 @@ dependencies:
   firebase_auth:
   pinput: ^2.2.30
   json_annotation:
-  json_helper:
+  
   google_maps_flutter:
   geolocator: 
   flutter_polyline_points: 
