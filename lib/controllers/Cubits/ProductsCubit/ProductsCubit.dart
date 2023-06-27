@@ -5,6 +5,8 @@ import 'package:xeats/controllers/Components/Product%20Class/Products_Class.dart
 import 'package:xeats/controllers/Cubits/ProductsCubit/ProductsStates.dart';
 import 'package:xeats/controllers/Dio/DioHelper.dart';
 
+enum Privacy { Private, Public }
+
 class ProductsCubit extends Cubit<ProductsStates> {
   ProductsCubit() : super(SuperProductsStates());
   static ProductsCubit get(context) => BlocProvider.of(context);
@@ -226,5 +228,11 @@ class ProductsCubit extends Cubit<ProductsStates> {
       ));
     });
     return data;
+  }
+
+  Privacy? privacy = Privacy.Public;
+  void changePrivacyOrdertoPublic(Privacy? value) {
+    privacy = value;
+    emit(ChangePrivacytoPublic());
   }
 }

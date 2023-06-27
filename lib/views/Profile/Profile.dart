@@ -9,6 +9,7 @@ import 'package:xeats/controllers/Components/Global%20Components/loading.dart';
 import 'package:xeats/controllers/Cubits/AuthCubit/States.dart';
 import 'package:xeats/controllers/Cubits/AuthCubit/cubit.dart';
 import 'package:xeats/controllers/Cubits/ButtomNavigationBarCubit/navigationCubit.dart';
+import 'package:xeats/controllers/Cubits/OrderCubit/OrderCubit.dart';
 import 'package:xeats/views/Layout/Layout.dart';
 import 'package:xeats/views/Resturants/Resturants.dart';
 
@@ -132,7 +133,10 @@ class Profile extends StatelessWidget {
                     } else if (index == 0) {
                       Navigation(context, Layout());
                     } else {
-                      Navigation(context, const Restaurants());
+                      Navigation(
+                          context,
+                          Restaurants(
+                              currentLocation: OrderCubit.currentLocation));
                     }
                   },
                 ),

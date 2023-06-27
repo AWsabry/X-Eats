@@ -32,7 +32,7 @@ class SignIn extends StatelessWidget {
               ..GetMostSoldProducts()
               ..getPoster()),
         BlocProvider(
-          create: (context) => RestuarantsCubit()..GetResturants(),
+          create: (context) => RestuarantsCubit(),
         ),
         BlocProvider(create: (context) => OrderCubit()..getCartID(context))
       ],

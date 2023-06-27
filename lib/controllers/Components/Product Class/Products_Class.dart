@@ -486,6 +486,7 @@ class ProductClass extends StatelessWidget {
     return BlocConsumer<OrderCubit, OrderStates>(
       builder: (context, state) {
         var navcubit = NavBarCubitcubit.get(context);
+
         double width = MediaQuery.of(context).size.width;
         double height = MediaQuery.of(context).size.height;
         return Scaffold(
@@ -682,7 +683,7 @@ class ProductClass extends StatelessWidget {
             onTap: (index) {
               Navigator.pop(context);
               if (index == 1) {
-                Navigation(context, const Restaurants());
+                Navigation(context, Restaurants());
               } else if (index == 0) {
                 Navigation(context, Layout());
               } else {

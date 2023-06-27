@@ -8,17 +8,21 @@ import 'package:xeats/controllers/Components/General%20Components/Components.dar
 import 'package:xeats/controllers/Components/Global%20Components/loading.dart';
 import 'package:xeats/controllers/Components/Product%20Class/Products_Class.dart';
 import 'package:xeats/controllers/Cubits/ButtomNavigationBarCubit/navigationCubit.dart';
+import 'package:xeats/controllers/Cubits/OrderCubit/OrderCubit.dart';
+import 'package:xeats/controllers/Cubits/OrderCubit/OrderStates.dart';
 import 'package:xeats/controllers/Cubits/ProductsCubit/ProductsCubit.dart';
 import 'package:xeats/controllers/Cubits/ProductsCubit/ProductsStates.dart';
 import 'package:xeats/controllers/Cubits/RestauratsCubit/RestuarantsCubit.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:xeats/views/Layout/Layout.dart';
 import 'package:xeats/views/Profile/Profile.dart';
+import 'package:xeats/views/HomePage/HomePage.dart';
 import 'package:xeats/views/ResturantsMenu/ResturantsMenu.dart';
 import '../../controllers/Components/Products Components/NewProducts.dart';
 
 class Restaurants extends StatelessWidget {
-  const Restaurants({super.key});
+  Restaurants({super.key, this.currentLocation});
+  String? currentLocation;
 
   @override
   Widget build(BuildContext context) {
@@ -28,11 +32,13 @@ class Restaurants extends StatelessWidget {
         BlocProvider(
           create: (context) => ProductsCubit()..NewProducts(),
         ),
+        BlocProvider(
+          create: (context) => OrderCubit()..getRestaurantsOfLocation(context),
+        )
       ],
       child: BlocConsumer<ProductsCubit, ProductsStates>(
         listener: (context, state) {},
         builder: (context, state) {
-          var data_from_api = RestuarantsCubit.ResturantsList;
           var newProducts = ProductsCubit.get(context).new_products;
           var navcubit = NavBarCubitcubit.get(context);
           var Connection = false;
@@ -123,128 +129,150 @@ class Restaurants extends StatelessWidget {
                           ),
                         ],
                       ),
-                      ConditionalBuilder(
-                        condition:
-                            data_from_api.isNotEmpty && Connection == false,
-                        fallback: (context) => Center(child: Loading()),
-                        builder: (context) => ListView.separated(
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemBuilder: (context, index) {
-                            if (data_from_api[index]['logo'] == null) {
-                              return Loading();
-                            } else {
-                              return InkWell(
-                                onTap: () {
-                                  Navigation(
-                                      context,
-                                      ResturantsMenu(
-                                        data: data_from_api[index],
-                                        RestaurantId: data_from_api[index]
-                                            ['id'],
-                                      ));
-                                },
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8),
-                                  child: Row(children: [
-                                    Container(
-                                      height: 130.h,
-                                      decoration: BoxDecoration(
-                                        border: Border.all(
-                                            color: Color.fromARGB(
-                                                74, 158, 158, 158)),
-                                        borderRadius:
-                                            BorderRadius.circular(10.0),
-                                      ),
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(16.0),
-                                        child: CachedNetworkImage(
-                                          progressIndicatorBuilder:
-                                              (context, url, progress) =>
-                                                  Center(
-                                            child: CircularProgressIndicator(
-                                              value: progress.progress,
+                      BlocBuilder<OrderCubit, OrderStates>(
+                        builder: (context, state) {
+                          var restuarantsOfSlugListApi =
+                              OrderCubit.restuarantsOfSlugList;
+                          return ConditionalBuilder(
+                            condition: restuarantsOfSlugListApi.isNotEmpty &&
+                                Connection == false,
+                            fallback: (context) => const Center(
+                                child: CircularProgressIndicator()),
+                            builder: (context) => ListView.separated(
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemBuilder: (context, index) {
+                                if (restuarantsOfSlugListApi[index]['logo'] ==
+                                    null) {
+                                  return Loading();
+                                } else {
+                                  return InkWell(
+                                    onTap: () {
+                                      Navigation(
+                                          context,
+                                          ResturantsMenu(
+                                            data:
+                                                restuarantsOfSlugListApi[index],
+                                            RestaurantId:
+                                                restuarantsOfSlugListApi[index]
+                                                    ['id'],
+                                          ));
+                                    },
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8),
+                                      child: Row(children: [
+                                        Container(
+                                          height: 130.h,
+                                          decoration: BoxDecoration(
+                                            border: Border.all(
+                                                color: Color.fromARGB(
+                                                    74, 158, 158, 158)),
+                                            borderRadius:
+                                                BorderRadius.circular(10.0),
+                                          ),
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(16.0),
+                                            child: CachedNetworkImage(
+                                              progressIndicatorBuilder:
+                                                  (context, url, progress) =>
+                                                      Center(
+                                                child:
+                                                    CircularProgressIndicator(
+                                                  value: progress.progress,
+                                                ),
+                                              ),
+                                              imageUrl:
+                                                  'https://www.x-eats.com' +
+                                                      restuarantsOfSlugListApi[
+                                                          index]['logo'],
                                             ),
                                           ),
-                                          imageUrl: 'https://www.x-eats.com' +
-                                              data_from_api[index]['logo'],
                                         ),
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      width: 20.w,
-                                    ),
-                                    Expanded(
-                                      child: Container(
-                                        height: height / 7,
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          children: [
-                                            Column(children: [
-                                              Text(
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  maxLines: 1,
-                                                  '${data_from_api[index]['Name']}',
-                                                  style: GoogleFonts.poppins(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 18,
-                                                  )),
-                                            ]),
-                                            SizedBox(
-                                              height: 10.h,
+                                        SizedBox(
+                                          width: 20.w,
+                                        ),
+                                        Expanded(
+                                          child: Container(
+                                            height: height / 7,
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              children: [
+                                                Column(children: [
+                                                  Text(
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                      maxLines: 1,
+                                                      '${restuarantsOfSlugListApi[index]['Name']}',
+                                                      style:
+                                                          GoogleFonts.poppins(
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontSize: 18,
+                                                      )),
+                                                ]),
+                                                SizedBox(
+                                                  height: 10.h,
+                                                ),
+                                                Row(children: const [
+                                                  Icon(
+                                                    Icons.star,
+                                                    color: Colors.amber,
+                                                  ),
+                                                  Text(' 4.1'),
+                                                  Text(' (100+)')
+                                                ]),
+                                                SingleChildScrollView(
+                                                  scrollDirection:
+                                                      Axis.horizontal,
+                                                  child: Row(
+                                                    children: [
+                                                      const Icon(
+                                                          Icons.timer_sharp),
+                                                      Text(
+                                                        ' 45 mins',
+                                                        style:
+                                                            GoogleFonts.poppins(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w400),
+                                                      ),
+                                                      SizedBox(
+                                                        width: 25.w,
+                                                      ),
+                                                      Icon(Icons
+                                                          .delivery_dining_outlined),
+                                                      SizedBox(
+                                                        width: 2.w,
+                                                      ),
+                                                      Text(
+                                                        'X-Eats Delivery',
+                                                        style:
+                                                            GoogleFonts.poppins(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w400),
+                                                      )
+                                                    ],
+                                                  ),
+                                                )
+                                              ],
                                             ),
-                                            Row(children: const [
-                                              Icon(
-                                                Icons.star,
-                                                color: Colors.amber,
-                                              ),
-                                              Text(' 4.1'),
-                                              Text(' (100+)')
-                                            ]),
-                                            SingleChildScrollView(
-                                              scrollDirection: Axis.horizontal,
-                                              child: Row(
-                                                children: [
-                                                  const Icon(Icons.timer_sharp),
-                                                  Text(
-                                                    ' 45 mins',
-                                                    style: GoogleFonts.poppins(
-                                                        fontWeight:
-                                                            FontWeight.w400),
-                                                  ),
-                                                  SizedBox(
-                                                    width: 25.w,
-                                                  ),
-                                                  Icon(Icons
-                                                      .delivery_dining_outlined),
-                                                  SizedBox(
-                                                    width: 2.w,
-                                                  ),
-                                                  Text(
-                                                    'X-Eats Delivery',
-                                                    style: GoogleFonts.poppins(
-                                                        fontWeight:
-                                                            FontWeight.w400),
-                                                  )
-                                                ],
-                                              ),
-                                            )
-                                          ],
+                                          ),
                                         ),
-                                      ),
+                                      ]),
                                     ),
-                                  ]),
-                                ),
-                              );
-                            }
-                          },
-                          separatorBuilder: ((context, index) => Dividerr()),
-                          itemCount: data_from_api.length,
-                        ),
+                                  );
+                                }
+                              },
+                              separatorBuilder: ((context, index) =>
+                                  Dividerr()),
+                              itemCount: restuarantsOfSlugListApi.length,
+                            ),
+                          );
+                        },
                       )
                     ],
                   ),
@@ -262,7 +290,7 @@ class Restaurants extends StatelessWidget {
                 } else if (index == 0) {
                   Navigation(context, Layout());
                 } else {
-                  Navigation(context, Profile());
+                  Navigation(context, const Profile());
                 }
               },
             ),

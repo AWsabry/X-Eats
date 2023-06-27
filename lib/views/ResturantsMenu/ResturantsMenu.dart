@@ -246,7 +246,7 @@ class ResturantsMenu extends StatelessWidget {
                     future:
                         RestuarantsCubit.get(context).getRestaurantCategories(
                       context,
-                      image: data["image"].toString(),
+                      image: data["logo"].toString(),
                       restaurantId: data["id"].toString(),
                       restaurantName: data['Name'].toString(),
                     ),

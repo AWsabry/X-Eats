@@ -17,14 +17,16 @@ import 'package:xeats/controllers/Dio/DioHelper.dart';
 import 'package:xeats/views/CategoryView/categoryView.dart';
 import 'package:xeats/views/WaitingRoom/waitingRoom.dart';
 import '../../../views/Cart/cart.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class OrderCubit extends Cubit<OrderStates> {
   OrderCubit() : super(SuperOrderStates());
   static OrderCubit get(context) => BlocProvider.of(context);
 
-  String BASEURL = "https://www.x-eats.com";
+  static String BASEURL = "https://www.x-eats.com";
 
   int? cartID;
+
   Future<void> getCartID(context) async {
     SharedPreferences userCartID = await SharedPreferences.getInstance();
     var d;
@@ -342,17 +344,49 @@ class OrderCubit extends Cubit<OrderStates> {
     });
   }
 
+  static String? currentLocation;
+  void ChangeLocation(String value) {
+    currentLocation = value;
+    print(currentLocation);
+    emit(ChangeLocationStatesSuccefullty());
+  }
+
+  List<dynamic> LocationsNames = [];
+  List<dynamic> Locations = [];
+  List<dynamic> LocationSlugList = [];
   void getLocation(
     context,
-  ) async {
-    await Dio()
+  ) {
+    emit(GetLocationsStatesLoading());
+    Dio()
         .get(
       "$BASEURL/get_locations/",
     )
         .then((value) {
-      for (var i in value.data["Names"]) {
-        print(i['id']);
-      }
+      Locations = value.data["Names"];
+      Locations.forEach((Location) {
+        LocationsNames.add(Location["location_Name"]);
+        LocationSlugList.add(Location["location_slug"]);
+      });
+      emit(GetLocationNamesStatesSuccefully());
+    }).catchError((onError) {
+      print("7a7a $LocationsNames");
+    });
+  }
+
+  static List<dynamic> restuarantsOfSlugList = [];
+  void getRestaurantsOfLocation(context) {
+    emit(getRestuarantSlugStateLoading());
+    Locations.forEach((slug) async {
+      if (slug["location_Name"] == currentLocation) {
+        await Dio()
+            .get(
+                "$BASEURL/get_restaurants_by_location/${slug["location_slug"]}")
+            .then((value) {
+          restuarantsOfSlugList = value.data["Names"];
+          emit(getRestuarantsOfSlugStates());
+        });
+      } else {}
     });
   }
 

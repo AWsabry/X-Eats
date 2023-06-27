@@ -24,7 +24,7 @@ class LoginSuccess extends StatelessWidget {
               ..getPoster()
               ..NewProducts()
               ..GetMostSoldProducts()),
-        BlocProvider(create: (context) => RestuarantsCubit()..GetResturants()),
+        BlocProvider(create: (context) => RestuarantsCubit()),
         BlocProvider(create: (context) => OrderCubit()..getCartID(context)),
       ],
       child: BlocConsumer<AuthCubit, AuthStates>(

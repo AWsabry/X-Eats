@@ -215,73 +215,49 @@ class RestuarantsCubit extends Cubit<RestuarantsStates> {
         )
       ],
     );
+
     return RestuarantsUI;
   }
 
-  final List<int> RestaurantId = [];
-  final List<dynamic> Restuarantsdata = [];
-
-  Future<void> GetIdOfResutarant(BuildContext context) async {
-    final response = await Dio().get("$BASEURL/get_restaurants");
-    response.data["Names"].forEach((restaurant) {
-      if (restaurant["Name"]
-          .toString()
-          .toLowerCase()
-          .contains(searchRestaurantsController.text.toLowerCase())) {
-        if (restaurant["id"] is int) {
-          RestaurantId.add(restaurant["id"]);
-          Restuarantsdata.add(restaurant);
-        }
-      }
+  List<dynamic> RestuarantsSearchedList = [];
+  bool isSearched = false;
+  void searchOnRestaurants(String value) {
+    emit(LoadingSearchingState());
+    DioHelper.getdata(url: "get_searched_restaurants/$value").then((value) {
+      RestuarantsSearchedList = value.data["Names"];
+      emit(RestaurantsFounded());
+    }).catchError((onError) {
+      print(onError);
     });
-    emit(RestaurantIdSuccefull());
   }
 
 //---------- Clear The ID Because Searching more than once
-  Future<void> clearRestaurantId() async {
-    imageOfRestaurant.clear();
-    restaurant_nameFromSearching.clear();
-    RestaurantId.clear();
-    emit(ClearRestaurantsIdState());
+  void clearRestaurantsSearched() {
+    RestuarantsSearchedList.clear();
+    emit(ClearRestaurantsSearchList());
   }
 
   final List<String> restaurant_nameFromSearching = [];
 
   final List<String> imageOfRestaurant = [];
   //----------- Loop For the Id that get it from Searching and put it into a List to display in GetList Function-----/////////
-  Future<void> SearchOnListOfRestuarant(
-    BuildContext context,
-  ) async {
-    await Future.wait(RestaurantId.map(
-        (id) => Dio().get("$BASEURL/get_restaurants_by_id/$id").then((value) {
-              imageOfRestaurant.add(value.data["Names"][0]["image"]);
-              restaurant_nameFromSearching.add(value.data["Names"][0]["Name"]);
-            }).catchError((e) {
-              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                duration: Duration(milliseconds: 1500),
-                content: Text("Something error try again later !!"),
-                backgroundColor: Colors.red,
-              ));
-            })));
-    emit(SearhOnRestaurantSuccessfull());
-  }
 
 //-------------------- Function Separated to get his email if his email null then it will go to login if not then it will go to home page
-  static List<dynamic> ResturantsList = [];
+  // List<dynamic> ResturantsList = [];
   static Map currentRestaurant = {};
   //------- Displaying All the restaurants on home page
-  void GetResturants() async {
-    emit(RestaurantsListLoading());
-    DioHelper.getdata(
-      url: 'get_restaurants/',
-      query: {},
-    ).then((value) {
-      ResturantsList = value.data['Names'];
-      emit(RestaurantsListSuccess());
-    }).catchError((error) {
-      emit(RestaurantsListFail(error.toString()));
-    });
-  }
+  // void GetResturants() {
+  //   emit(RestaurantsListLoading());
+  //   DioHelper.getdata(
+  //     url: 'get_restaurants/',
+  //     query: {},
+  //   ).then((value) {
+  //     ResturantsList = value.data['Names'];
+  //     emit(RestaurantsListSuccess());
+  //   }).catchError((error) {
+  //     emit(RestaurantsListFail(error.toString()));
+  //   });
+  // }
 
 //----- Knowing the avalable order restuarants that allowed to user to show
   Future<void> getCurrentAvailableOrderRestauant(context) async {

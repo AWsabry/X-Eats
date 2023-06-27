@@ -23,3 +23,5 @@ class SearhOnProductFail extends SuperProductsStates {
 }
 
 class ClearProductId extends SuperProductsStates {}
+
+class ChangePrivacytoPublic extends SuperProductsStates {}
