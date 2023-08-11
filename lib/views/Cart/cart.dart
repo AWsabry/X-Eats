@@ -8,6 +8,9 @@ import 'package:xeats/controllers/Components/General%20Components/Components.dar
 import 'package:xeats/controllers/Components/Global%20Components/loading.dart';
 import 'package:xeats/controllers/Cubits/AuthCubit/cubit.dart';
 import 'package:xeats/controllers/Cubits/OrderCubit/OrderCubit.dart';
+import 'package:xeats/controllers/Cubits/OrderCubit/OrderStates.dart';
+import 'package:xeats/controllers/Cubits/ProductsCubit/ProductsCubit.dart';
+import 'package:xeats/controllers/Cubits/ProductsCubit/ProductsStates.dart';
 import 'package:xeats/controllers/Cubits/RestauratsCubit/RestaurantsStates.dart';
 import 'package:xeats/controllers/Cubits/RestauratsCubit/RestuarantsCubit.dart';
 import 'package:xeats/views/Animations/EmptyCart.dart';
@@ -199,18 +202,33 @@ class _CartState extends State<Cart> {
                                                 2,
                                         height: 50.h,
                                         child: ElevatedButton(
-                                            style: ElevatedButton.styleFrom(
-                                                shape: RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            20))),
-                                            onPressed: () async {
-                                              await OrderCubit.get(context)
-                                                  .deliveryFees();
+                                          style: ElevatedButton.styleFrom(
+                                              shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          20))),
+                                          onPressed: () async {
+                                            await OrderCubit.get(context)
+                                                .deliveryFees();
+                                            if (ProductsCubit.get(context)
+                                                    .privacy ==
+                                                Privacy.Private) {
                                               Navigation(
-                                                  context, const CheckOut());
-                                            },
-                                            child: const Text("Check Out")),
+                                                  context,
+                                                  CheckOut(
+                                                    Private: true,
+                                                  ));
+                                            } else {
+                                              Navigation(
+                                                context,
+                                                CheckOut(
+                                                  Private: false,
+                                                ),
+                                              );
+                                            }
+                                          },
+                                          child: const Text("Check Out"),
+                                        ),
                                       )
                                     ],
                                   ),
@@ -232,57 +250,64 @@ class _CartState extends State<Cart> {
                                     itemCount: allWhatInCart.length,
                                   ),
                                 ),
-                                // Row(
-                                //   mainAxisAlignment:
-                                //       MainAxisAlignment.spaceAround,
-                                //   children: [
-                                //     Text(
-                                //       "Public",
-                                //       maxLines: 1,
-                                //       overflow: TextOverflow.ellipsis,
-                                //       style: GoogleFonts.poppins(
-                                //           fontWeight: FontWeight.bold,
-                                //           fontSize: 14),
-                                //     ),
-                                //     const SizedBox(width: 10),
-                                //     Radio(
-                                //       value: Privacy.Public,
-                                //       groupValue:
-                                //           RestuarantsCubit.get(context).privacy,
-                                //       onChanged: (Privacy? value) {
-                                //         RestuarantsCubit.get(context)
-                                //             .changePrivacyOrdertoPublic(value);
-                                //       },
-                                //     ),
-                                //     const SizedBox(width: 10),
-                                //     Padding(
-                                //       padding: const EdgeInsets.all(8.0),
-                                //       child: Text(
-                                //         "Private",
-                                //         maxLines: 1,
-                                //         overflow: TextOverflow.ellipsis,
-                                //         style: GoogleFonts.poppins(
-                                //             fontWeight: FontWeight.bold,
-                                //             fontSize: 14),
-                                //       ),
-                                //     ),
-                                //     const SizedBox(width: 10),
-                                //     Padding(
-                                //       padding: const EdgeInsets.all(8.0),
-                                //       child: Radio<Privacy>(
-                                //         value: Privacy.Private,
-                                //         groupValue:
-                                //             RestuarantsCubit.get(context)
-                                //                 .privacy,
-                                //         onChanged: (Privacy? value) {
-                                //           RestuarantsCubit.get(context)
-                                //               .changePrivacyOrdertoPublic(
-                                //                   value);
-                                //         },
-                                //       ),
-                                //     ),
-                                //   ],
-                                // ),
+                                BlocBuilder<ProductsCubit, ProductsStates>(
+                                  builder: (ProductCubit, ProductStates) {
+                                    return Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceAround,
+                                      children: [
+                                        Text(
+                                          "Public",
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: GoogleFonts.poppins(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 14),
+                                        ),
+                                        const SizedBox(width: 10),
+                                        Radio<Privacy>(
+                                          value: Privacy.Public,
+                                          groupValue:
+                                              ProductsCubit.get(ProductCubit)
+                                                  .privacy,
+                                          onChanged: (Privacy? value) {
+                                            ProductsCubit.get(ProductCubit)
+                                                .changePrivacyOrdertoPublic(
+                                                    value);
+                                          },
+                                        ),
+                                        const SizedBox(width: 10),
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Text(
+                                            "Private",
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: GoogleFonts.poppins(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 14),
+                                          ),
+                                        ),
+                                        const SizedBox(width: 10),
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Radio<Privacy>(
+                                            value: Privacy.Private,
+                                            groupValue:
+                                                ProductsCubit.get(ProductCubit)
+                                                    .privacy,
+                                            onChanged: (Privacy? value) {
+                                              print("kkk$value");
+                                              ProductsCubit.get(ProductCubit)
+                                                  .changePrivacyOrdertoPublic(
+                                                      value);
+                                            },
+                                          ),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                ),
                               ],
                             );
                           } else {

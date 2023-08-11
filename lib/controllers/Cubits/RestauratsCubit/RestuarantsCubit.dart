@@ -240,24 +240,7 @@ class RestuarantsCubit extends Cubit<RestuarantsStates> {
   final List<String> restaurant_nameFromSearching = [];
 
   final List<String> imageOfRestaurant = [];
-  //----------- Loop For the Id that get it from Searching and put it into a List to display in GetList Function-----/////////
-
-//-------------------- Function Separated to get his email if his email null then it will go to login if not then it will go to home page
-  // List<dynamic> ResturantsList = [];
   static Map currentRestaurant = {};
-  //------- Displaying All the restaurants on home page
-  // void GetResturants() {
-  //   emit(RestaurantsListLoading());
-  //   DioHelper.getdata(
-  //     url: 'get_restaurants/',
-  //     query: {},
-  //   ).then((value) {
-  //     ResturantsList = value.data['Names'];
-  //     emit(RestaurantsListSuccess());
-  //   }).catchError((error) {
-  //     emit(RestaurantsListFail(error.toString()));
-  //   });
-  // }
 
 //----- Knowing the avalable order restuarants that allowed to user to show
   Future<void> getCurrentAvailableOrderRestauant(context) async {

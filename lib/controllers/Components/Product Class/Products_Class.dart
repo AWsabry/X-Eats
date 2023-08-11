@@ -98,7 +98,6 @@ class ProductClass extends StatelessWidget {
           child: Dismissible(
             onDismissed: (direction) async {
               if (direction == DismissDirection.startToEnd) {
-                NavigateAndRemov(context, const CheckOut());
               } else {
                 await OrderCubit.get(context)
                     .deleteCartItem(context, "$cartItemId")
@@ -111,25 +110,12 @@ class ProductClass extends StatelessWidget {
             },
             key: const Key(""),
             background: Container(
-              color: Colors.blue,
-              child: Padding(
-                padding: const EdgeInsets.all(15),
-                child: Row(
-                  children: const [
-                    Icon(Icons.arrow_forward_rounded, color: Colors.white),
-                    Text('Move to CheckOut',
-                        style: TextStyle(color: Colors.white)),
-                  ],
-                ),
-              ),
-            ),
-            secondaryBackground: Container(
               color: Colors.red,
-              child: Padding(
-                padding: const EdgeInsets.all(15),
+              child: const Padding(
+                padding: EdgeInsets.all(15),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
-                  children: const [
+                  children: [
                     Icon(Icons.delete, color: Colors.white),
                     Text('Move to trash',
                         style: TextStyle(color: Colors.white)),

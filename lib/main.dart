@@ -36,7 +36,7 @@ void main() async {
           channelKey: 'basic_channel',
           channelName: 'Basic Notification',
           channelDescription: 'Notification for tests',
-          defaultColor: Color.fromARGB(255, 9, 134, 211),
+          defaultColor: const Color.fromARGB(255, 9, 134, 211),
           importance: NotificationImportance.High,
           channelShowBadge: true,
           ledColor: Colors.white,
@@ -127,7 +127,10 @@ class _MyAppState extends State<MyApp> {
               ..NewProducts(),
           ),
           BlocProvider(
-            create: (context) => OrderCubit()..getCartID(context),
+            create: (context) => OrderCubit()
+              ..getCartID(context)
+              ..getLocation(context)
+              ..getRestaurantsOfLocation(context),
           )
         ],
         child: ScreenUtilInit(
@@ -146,7 +149,7 @@ class _MyAppState extends State<MyApp> {
               home: child,
             );
           },
-          child: SplashScreen(),
+          child: const SplashScreen(),
         ));
   }
 }

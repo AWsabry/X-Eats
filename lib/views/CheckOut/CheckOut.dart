@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:xeats/controllers/Components/General%20Components/Components.dart';
@@ -8,12 +10,16 @@ import 'package:xeats/controllers/Cubits/OrderCubit/OrderStates.dart';
 import 'package:xeats/views/Cart/cart.dart';
 
 class CheckOut extends StatelessWidget {
-  const CheckOut({super.key});
-
+  CheckOut({
+    super.key,
+    required this.Private,
+  });
+  bool? Private;
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<OrderCubit, OrderStates>(builder: (context, state) {
-      double deliveryFees = OrderCubit.get(context).deliveryfees!;
+      double deliveryFees = OrderCubit.get(context).deliveryfees ?? 15;
+
       return Scaffold(
         appBar: AppBar(
           actions: [Image.asset("assets/Images/shopping-cart.png")],
@@ -54,12 +60,12 @@ class CheckOut extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  const Text(
-                    "Delivery Fee",
-                    style: TextStyle(fontSize: 20),
+                  Text(
+                    "Delivery Fee ",
+                    style: const TextStyle(fontSize: 20),
                   ),
                   Text(
-                    "EGP ${deliveryFees}",
+                    "${deliveryFees} EGP ",
                     style: const TextStyle(fontSize: 20),
                   )
                 ],
@@ -72,7 +78,7 @@ class CheckOut extends StatelessWidget {
                     style: TextStyle(fontSize: 24),
                   ),
                   Text(
-                    "EGP ${deliveryFees + ProductClass.getSubtotal()}",
+                    "${deliveryFees + ProductClass.getSubtotal()} EGP ",
                     style: const TextStyle(fontSize: 24),
                   )
                 ],
@@ -99,9 +105,7 @@ class CheckOut extends StatelessWidget {
                       )),
                   DefaultButton(
                       function: () {
-                        OrderCubit.get(context).confirmOrder(
-                          context,
-                        );
+                        OrderCubit.get(context).confirmOrder(context, Private);
                       },
                       text: "Order Now")
                 ],
@@ -113,5 +117,3 @@ class CheckOut extends StatelessWidget {
     });
   }
 }
-
-void _moveToScreen2(BuildContext context) => Navigation(context, const Cart());

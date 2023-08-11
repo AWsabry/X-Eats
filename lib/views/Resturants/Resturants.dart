@@ -12,11 +12,9 @@ import 'package:xeats/controllers/Cubits/OrderCubit/OrderCubit.dart';
 import 'package:xeats/controllers/Cubits/OrderCubit/OrderStates.dart';
 import 'package:xeats/controllers/Cubits/ProductsCubit/ProductsCubit.dart';
 import 'package:xeats/controllers/Cubits/ProductsCubit/ProductsStates.dart';
-import 'package:xeats/controllers/Cubits/RestauratsCubit/RestuarantsCubit.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:xeats/views/Layout/Layout.dart';
 import 'package:xeats/views/Profile/Profile.dart';
-import 'package:xeats/views/HomePage/HomePage.dart';
 import 'package:xeats/views/ResturantsMenu/ResturantsMenu.dart';
 import '../../controllers/Components/Products Components/NewProducts.dart';
 

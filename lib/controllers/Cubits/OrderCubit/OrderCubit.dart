@@ -1,5 +1,7 @@
 // ignore_for_file: invalid_return_type_for_catch_error, body_might_complete_normally_catch_error
 
+import 'dart:async';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -15,16 +17,15 @@ import 'package:xeats/controllers/Cubits/AuthCubit/cubit.dart';
 import 'package:xeats/controllers/Cubits/OrderCubit/OrderStates.dart';
 import 'package:xeats/controllers/Dio/DioHelper.dart';
 import 'package:xeats/views/CategoryView/categoryView.dart';
+import 'package:xeats/views/ThankYou/thankyou.dart';
 import 'package:xeats/views/WaitingRoom/waitingRoom.dart';
 import '../../../views/Cart/cart.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class OrderCubit extends Cubit<OrderStates> {
   OrderCubit() : super(SuperOrderStates());
   static OrderCubit get(context) => BlocProvider.of(context);
 
   static String BASEURL = "https://www.x-eats.com";
-
   int? cartID;
 
   Future<void> getCartID(context) async {
@@ -315,35 +316,6 @@ class OrderCubit extends Cubit<OrderStates> {
     return ProductClass.CartItems;
   }
 
-  // a function to confirm and checkout
-  void confirmOrder(
-    context,
-  ) async {
-    await Dio().get("$BASEURL/get_Delivery_Fees").then((value) async {
-      await Dio().post(
-          "$BASEURL/get_orders_by_email/${AuthCubit.get(context).EmailInforamtion}",
-          data: {
-            "first_name": AuthCubit.get(context).FirstName,
-            "last_name": AuthCubit.get(context).LastName,
-            "phone_number": AuthCubit.get(context).PhoneNumber,
-            "email": AuthCubit.get(context).EmailInforamtion,
-            "location_name": value.data["Names"][0]["location"],
-            "total_price_after_delivery": value.data["Names"][0]
-                    ["delivery_fees"] +
-                ProductClass.getSubtotal(),
-            "totalPrice": ProductClass.getSubtotal(),
-            "flag": "Mobile",
-            "private": false,
-            "status": "Pending",
-            "user": AuthCubit.get(context).idInformation,
-            "cart": cartID,
-            "deliver_to": 1
-          }).then((value) {
-        NavigateAndRemov(context, const WaitingRoom());
-      }).catchError((onError) {});
-    });
-  }
-
   static String? currentLocation;
   void ChangeLocation(String value) {
     currentLocation = value;
@@ -390,6 +362,7 @@ class OrderCubit extends Cubit<OrderStates> {
     });
   }
 
+  List<dynamic> OrdersPending = [];
   void feesDistribution(
     context,
   ) async {
@@ -400,7 +373,7 @@ class OrderCubit extends Cubit<OrderStates> {
         .then((value) {
       for (var i in value.data["Names"]) {
         if (i['status'] == 'Pending') {
-          print(i['id']);
+          OrdersPending = i['id'];
         }
       }
     });
@@ -447,15 +420,6 @@ class OrderCubit extends Cubit<OrderStates> {
           ),
         ),
       );
-    });
-  }
-
-  double? deliveryfees;
-  Future<void> deliveryFees() async {
-    await Dio().get("$BASEURL/get_Delivery_Fees").then((value) {
-      deliveryfees = value.data["Names"][0]["delivery_fees"];
-    }).catchError((onError) {
-      print(onError);
     });
   }
 
@@ -535,5 +499,174 @@ class OrderCubit extends Cubit<OrderStates> {
             print('Token Exist');
           }
         });
+  }
+
+  List<dynamic> OrdersssPendeing = [];
+  String StartingOrder = "";
+  String EndingOrder = "";
+
+  DateTime? difference;
+
+  Future<void> getPublicOrder(context) async {
+    emit(getTimeStateLoading());
+
+    await Dio()
+        .get("$BASEURL/get_time_of_first_public_order_in_location/1")
+        .then((value) {
+      OrdersssPendeing = value.data["Names"];
+      EndingOrder = value.data["end_on"];
+      emit(getTimeStateSuccess());
+    }).catchError((error) {
+      print("7a7a $error");
+      emit(getTimeStateFailier());
+    });
+  }
+
+  double? deliveryfees;
+  String? LocationName;
+  var count;
+  Future<void> deliveryFees() async {
+    emit(getDeliveryFeesLoadingState());
+
+    await Dio().get("$BASEURL/get_Delivery_Fees").then((value) {
+      deliveryfees = value.data["Names"][0]["delivery_fees"];
+      LocationName = value.data["Names"][0]["location"];
+      count = value.data["count"];
+    }).catchError((onError) {
+      print(onError);
+    });
+  }
+
+  void confirmOrder(context, bool? Private) async {
+    await getPublicOrder(context).then((value) async {
+      try {
+        var endingOrderTime = DateTime.parse(EndingOrder);
+        bool CheckingDifference = DateTime.now()
+            .isBefore(endingOrderTime.add(const Duration(minutes: 1)));
+        var endingOrderTimeMinute =
+            endingOrderTime.difference(DateTime.now()).inMinutes;
+        if (CheckingDifference == false) {
+          print("kakaka");
+          Dio().post("$BASEURL/get_time_of_first_public_order_in_location/1",
+              data: {}).then((value4) {
+            if (value4.statusCode == 500) {
+              print("mm");
+              Dio().get("$BASEURL/get_Delivery_Fees").then((value1) {
+                Dio().post(
+                    "$BASEURL/get_orders_by_email/${AuthCubit.get(context).EmailInforamtion}",
+                    data: {
+                      "first_name": AuthCubit.get(context).FirstName,
+                      "last_name": AuthCubit.get(context).LastName,
+                      "phone_number": AuthCubit.get(context).PhoneNumber,
+                      "email": AuthCubit.get(context).EmailInforamtion,
+                      "location_name": value1.data["Names"][0]["location"],
+                      "total_price_after_delivery": value1.data["Names"][0]
+                              ["delivery_fees"] +
+                          ProductClass.getSubtotal(),
+                      "totalPrice": ProductClass.getSubtotal(),
+                      "flag": "Mobile",
+                      "private": Private,
+                      "status": "Pending",
+                      "user": AuthCubit.get(context).idInformation,
+                      "cart": cartID,
+                      "deliver_to": 1
+                    }).then((value) {
+                  if (Private == false) {
+                    Navigation(
+                        context,
+                        WaitingRoom(
+                          endingOrderTimeMinute: 20,
+                        ));
+                  } else {
+                    NavigateAndRemov(context, const ThankYou());
+                  }
+                }).catchError((onError) {
+                  print(onError.toString());
+                });
+              });
+            }
+          });
+        } else {
+          print("mmm");
+          Dio().get("$BASEURL/get_Delivery_Fees").then((value11) {
+            emit(getDeliveryFeesState());
+
+            Dio().post(
+                "$BASEURL/get_orders_by_email/${AuthCubit.get(context).EmailInforamtion}",
+                data: {
+                  "first_name": AuthCubit.get(context).FirstName,
+                  "last_name": AuthCubit.get(context).LastName,
+                  "phone_number": AuthCubit.get(context).PhoneNumber,
+                  "email": AuthCubit.get(context).EmailInforamtion,
+                  "location_name": value11.data["Names"][0]["location"],
+                  "total_price_after_delivery": value11.data["Names"][0]
+                          ["delivery_fees"] +
+                      ProductClass.getSubtotal(),
+                  "totalPrice": ProductClass.getSubtotal(),
+                  "flag": "Mobile",
+                  "private": Private,
+                  "status": "Pending",
+                  "user": AuthCubit.get(context).idInformation,
+                  "cart": cartID,
+                  "deliver_to": 1
+                }).then((value) {
+              if (Private == false) {
+                Navigation(
+                    context,
+                    WaitingRoom(
+                      endingOrderTimeMinute: endingOrderTimeMinute,
+                    ));
+              } else {
+                NavigateAndRemov(context, const ThankYou());
+              }
+              emit(confirmOrderBefore20MinutesState());
+            }).catchError((onError) {
+              print(onError.toString());
+              print("mmaaam");
+            });
+          });
+        }
+      } on FormatException {
+        print("mmaaaaaaam");
+        Dio().get("$BASEURL/get_Delivery_Fees").then((value12) {
+          emit(getDeliveryFeesState());
+          Dio().post(
+              "$BASEURL/get_orders_by_email/${AuthCubit.get(context).EmailInforamtion}",
+              data: {
+                "first_name": AuthCubit.get(context).FirstName,
+                "last_name": AuthCubit.get(context).LastName,
+                "phone_number": AuthCubit.get(context).PhoneNumber,
+                "email": AuthCubit.get(context).EmailInforamtion,
+                "location_name": value12.data["Names"][0]["location"],
+                "total_price_after_delivery": value12.data["Names"][0]
+                        ["delivery_fees"] +
+                    ProductClass.getSubtotal(),
+                "totalPrice": ProductClass.getSubtotal(),
+                "flag": "Mobile",
+                "private": Private,
+                "status": "Pending",
+                "user": AuthCubit.get(context).idInformation,
+                "cart": cartID,
+                "deliver_to": 1
+              }).then((value) async {
+            await getPublicOrder(context).then((value) {});
+            var endingOrderTime = DateTime.parse(EndingOrder);
+            var endingOrderTimeMinute =
+                endingOrderTime.difference(DateTime.now()).inMinutes;
+            if (Private == false) {
+              Navigation(
+                  context,
+                  WaitingRoom(
+                    endingOrderTimeMinute: endingOrderTimeMinute,
+                  ));
+            } else {
+              NavigateAndRemov(context, const ThankYou());
+            }
+
+            emit(confirmOrderAfter20MinutesState());
+          });
+        });
+      }
+    });
   }
 }

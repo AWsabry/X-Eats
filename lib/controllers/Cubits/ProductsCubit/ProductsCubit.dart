@@ -233,6 +233,8 @@ class ProductsCubit extends Cubit<ProductsStates> {
   Privacy? privacy = Privacy.Public;
   void changePrivacyOrdertoPublic(Privacy? value) {
     privacy = value;
+    print(ChangePrivacytoPublic());
+    print(value);
     emit(ChangePrivacytoPublic());
   }
 }
