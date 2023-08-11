@@ -549,7 +549,7 @@ class OrderCubit extends Cubit<OrderStates> {
           print("kakaka");
           Dio().post("$BASEURL/get_time_of_first_public_order_in_location/1",
               data: {}).then((value4) {
-            if (value4.statusCode == 500) {
+            if (value4.statusCode == 200) {
               print("mm");
               Dio().get("$BASEURL/get_Delivery_Fees").then((value1) {
                 Dio().post(
