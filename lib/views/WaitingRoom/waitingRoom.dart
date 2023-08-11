@@ -1,5 +1,6 @@
 // ignore_for_file: non_constant_identifier_names
 
+import 'package:custom_timer/custom_timer.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -9,38 +10,56 @@ import 'package:xeats/controllers/Cubits/OrderCubit/OrderStates.dart';
 
 import '../../controllers/Components/Global Components/DefaultButton.dart';
 
-class WaitingRoom extends StatelessWidget {
-  WaitingRoom({Key? key, this.endingOrderTimeMinute}) : super(key: key);
-  var endingOrderTimeMinute;
+class WaitingRoom extends StatefulWidget {
+  WaitingRoom({Key? key, this.endingOrderTimeSecond}) : super(key: key);
+  var endingOrderTimeSecond;
+
+  @override
+  State<WaitingRoom> createState() => _WaitingRoomState();
+}
+
+class _WaitingRoomState extends State<WaitingRoom>
+    with SingleTickerProviderStateMixin {
+  late final CustomTimerController _controller = CustomTimerController(
+    vsync: this,
+    begin: Duration(seconds: widget.endingOrderTimeSecond),
+    end: Duration(seconds: 0),
+    initialState: CustomTimerState.reset,
+    interval: CustomTimerInterval.seconds,
+  );
+
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
+    int minutes = widget.endingOrderTimeSecond * 60;
+    _controller.start();
+
     return BlocProvider(
       create: (context) => OrderCubit()..getLocation(context),
       child: BlocBuilder<OrderCubit, OrderStates>(builder: (context, state) {
         return Scaffold(
           appBar: appBar(context, subtitle: "Waiting Room"),
           body: Container(
-              height: height,
-              width: width,
               child: Column(
-                children: [
-                  DefaultButton(
-                      function: () {
-                        // print(
-                        // "aaaaaaaaaa${DateTime.now().difference(OrderCubit.get(context).endingOrderTime!).inMinutes}");
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Center(
+                  child: CustomTimer(
+                controller: _controller,
+                builder: (state, time) {
+                  return Text("${time.minutes}:${time.seconds}",
+                      style: TextStyle(fontSize: 24.0));
+                },
+              )
+                  // Center(
+                  //   child: Text("$endingOrderTimeMinute"),
+                  // ),
 
-                        Dio().post(
-                            "x-eats.com/get_time_of_first_public_order_in_location/1",
-                            data: {});
-                      },
-                      text: "Orders Missing"),
-                  Center(
-                    child: Text("$endingOrderTimeMinute"),
                   ),
-                ],
-              )),
+            ],
+          )),
         );
       }),
     );

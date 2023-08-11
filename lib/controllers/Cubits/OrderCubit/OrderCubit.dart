@@ -543,8 +543,8 @@ class OrderCubit extends Cubit<OrderStates> {
         var endingOrderTime = DateTime.parse(EndingOrder);
         bool CheckingDifference = DateTime.now()
             .isBefore(endingOrderTime.add(const Duration(minutes: 1)));
-        var endingOrderTimeMinute =
-            endingOrderTime.difference(DateTime.now()).inMinutes;
+        var endingOrderTimeSecond =
+            endingOrderTime.difference(DateTime.now()).inSeconds;
         if (CheckingDifference == false) {
           print("kakaka");
           Dio().post("$BASEURL/get_time_of_first_public_order_in_location/1",
@@ -575,7 +575,7 @@ class OrderCubit extends Cubit<OrderStates> {
                     Navigation(
                         context,
                         WaitingRoom(
-                          endingOrderTimeMinute: 20,
+                          endingOrderTimeSecond: 1200,
                         ));
                   } else {
                     NavigateAndRemov(context, const ThankYou());
@@ -614,7 +614,7 @@ class OrderCubit extends Cubit<OrderStates> {
                 Navigation(
                     context,
                     WaitingRoom(
-                      endingOrderTimeMinute: endingOrderTimeMinute,
+                      endingOrderTimeSecond: endingOrderTimeSecond,
                     ));
               } else {
                 NavigateAndRemov(context, const ThankYou());
@@ -651,13 +651,13 @@ class OrderCubit extends Cubit<OrderStates> {
               }).then((value) async {
             await getPublicOrder(context).then((value) {});
             var endingOrderTime = DateTime.parse(EndingOrder);
-            var endingOrderTimeMinute =
-                endingOrderTime.difference(DateTime.now()).inMinutes;
+            var endingOrderTimeSecond =
+                endingOrderTime.difference(DateTime.now()).inSeconds;
             if (Private == false) {
               Navigation(
                   context,
                   WaitingRoom(
-                    endingOrderTimeMinute: endingOrderTimeMinute,
+                    endingOrderTimeSecond: endingOrderTimeSecond,
                   ));
             } else {
               NavigateAndRemov(context, const ThankYou());
