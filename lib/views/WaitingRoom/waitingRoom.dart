@@ -52,12 +52,7 @@ class _WaitingRoomState extends State<WaitingRoom>
                   return Text("${time.minutes}:${time.seconds}",
                       style: TextStyle(fontSize: 24.0));
                 },
-              )
-                  // Center(
-                  //   child: Text("$endingOrderTimeMinute"),
-                  // ),
-
-                  ),
+              )),
             ],
           )),
         );
