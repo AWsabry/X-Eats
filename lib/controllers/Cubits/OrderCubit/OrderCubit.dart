@@ -621,7 +621,7 @@ class OrderCubit extends Cubit<OrderStates> {
                   NavigateAndRemov(
                       context,
                       WaitingRoom(
-                          endingOrderTimeSecond: 60,
+                          endingOrderTimeSecond: 1200,
                           count: 1,
                           TimeOfLastOrder: DateTime.now(),
                           LengthOfPublicOrders: 0));
