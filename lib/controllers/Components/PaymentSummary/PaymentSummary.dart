@@ -1,6 +1,7 @@
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:xeats/controllers/Components/General%20Components/Components.dart';
 import 'package:xeats/controllers/Cubits/OrderCubit/OrderCubit.dart';
 import 'package:xeats/views/WaitingRoom/waitingRoom.dart';
 
@@ -149,14 +150,27 @@ class _PaymentSummaryState extends State<PaymentSummary> {
                               color: Color.fromARGB(255, 128, 255, 0),
                               borderRadius:
                                   BorderRadius.all(Radius.circular(5))),
-                          child: Center(
-                            child: Text(
-                              "Switch to Private",
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontFamily: "IntegralCf",
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 16),
+                          child: ElevatedButton(
+                            style: ButtonStyle(
+                                backgroundColor: MaterialStateProperty.all(
+                                    Color.fromARGB(255, 128, 255, 0))),
+                            onPressed: () {
+                              NavigateAndRemov(
+                                  context,
+                                  WaitingRoom(
+                                      endingOrderTimeSecond:
+                                          widget.widget.endingOrderTimeSecond,
+                                      count: widget.widget.count));
+                            },
+                            child: Center(
+                              child: Text(
+                                "Switch to Private",
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontFamily: "IntegralCf",
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 16),
+                              ),
                             ),
                           ),
                         );

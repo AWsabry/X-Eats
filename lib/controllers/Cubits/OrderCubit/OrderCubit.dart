@@ -573,11 +573,9 @@ class OrderCubit extends Cubit<OrderStates> {
   bool clikable = true;
 
   void clickableChange() {
-    Future.delayed(const Duration(seconds: 10, minutes: 5)).then((value) {
-      if (endingOrderTimeSecond >= 360) {
-        clikable = false;
-        emit(ClickableState());
-      } else {}
+    Future.delayed(const Duration(minutes: 5, seconds: 4)).then((value) {
+      clikable = false;
+      emit(ClickableState());
     });
   }
 
