@@ -516,7 +516,7 @@ class ProductClass extends StatelessWidget {
                             child: Image(
                               width: 200,
                               image: CachedNetworkImageProvider(
-                                'https://x-eats.com/uploads/$image',
+                                '$image',
                               ),
                               loadingBuilder:
                                   (context, child, loadingProgress) {

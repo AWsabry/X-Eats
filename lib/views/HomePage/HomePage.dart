@@ -88,8 +88,9 @@ class _HomePageState extends State<HomePage> {
         BlocProvider(
           create: (context) => OrderCubit()
             ..getCartID(context)
-            ..getLocation(context)
-            ..getRestaurantsOfLocation(context),
+            ..getLocation()
+            ..getRestaurantsOfLocation()
+            ..deliveryFees(),
         )
       ],
       child: BlocBuilder<ProductsCubit, ProductsStates>(
@@ -99,199 +100,126 @@ class _HomePageState extends State<HomePage> {
           var product_api = ProductsCubit.get(context).MostSold;
           var FirstName = cubit.FirstName ?? ' ';
           print(OrderCubit.currentLocation);
-          return Scaffold(
-            appBar: LocationBar(
-              context,
-            ),
-            body: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  BlocBuilder<OrderCubit, OrderStates>(
-                    builder: (context, OrderStates) {
-                      print(" Khaled $OrderStates");
-                      var LocationList = OrderCubit.get(context).LocationsNames;
-                      var RestaurantsSlugApi = OrderCubit.restuarantsOfSlugList;
-                      return ConditionalBuilder(
-                          fallback: (context) {
-                            if (OrderStates is getRestuarantSlugStateLoading) {
-                              return Column(
-                                children: [
-                                  SizedBox(
-                                    height: height / 2.6,
-                                  ),
-                                  Center(
-                                    child: Container(
-                                        child: CircularProgressIndicator()),
-                                  ),
-                                ],
-                              );
-                            } else {
-                              return Column(
-                                children: [
-                                  SizedBox(
-                                    height: height / 2.6,
-                                  ),
-                                  Center(
-                                    child: Container(
-                                      child: Text(
-                                        Appconstants.PleaseSelectLocation,
-                                        style:
-                                            GoogleFonts.openSans(fontSize: 18),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              );
-                            }
-                          },
-                          condition: RestaurantsSlugApi.length != 0,
-                          builder: (context) {
-                            if (OrderStates is getRestuarantSlugStateLoading) {
-                              return Column(
-                                children: [
-                                  SizedBox(
-                                    height: height / 2.6,
-                                  ),
-                                  Center(
-                                    child: Container(
-                                        child: CircularProgressIndicator()),
-                                  ),
-                                ],
-                              );
-                            } else {
-                              return Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.start,
+          return SafeArea(
+            child: Scaffold(
+              appBar: LocationBar(context),
+              body: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    BlocBuilder<OrderCubit, OrderStates>(
+                      builder: (context, OrderStates) {
+                        print(" Khaled $OrderStates");
+                        var LocationList =
+                            OrderCubit.get(context).LocationsNames;
+                        var RestaurantsSlugApi =
+                            OrderCubit.restuarantsOfSlugList;
+                        return ConditionalBuilder(
+                            fallback: (context) {
+                              if (OrderStates
+                                  is getRestuarantSlugStateLoading) {
+                                return Column(
                                   children: [
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        children: [
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.start,
-                                            children: [
-                                              Padding(
-                                                padding: const EdgeInsets.only(
-                                                    left: 12, bottom: 12),
-                                                child: Text(
-                                                  maxLines: 1,
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  "Welcome, $FirstName",
-                                                  style: GoogleFonts.poppins(
-                                                      fontSize: 14,
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                          ConditionalBuilder(
-                                              condition:
-                                                  ProductsCubit.get(context)
-                                                      .getposters
-                                                      .isNotEmpty,
-                                              fallback: (context) => Center(
-                                                    child: Loading(),
-                                                  ),
-                                              builder: (context) =>
-                                                  const DiscountBanner()),
-                                        ],
+                                    SizedBox(
+                                      height: height / 2.6,
+                                    ),
+                                    Center(
+                                      child: Container(
+                                          child: CircularProgressIndicator()),
+                                    ),
+                                  ],
+                                );
+                              } else {
+                                return Column(
+                                  children: [
+                                    SizedBox(
+                                      height: height / 2.6,
+                                    ),
+                                    Center(
+                                      child: Container(
+                                        child: Text(
+                                          Appconstants.PleaseSelectLocation,
+                                          style: GoogleFonts.openSans(
+                                              fontSize: 18),
+                                        ),
                                       ),
                                     ),
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        Padding(
-                                          padding: const EdgeInsets.all(15.0),
-                                          child: Text(
-                                            'Restaurant',
-                                            style: GoogleFonts.poppins(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                        ),
-                                        SingleChildScrollView(
-                                          scrollDirection: Axis.horizontal,
-                                          child: Row(
-                                            children: [
-                                              ...List.generate(
-                                                OrderCubit.restuarantsOfSlugList
-                                                    .length,
-                                                (index) {
-                                                  return GestureDetector(
-                                                    onTap: () {
-                                                      Navigation(
-                                                          context,
-                                                          ResturantsMenu(
-                                                              data:
-                                                                  RestaurantsSlugApi[
-                                                                      index],
-                                                              RestaurantId:
-                                                                  RestaurantsSlugApi[
-                                                                          index]
-                                                                      ['id']));
-                                                    },
-                                                    child: RestaurantView(
-                                                      data: RestaurantsSlugApi[
-                                                              index]['Name'] ??
-                                                          Loading(),
-                                                      Colors:
-                                                          const Color.fromARGB(
-                                                              255, 5, 95, 9),
-                                                      image: Image(
-                                                        // loadingBuilder:
-                                                        //     (context, child, loadingProgress) {
-                                                        //   if (loadingProgress == null) {
-                                                        //     return text;
-                                                        //   }
-                                                        //   return Center(
-                                                        //     child: Loading(),
-                                                        //   );
-                                                        // },
-                                                        image: CachedNetworkImageProvider(
-                                                            DioHelper
-                                                                    .dio!
-                                                                    .options
-                                                                    .baseUrl +
-                                                                RestaurantsSlugApi[
-                                                                        index]
-                                                                    ['logo']),
-                                                      ),
-                                                    ),
-                                                  );
-                                                },
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        const SizedBox(
-                                          height: 10,
-                                        ),
-                                        SizedBox(
-                                          height: 50,
-                                          width: double.maxFinite,
-                                          child: AdWidget(ad: bannerAd),
-                                        )
-                                      ],
+                                  ],
+                                );
+                              }
+                            },
+                            condition: RestaurantsSlugApi.length != 0,
+                            builder: (context) {
+                              if (OrderStates
+                                  is getRestuarantSlugStateLoading) {
+                                return Column(
+                                  children: [
+                                    SizedBox(
+                                      height: height / 2.6,
                                     ),
-                                    Container(
-                                      child: Column(
+                                    Center(
+                                      child: Container(
+                                          child: CircularProgressIndicator()),
+                                    ),
+                                  ],
+                                );
+                              } else {
+                                return Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          children: [
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              children: [
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          left: 12, bottom: 12),
+                                                  child: Text(
+                                                    maxLines: 1,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    "Welcome, $FirstName",
+                                                    style: GoogleFonts.poppins(
+                                                        fontSize: 14,
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            ConditionalBuilder(
+                                                condition:
+                                                    ProductsCubit.get(context)
+                                                        .getposters
+                                                        .isNotEmpty,
+                                                fallback: (context) => Center(
+                                                      child: Loading(),
+                                                    ),
+                                                builder: (context) =>
+                                                    const DiscountBanner()),
+                                          ],
+                                        ),
+                                      ),
+                                      Column(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
                                         children: [
                                           Padding(
                                             padding: const EdgeInsets.all(15.0),
                                             child: Text(
-                                              'Most Ordered',
+                                              'Restaurant',
                                               style: GoogleFonts.poppins(
                                                   fontSize: 16,
                                                   fontWeight: FontWeight.bold),
@@ -302,99 +230,190 @@ class _HomePageState extends State<HomePage> {
                                             child: Row(
                                               children: [
                                                 ...List.generate(
-                                                  product_api.length,
+                                                  OrderCubit
+                                                      .restuarantsOfSlugList
+                                                      .length,
                                                   (index) {
-                                                    return ConditionalBuilder(
-                                                        fallback: (context) {
-                                                          return Loading();
-                                                        },
-                                                        condition:
-                                                            product_api[index]
-                                                                    ["image"] !=
-                                                                null,
-                                                        builder: (
-                                                          context,
-                                                        ) {
-                                                          double? price =
-                                                              product_api[index]
-                                                                  ['price'];
-
-                                                          return GestureDetector(
-                                                            child: ProductView(
-                                                                image: product_api[
+                                                    return GestureDetector(
+                                                      onTap: () {
+                                                        Navigation(
+                                                            context,
+                                                            ResturantsMenu(
+                                                                data:
+                                                                    RestaurantsSlugApi[
+                                                                        index],
+                                                                RestaurantId:
+                                                                    RestaurantsSlugApi[
+                                                                            index]
+                                                                        [
+                                                                        'id']));
+                                                      },
+                                                      child: RestaurantView(
+                                                        data:
+                                                            RestaurantsSlugApi[
                                                                         index]
-                                                                    ["image"],
-                                                                width:
-                                                                    width / 2.0,
-                                                                height: height /
-                                                                    4.2,
-                                                                data: product_api[
-                                                                        index]
-                                                                    ["name"],
-                                                                Colors: Colors
-                                                                    .white,
-                                                                Navigate:
-                                                                    () => {
-                                                                          Navigation(
-                                                                              context,
-                                                                              ProductClass().productDetails(
-                                                                                context,
-                                                                                productName: product_api[index]["productName"],
-                                                                                id: product_api[index]["id"],
-                                                                                restaurant: product_api[index]["Restaurant"],
-                                                                                image: product_api[index]["image"],
-                                                                                price: price,
-                                                                                englishName: product_api[index]["name"],
-                                                                                arabicName: product_api[index]["ArabicName"],
-                                                                                description: product_api[index]["description"] ?? "No Description for this Product",
-                                                                                restaurantName: product_api[index]["Restaurant"].toString(),
-                                                                              )),
-                                                                        }),
-                                                            onTap: () {},
-                                                          );
-                                                        });
+                                                                    ['Name'] ??
+                                                                Loading(),
+                                                        Colors: const Color
+                                                                .fromARGB(
+                                                            255, 5, 95, 9),
+                                                        image: Image(
+                                                          // loadingBuilder:
+                                                          //     (context, child, loadingProgress) {
+                                                          //   if (loadingProgress == null) {
+                                                          //     return text;
+                                                          //   }
+                                                          //   return Center(
+                                                          //     child: Loading(),
+                                                          //   );
+                                                          // },
+                                                          image: CachedNetworkImageProvider(
+                                                              DioHelper
+                                                                      .dio!
+                                                                      .options
+                                                                      .baseUrl +
+                                                                  RestaurantsSlugApi[
+                                                                          index]
+                                                                      ['logo']),
+                                                        ),
+                                                      ),
+                                                    );
                                                   },
                                                 ),
                                               ],
                                             ),
                                           ),
+                                          const SizedBox(
+                                            height: 10,
+                                          ),
+                                          SizedBox(
+                                            height: 50,
+                                            width: double.maxFinite,
+                                            child: AdWidget(ad: bannerAd),
+                                          )
                                         ],
                                       ),
-                                    ),
-                                    SizedBox(
-                                      height: 50,
-                                      width: double.maxFinite,
-                                      child: AdWidget(ad: bannerAd2),
-                                    ),
-                                    // ListView.builder(
-                                    //   itemBuilder: (context, index) {},
-                                    // )
-                                  ]);
-                            }
-                          });
-                    },
-                  ),
-                ],
+                                      Container(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.all(15.0),
+                                              child: Text(
+                                                'Most Ordered',
+                                                style: GoogleFonts.poppins(
+                                                    fontSize: 16,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                            ),
+                                            SingleChildScrollView(
+                                              scrollDirection: Axis.horizontal,
+                                              child: Row(
+                                                children: [
+                                                  ...List.generate(
+                                                    product_api.length,
+                                                    (index) {
+                                                      return ConditionalBuilder(
+                                                          fallback: (context) {
+                                                            return Loading();
+                                                          },
+                                                          condition: product_api[
+                                                                      index]
+                                                                  ["image"] !=
+                                                              null,
+                                                          builder: (
+                                                            context,
+                                                          ) {
+                                                            double? price =
+                                                                product_api[
+                                                                        index]
+                                                                    ['price'];
+
+                                                            return GestureDetector(
+                                                              child:
+                                                                  ProductView(
+                                                                      image: product_api[
+                                                                              index][
+                                                                          "image"],
+                                                                      width:
+                                                                          width /
+                                                                              2.0,
+                                                                      height:
+                                                                          height /
+                                                                              4.2,
+                                                                      data: product_api[
+                                                                              index]
+                                                                          [
+                                                                          "name"],
+                                                                      Colors: Colors
+                                                                          .white,
+                                                                      Navigate:
+                                                                          () =>
+                                                                              {
+                                                                                Navigation(
+                                                                                    context,
+                                                                                    ProductClass().productDetails(
+                                                                                      context,
+                                                                                      productName: product_api[index]["productName"],
+                                                                                      id: product_api[index]["id"],
+                                                                                      restaurant: product_api[index]["Restaurant"],
+                                                                                      image: "${OrderCubit.BASEURL + "/uploads/" + product_api[index]["image"]}",
+                                                                                      price: price,
+                                                                                      englishName: product_api[index]["name"],
+                                                                                      arabicName: product_api[index]["ArabicName"],
+                                                                                      description: product_api[index]["description"] ?? "No Description for this Product",
+                                                                                      restaurantName: product_api[index]["Restaurant"].toString(),
+                                                                                    )),
+                                                                              }),
+                                                              onTap: () {},
+                                                            );
+                                                          });
+                                                    },
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: 50,
+                                        width: double.maxFinite,
+                                        child: AdWidget(ad: bannerAd2),
+                                      ),
+                                      // ListView.builder(
+                                      //   itemBuilder: (context, index) {},
+                                      // )
+                                    ]);
+                              }
+                            });
+                      },
+                    ),
+                  ],
+                ),
               ),
-            ),
-            bottomNavigationBar: BottomNavigationBar(
-              selectedLabelStyle: GoogleFonts.poppins(),
-              backgroundColor: Colors.white,
-              items: navcubit.bottomitems,
-              currentIndex: 0,
-              onTap: (index) {
-                if (index == 0) {
-                  Navigator.popUntil(context, (route) => route.isCurrent);
-                } else if (index == 1) {
-                  Navigation(
-                      context,
-                      Restaurants(
-                        currentLocation: OrderCubit.currentLocation,
-                      ));
-                } else {
-                  Navigation(context, Profile());
-                }
-              },
+              bottomNavigationBar: BottomNavigationBar(
+                selectedLabelStyle: GoogleFonts.poppins(),
+                backgroundColor: Colors.white,
+                items: navcubit.bottomitems,
+                currentIndex: 0,
+                onTap: (index) {
+                  if (index == 0) {
+                    Navigator.popUntil(context, (route) => route.isCurrent);
+                  } else if (index == 1) {
+                    Navigation(
+                        context,
+                        Restaurants(
+                          currentLocation: OrderCubit.currentLocation,
+                        ));
+                  } else {
+                    Navigation(context, Profile());
+                  }
+                },
+              ),
             ),
           );
         }),

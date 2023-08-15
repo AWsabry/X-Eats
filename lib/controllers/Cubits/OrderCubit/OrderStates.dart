@@ -51,3 +51,5 @@ class pressedState extends SuperOrderStates {}
 class confirmOrderAfter20MinutesState extends SuperOrderStates {}
 
 class confirmOrderBefore20MinutesState extends SuperOrderStates {}
+
+class ClickableState extends SuperOrderStates {}

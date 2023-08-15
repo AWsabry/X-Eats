@@ -46,7 +46,7 @@ class RestuarantsCubit extends Cubit<RestuarantsStates> {
                           category: value.data["Names"][index]['display_name'],
                           categoryId:
                               value.data["Names"][index]['id'].toString(),
-                          image: value.data["Names"][index]["image"],
+                          image: BASEURL + value.data["Names"][index]["image"],
                           restaurantName: restaurantName,
                           restaurantID: restaurantId),
                     );

@@ -128,8 +128,8 @@ class _MyAppState extends State<MyApp> {
           BlocProvider(
             create: (context) => OrderCubit()
               ..getCartID(context)
-              ..getLocation(context)
-              ..getRestaurantsOfLocation(context),
+              ..getLocation()
+              ..deliveryFees(),
           )
         ],
         child: ScreenUtilInit(

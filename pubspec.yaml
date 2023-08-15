@@ -29,6 +29,7 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+  timer_count_down: ^2.2.0
   custom_timer: ^0.2.3
   new_version_plus: ^0.0.9
   launch_review: ^3.0.1
@@ -124,6 +125,11 @@ flutter:
       fonts:
         - asset: fonts/UberMoveTextBold.otf
           style: italic
+    - family: IntegralCf
+      fonts:
+        - asset: fonts/INTEGRALCF-REGULAROBLIQUE.OTF
+          style: italic
+
     # - family: Trajan Pro
     #   fonts:
     #     - asset: fonts/TrajanPro.ttf

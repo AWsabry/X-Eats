@@ -31,7 +31,7 @@ class Restaurants extends StatelessWidget {
           create: (context) => ProductsCubit()..NewProducts(),
         ),
         BlocProvider(
-          create: (context) => OrderCubit()..getRestaurantsOfLocation(context),
+          create: (context) => OrderCubit()..getRestaurantsOfLocation(),
         )
       ],
       child: BlocConsumer<ProductsCubit, ProductsStates>(
@@ -79,8 +79,10 @@ class Restaurants extends StatelessWidget {
                                                 context,
                                                 ProductClass().productDetails(
                                                   context,
-                                                  image: newProducts[index]
-                                                      ["image"],
+                                                  image: OrderCubit.BASEURL +
+                                                      "/uploads/" +
+                                                      newProducts[index]
+                                                          ["image"],
                                                   id: newProducts[index]['id'],
                                                   restaurant: newProducts[index]
                                                       ['Restaurant'],
