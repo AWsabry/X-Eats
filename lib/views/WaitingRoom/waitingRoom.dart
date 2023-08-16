@@ -63,138 +63,159 @@ class _WaitingRoomState extends State<WaitingRoom>
     return BlocProvider(
       create: (context) => OrderCubit()
         ..deliveryFees()
-        ..clickableChange(),
+        ..clickableChange()
+        ..getPublicOrder(context),
       child: BlocBuilder<OrderCubit, OrderStates>(builder: (context, state) {
         return Scaffold(
           body: SafeArea(
-            child: Column(
-              children: [
-                Container(
-                  height: 108.h,
+            child: RefreshIndicator(
+              onRefresh: () async {
+                await OrderCubit.get(context).getPublicOrder(context);
+              },
+              child: SingleChildScrollView(
+                child: Container(
+                  height: height - 45.h,
                   width: width,
-                  color: Colors.transparent,
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                ConditionalBuilder(
-                  fallback: (context) =>
-                      const Center(child: CircularProgressIndicator()),
-                  condition: OrderCubit.get(context).deliveryfees != null,
-                  builder: (context) {
-                    return Flexible(
-                      child: Column(
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Center(
-                                child: CustomTimer(
-                                  controller: _controller,
-                                  builder: (state, time) {
-                                    return Text(
-                                        "${time.minutes}:${time.seconds}",
-                                        style: TextStyle(fontSize: 24.0));
-                                  },
-                                ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: 50.sp),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 20.0),
-                            child: ListView.separated(
-                                physics: NeverScrollableScrollPhysics(),
-                                separatorBuilder: (context, index) {
-                                  return Dividerr();
-                                },
-                                shrinkWrap: true,
-                                itemBuilder: (context, index) {
-                                  return SizedBox(
-                                      child: Column(
-                                    children: [
-                                      SizedBox(
-                                        height: 10,
+                  child: Column(
+                    children: [
+                      Container(
+                        height: 108.h,
+                        width: width,
+                        color: Colors.transparent,
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      ConditionalBuilder(
+                        fallback: (context) =>
+                            const Center(child: CircularProgressIndicator()),
+                        condition: OrderCubit.get(context).deliveryfees != null,
+                        builder: (context) {
+                          return Expanded(
+                            child: Column(
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Center(
+                                      child: CustomTimer(
+                                        controller: _controller,
+                                        builder: (state, time) {
+                                          return Text(
+                                              "${time.minutes}:${time.seconds}",
+                                              style: TextStyle(fontSize: 24.0));
+                                        },
                                       ),
-                                      Row(children: [
-                                        CircleAvatar(
-                                          radius: 40,
-                                          backgroundColor: Colors.black,
-                                          child: CircleAvatar(
-                                              radius: 30,
-                                              backgroundColor:
-                                                  widget.count != index + 1
-                                                      ? Colors.white
-                                                      : Colors.black,
-                                              child: Text("${index + 1}",
-                                                  style: TextStyle(
-                                                    fontFamily: "IntegralCf",
-                                                    color: widget.count !=
-                                                            index + 1
-                                                        ? Colors.black
-                                                        : Color.fromARGB(
-                                                            255, 128, 255, 0),
-                                                  ))),
-                                        ),
-                                        SizedBox(
-                                          width: width / 20,
-                                        ),
-                                        Text(
-                                          widget.count != index + 1
-                                              ? "Item ${index + 1}"
-                                              : "Your order ${widget.count} ",
-                                          style: TextStyle(
-                                            fontFamily: "IntegralCf",
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(height: 50.sp),
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 20.0),
+                                  child: ListView.separated(
+                                      physics:
+                                          const NeverScrollableScrollPhysics(),
+                                      separatorBuilder: (context, index) {
+                                        return Dividerr();
+                                      },
+                                      shrinkWrap: true,
+                                      itemBuilder: (context, index) {
+                                        return SizedBox(
+                                            child: Column(
+                                          children: [
+                                            SizedBox(
+                                              height: 10,
+                                            ),
+                                            Row(children: [
+                                              CircleAvatar(
+                                                radius: 40,
+                                                backgroundColor: Colors.black,
+                                                child: CircleAvatar(
+                                                    radius: 30,
+                                                    backgroundColor:
+                                                        widget.count !=
+                                                                index + 1
+                                                            ? Colors.white
+                                                            : Colors.black,
+                                                    child: Text("${index + 1}",
+                                                        style: TextStyle(
+                                                          fontFamily:
+                                                              "IntegralCf",
+                                                          color: widget.count !=
+                                                                  index + 1
+                                                              ? Colors.black
+                                                              : const Color
+                                                                      .fromARGB(
+                                                                  255,
+                                                                  9,
+                                                                  134,
+                                                                  211),
+                                                        ))),
+                                              ),
+                                              SizedBox(
+                                                width: width / 20,
+                                              ),
+                                              Text(
+                                                widget.count != index + 1
+                                                    ? "Item ${index + 1}"
+                                                    : "Your order ${widget.count} ",
+                                                style: TextStyle(
+                                                  fontFamily: "IntegralCf",
+                                                ),
+                                              ),
+                                            ]),
+                                            SizedBox(
+                                              height: 10,
+                                            ),
+                                            Dividerr()
+                                          ],
+                                        ));
+                                      },
+                                      itemCount:
+                                          OrderCubit.get(context).count!),
+                                ),
+                                SizedBox(
+                                  height: 50,
+                                ),
+                                Column(
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Padding(
+                                          padding: EdgeInsets.only(left: 25.w),
+                                          child: const Text(
+                                            "Total Delivery fees",
+                                            style: TextStyle(
+                                              fontFamily: "IntegralCf",
+                                            ),
                                           ),
                                         ),
-                                      ]),
-                                      SizedBox(
-                                        height: 10,
-                                      ),
-                                      Dividerr()
-                                    ],
-                                  ));
-                                },
-                                itemCount: widget.count),
-                          ),
-                          SizedBox(
-                            height: 50,
-                          ),
-                          Column(
-                            children: [
-                              Row(
-                                children: [
-                                  Padding(
-                                    padding: EdgeInsets.only(left: 25.w),
-                                    child: const Text(
-                                      "Total Delivery fees",
-                                      style: TextStyle(
-                                        fontFamily: "IntegralCf",
-                                      ),
+                                        const Spacer(),
+                                        Padding(
+                                          padding:
+                                              EdgeInsets.only(right: 30.0.w),
+                                          child: Text(
+                                            "EGP ${OrderCubit.get(context).deliveryfees}",
+                                            style: TextStyle(
+                                                fontFamily: "IntegralCf"),
+                                          ),
+                                        )
+                                      ],
                                     ),
-                                  ),
-                                  const Spacer(),
-                                  Padding(
-                                    padding: EdgeInsets.only(right: 30.0.w),
-                                    child: Text(
-                                      "EGP ${OrderCubit.get(context).deliveryfees}",
-                                      style:
-                                          TextStyle(fontFamily: "IntegralCf"),
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ],
-                          ),
-                          PaymentSummary(
-                            widget: widget,
-                          )
-                        ],
+                                  ],
+                                ),
+                                PaymentSummary(
+                                  widget: widget,
+                                )
+                              ],
+                            ),
+                          );
+                        },
                       ),
-                    );
-                  },
+                    ],
+                  ),
                 ),
-              ],
+              ),
             ),
           ),
         );

@@ -25,6 +25,7 @@ class _PaymentSummaryState extends State<PaymentSummary> {
     return Flexible(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           Container(
             decoration: const BoxDecoration(
@@ -146,14 +147,14 @@ class _PaymentSummaryState extends State<PaymentSummary> {
                         return Container(
                           width: 353,
                           height: 50,
-                          decoration: BoxDecoration(
-                              color: Color.fromARGB(255, 128, 255, 0),
+                          decoration: const BoxDecoration(
+                              color: Color.fromARGB(255, 9, 134, 211),
                               borderRadius:
                                   BorderRadius.all(Radius.circular(5))),
                           child: ElevatedButton(
                             style: ButtonStyle(
                                 backgroundColor: MaterialStateProperty.all(
-                                    Color.fromARGB(255, 128, 255, 0))),
+                                    const Color.fromARGB(255, 9, 134, 211))),
                             onPressed: () {
                               NavigateAndRemov(
                                   context,
@@ -162,7 +163,7 @@ class _PaymentSummaryState extends State<PaymentSummary> {
                                           widget.widget.endingOrderTimeSecond,
                                       count: widget.widget.count));
                             },
-                            child: Center(
+                            child: const Center(
                               child: Text(
                                 "Switch to Private",
                                 style: TextStyle(
@@ -179,11 +180,11 @@ class _PaymentSummaryState extends State<PaymentSummary> {
                         return Container(
                           width: 353,
                           height: 50,
-                          decoration: BoxDecoration(
+                          decoration: const BoxDecoration(
                               color: Colors.grey,
                               borderRadius:
                                   BorderRadius.all(Radius.circular(5))),
-                          child: Center(
+                          child: const Center(
                             child: Text(
                               "Switch to Private",
                               style: TextStyle(
