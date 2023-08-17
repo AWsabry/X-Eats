@@ -324,9 +324,10 @@ class OrderCubit extends Cubit<OrderStates> {
     emit(ChangeLocationStatesSuccefullty());
   }
 
-  List<dynamic> LocationsNames = [];
+  final List<dynamic> LocationsNames = [];
   List<dynamic> Locations = [];
-  List<dynamic> LocationSlugList = [];
+  static List<dynamic> LocationSlugList = [];
+  static List<dynamic> LocationId = [];
   void getLocation() {
     emit(GetLocationsStatesLoading());
     Dio()
@@ -338,6 +339,7 @@ class OrderCubit extends Cubit<OrderStates> {
       Locations.forEach((Location) {
         LocationsNames.add(Location["location_Name"]);
         LocationSlugList.add(Location["location_slug"]);
+        LocationId.add(Location["id"]);
       });
       emit(GetLocationNamesStatesSuccefully());
     }).catchError((onError) {
@@ -346,6 +348,7 @@ class OrderCubit extends Cubit<OrderStates> {
   }
 
   static List<dynamic> restuarantsOfSlugList = [];
+  static int? PublicLocationId;
   void getRestaurantsOfLocation() {
     emit(getRestuarantSlugStateLoading());
     Locations.forEach((slug) async {
@@ -355,6 +358,8 @@ class OrderCubit extends Cubit<OrderStates> {
                 "$BASEURL/get_restaurants_by_location/${slug["location_slug"]}")
             .then((value) {
           restuarantsOfSlugList = value.data["Names"];
+          PublicLocationId = slug["id"] - 1;
+          print(PublicLocationId);
           emit(getRestuarantsOfSlugStates());
         });
       } else {}
@@ -512,7 +517,8 @@ class OrderCubit extends Cubit<OrderStates> {
     emit(getTimeStateLoading());
 
     await Dio()
-        .get("$BASEURL/get_time_of_first_public_order_in_location/1")
+        .get(
+            "$BASEURL/get_time_of_first_public_order_in_location/${PublicLocationId! + 1}")
         .then((value) {
       OrdersssPendeing = value.data["Names"];
       EndingOrder = value.data["end_on"];
@@ -527,14 +533,14 @@ class OrderCubit extends Cubit<OrderStates> {
     });
   }
 
-  double? deliveryfees;
-  String? LocationName;
+  static double? deliveryfees;
+  static String? LocationName;
   Future<void> deliveryFees() async {
     emit(getDeliveryFeesLoadingState());
 
     await Dio().get("$BASEURL/get_Delivery_Fees").then((value) {
-      deliveryfees = value.data["Names"][0]["delivery_fees"];
-      LocationName = value.data["Names"][0]["location"];
+      deliveryfees = value.data["Names"][PublicLocationId]["delivery_fees"];
+      LocationName = value.data["Names"][PublicLocationId]["location"];
       emit(getDeliveryFeesState());
     }).catchError((onError) {
       print(onError);
@@ -543,7 +549,7 @@ class OrderCubit extends Cubit<OrderStates> {
 
   void ConfirmAllPublicOrders(context) {
     Dio().post(
-      "$BASEURL/get_time_of_first_public_order_in_location/1",
+      "$BASEURL/get_time_of_first_public_order_in_location/${PublicLocationId! + 1}",
     );
   }
 
@@ -564,7 +570,7 @@ class OrderCubit extends Cubit<OrderStates> {
           "status": "Pending",
           "user": AuthCubit.get(context).idInformation,
           "cart": cartID,
-          "deliver_to": 1
+          "deliver_to": PublicLocationId! + 1
         }).then((value) {
       NavigateAndRemov(context, const ThankYou());
     });
@@ -592,8 +598,9 @@ class OrderCubit extends Cubit<OrderStates> {
             endingOrderTime.difference(DateTime.now()).inSeconds;
         if (CheckingDifference == false) {
           print("kakaka");
-          Dio().post("$BASEURL/get_time_of_first_public_order_in_location/1",
-              data: {}).then((value4) {
+          await Dio().post(
+              "$BASEURL/get_time_of_first_public_order_in_location/${PublicLocationId! + 1}",
+              data: {}).then((value4) async {
             if (value4.statusCode == 200) {
               print("mm");
 
@@ -613,7 +620,7 @@ class OrderCubit extends Cubit<OrderStates> {
                     "status": "Pending",
                     "user": AuthCubit.get(context).idInformation,
                     "cart": cartID,
-                    "deliver_to": 1
+                    "deliver_to": PublicLocationId! + 1
                   }).then((value) {
                 if (Private == false) {
                   NavigateAndRemov(
@@ -650,7 +657,7 @@ class OrderCubit extends Cubit<OrderStates> {
                 "status": "Pending",
                 "user": AuthCubit.get(context).idInformation,
                 "cart": cartID,
-                "deliver_to": 1
+                "deliver_to": PublicLocationId! + 1
               }).then((value) async {
             if (Private == false) {
               await getPublicOrder(context).then((value) {
@@ -690,7 +697,7 @@ class OrderCubit extends Cubit<OrderStates> {
               "status": "Pending",
               "user": AuthCubit.get(context).idInformation,
               "cart": cartID,
-              "deliver_to": 1
+              "deliver_to": PublicLocationId! + 1
             }).then((value) async {
           await getPublicOrder(context).then((value) {
             var endingOrderTime = DateTime.parse(EndingOrder);

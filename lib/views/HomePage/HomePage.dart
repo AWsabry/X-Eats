@@ -98,7 +98,7 @@ class _HomePageState extends State<HomePage> {
           var cubit = AuthCubit.get(context);
           var navcubit = NavBarCubitcubit.get(context);
           var product_api = ProductsCubit.get(context).MostSold;
-          var FirstName = cubit.FirstName ?? ' ';
+          var FirstName = cubit.FirstName ?? '';
           print(OrderCubit.currentLocation);
           return SafeArea(
             child: Scaffold(
@@ -111,8 +111,7 @@ class _HomePageState extends State<HomePage> {
                     BlocBuilder<OrderCubit, OrderStates>(
                       builder: (context, OrderStates) {
                         print(" Khaled $OrderStates");
-                        var LocationList =
-                            OrderCubit.get(context).LocationsNames;
+
                         var RestaurantsSlugApi =
                             OrderCubit.restuarantsOfSlugList;
                         return ConditionalBuilder(

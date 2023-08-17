@@ -89,127 +89,136 @@ class _WaitingRoomState extends State<WaitingRoom>
                       ConditionalBuilder(
                         fallback: (context) =>
                             const Center(child: CircularProgressIndicator()),
-                        condition: OrderCubit.get(context).deliveryfees != null,
+                        condition: OrderCubit.deliveryfees != null,
                         builder: (context) {
-                          return Expanded(
-                            child: Column(
-                              children: [
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Center(
-                                      child: CustomTimer(
-                                        controller: _controller,
-                                        builder: (state, time) {
-                                          return Text(
-                                              "${time.minutes}:${time.seconds}",
-                                              style: TextStyle(fontSize: 24.0));
-                                        },
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(height: 50.sp),
-                                Padding(
-                                  padding: const EdgeInsets.only(left: 20.0),
-                                  child: ListView.separated(
-                                      physics:
-                                          const NeverScrollableScrollPhysics(),
-                                      separatorBuilder: (context, index) {
-                                        return Dividerr();
-                                      },
-                                      shrinkWrap: true,
-                                      itemBuilder: (context, index) {
-                                        return SizedBox(
-                                            child: Column(
-                                          children: [
-                                            SizedBox(
-                                              height: 10,
-                                            ),
-                                            Row(children: [
-                                              CircleAvatar(
-                                                radius: 40,
-                                                backgroundColor: Colors.black,
-                                                child: CircleAvatar(
-                                                    radius: 30,
-                                                    backgroundColor:
-                                                        widget.count !=
-                                                                index + 1
-                                                            ? Colors.white
-                                                            : Colors.black,
-                                                    child: Text("${index + 1}",
-                                                        style: TextStyle(
-                                                          fontFamily:
-                                                              "IntegralCf",
-                                                          color: widget.count !=
-                                                                  index + 1
-                                                              ? Colors.black
-                                                              : const Color
-                                                                      .fromARGB(
-                                                                  255,
-                                                                  9,
-                                                                  134,
-                                                                  211),
-                                                        ))),
-                                              ),
-                                              SizedBox(
-                                                width: width / 20,
-                                              ),
-                                              Text(
-                                                widget.count != index + 1
-                                                    ? "Item ${index + 1}"
-                                                    : "Your order ${widget.count} ",
-                                                style: TextStyle(
-                                                  fontFamily: "IntegralCf",
-                                                ),
-                                              ),
-                                            ]),
-                                            SizedBox(
-                                              height: 10,
-                                            ),
-                                            Dividerr()
-                                          ],
-                                        ));
-                                      },
-                                      itemCount:
-                                          OrderCubit.get(context).count!),
-                                ),
-                                SizedBox(
-                                  height: 50,
-                                ),
-                                Column(
-                                  children: [
-                                    Row(
-                                      children: [
-                                        Padding(
-                                          padding: EdgeInsets.only(left: 25.w),
-                                          child: const Text(
-                                            "Total Delivery fees",
-                                            style: TextStyle(
-                                              fontFamily: "IntegralCf",
-                                            ),
-                                          ),
+                          if (OrderCubit.get(context).count == null) {
+                            return const Center(
+                                child: CircularProgressIndicator());
+                          } else {
+                            return Expanded(
+                              child: Column(
+                                children: [
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Center(
+                                        child: CustomTimer(
+                                          controller: _controller,
+                                          builder: (state, time) {
+                                            return Text(
+                                                "${time.minutes}:${time.seconds}",
+                                                style:
+                                                    TextStyle(fontSize: 24.0));
+                                          },
                                         ),
-                                        const Spacer(),
-                                        Padding(
-                                          padding:
-                                              EdgeInsets.only(right: 30.0.w),
-                                          child: Text(
-                                            "EGP ${OrderCubit.get(context).deliveryfees}",
-                                            style: TextStyle(
-                                                fontFamily: "IntegralCf"),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(height: 50.sp),
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 20.0),
+                                    child: ListView.separated(
+                                        physics:
+                                            const NeverScrollableScrollPhysics(),
+                                        separatorBuilder: (context, index) {
+                                          return Dividerr();
+                                        },
+                                        shrinkWrap: true,
+                                        itemBuilder: (context, index) {
+                                          return SizedBox(
+                                              child: Column(
+                                            children: [
+                                              SizedBox(
+                                                height: 10,
+                                              ),
+                                              Row(children: [
+                                                CircleAvatar(
+                                                  radius: 40,
+                                                  backgroundColor: Colors.black,
+                                                  child: CircleAvatar(
+                                                      radius: 30,
+                                                      backgroundColor:
+                                                          widget.count !=
+                                                                  index + 1
+                                                              ? Colors.white
+                                                              : Colors.black,
+                                                      child: Text(
+                                                          "${index + 1}",
+                                                          style: TextStyle(
+                                                            fontFamily:
+                                                                "IntegralCf",
+                                                            color: widget
+                                                                        .count !=
+                                                                    index + 1
+                                                                ? Colors.black
+                                                                : const Color
+                                                                        .fromARGB(
+                                                                    255,
+                                                                    9,
+                                                                    134,
+                                                                    211),
+                                                          ))),
+                                                ),
+                                                SizedBox(
+                                                  width: width / 20,
+                                                ),
+                                                Text(
+                                                  widget.count != index + 1
+                                                      ? "Item ${index + 1}"
+                                                      : "Your order ${widget.count} ",
+                                                  style: TextStyle(
+                                                    fontFamily: "IntegralCf",
+                                                  ),
+                                                ),
+                                              ]),
+                                              SizedBox(
+                                                height: 10,
+                                              ),
+                                              Dividerr()
+                                            ],
+                                          ));
+                                        },
+                                        itemCount:
+                                            OrderCubit.get(context).count!),
+                                  ),
+                                  SizedBox(
+                                    height: 50,
+                                  ),
+                                  Column(
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Padding(
+                                            padding:
+                                                EdgeInsets.only(left: 25.w),
+                                            child: const Text(
+                                              "Total Delivery fees",
+                                              style: TextStyle(
+                                                fontFamily: "IntegralCf",
+                                              ),
+                                            ),
                                           ),
-                                        )
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                                PaymentSummary(
-                                  widget: widget,
-                                )
-                              ],
-                            ),
-                          );
+                                          const Spacer(),
+                                          Padding(
+                                            padding:
+                                                EdgeInsets.only(right: 30.0.w),
+                                            child: Text(
+                                              "EGP ${OrderCubit.deliveryfees}",
+                                              style: TextStyle(
+                                                  fontFamily: "IntegralCf"),
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                  PaymentSummary(
+                                    widget: widget,
+                                  )
+                                ],
+                              ),
+                            );
+                          }
                         },
                       ),
                     ],

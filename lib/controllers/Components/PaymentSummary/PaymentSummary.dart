@@ -81,7 +81,7 @@ class _PaymentSummaryState extends State<PaymentSummary> {
                       Padding(
                         padding: const EdgeInsets.only(right: 18.0),
                         child: Text(
-                          "EGP ${OrderCubit.get(context).deliveryfees! / widget.widget.count}",
+                          "EGP ${OrderCubit.deliveryfees! / widget.widget.count}",
                           style: GoogleFonts.poppins(
                               fontSize: 15, color: Colors.white),
                         ),
@@ -102,7 +102,7 @@ class _PaymentSummaryState extends State<PaymentSummary> {
                       Padding(
                         padding: const EdgeInsets.only(right: 18.0),
                         child: Text(
-                          "EGP ${OrderCubit.get(context).deliveryfees! / 4}",
+                          "EGP ${OrderCubit.deliveryfees! / 4}",
                           style: GoogleFonts.poppins(
                               fontSize: 15, color: Colors.white),
                         ),
@@ -126,7 +126,7 @@ class _PaymentSummaryState extends State<PaymentSummary> {
                       Padding(
                         padding: const EdgeInsets.only(right: 18.0),
                         child: Text(
-                          "EGP ${ProductClass.getSubtotal() + (OrderCubit.get(context).deliveryfees! / 4) + (OrderCubit.get(context).deliveryfees! / widget.widget.count)}",
+                          "EGP ${ProductClass.getSubtotal() + (OrderCubit.deliveryfees! / 4) + (OrderCubit.deliveryfees! / widget.widget.count)}",
                           style: GoogleFonts.poppins(
                             fontSize: 15,
                             color: Colors.white,
