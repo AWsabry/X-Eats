@@ -13,11 +13,13 @@ import 'package:xeats/controllers/Cubits/OrderCubit/OrderStates.dart';
 import 'package:xeats/controllers/Cubits/ProductsCubit/ProductsCubit.dart';
 import 'package:xeats/controllers/Cubits/ProductsCubit/ProductsStates.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:xeats/core/Constants/constants.dart';
 import 'package:xeats/views/Layout/Layout.dart';
 import 'package:xeats/views/Profile/Profile.dart';
 import 'package:xeats/views/ResturantsMenu/ResturantsMenu.dart';
 import '../../controllers/Components/Products Components/NewProducts.dart';
 
+// ignore: must_be_immutable
 class Restaurants extends StatelessWidget {
   Restaurants({super.key, this.currentLocation});
   String? currentLocation;
@@ -79,7 +81,7 @@ class Restaurants extends StatelessWidget {
                                                 context,
                                                 ProductClass().productDetails(
                                                   context,
-                                                  image: OrderCubit.BASEURL +
+                                                  image: AppConstants.BaseUrl +
                                                       "/uploads/" +
                                                       newProducts[index]
                                                           ["image"],

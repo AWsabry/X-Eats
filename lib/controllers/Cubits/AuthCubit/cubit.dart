@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -141,6 +143,7 @@ class AuthCubit extends Cubit<AuthStates> {
   }
 
 //-------------------- Function Separated to get his email if his email null then it will go to login if not then it will go to home page
+
   String? EmailInforamtion;
   String? FirstName;
   String? LastName;

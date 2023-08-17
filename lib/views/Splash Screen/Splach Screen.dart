@@ -43,7 +43,6 @@ class _SplashScreenState extends State<SplashScreen> {
     FirebaseMessaging.onMessage.listen(
       (RemoteMessage remoteMessage) {
         RemoteNotification? notification = remoteMessage.notification;
-
         AndroidNotification? android = remoteMessage.notification!.android;
 
         if (notification != null && android != null) {
@@ -99,15 +98,11 @@ class _SplashScreenState extends State<SplashScreen> {
 
     Future.delayed(const Duration(seconds: 6)).then(
       (value) {
-        // if (Check == true) {
-        //   NavigateAndRemov(context, UpdateDialog());
-        // } else {
         if (AuthCubit.get(context).EmailInforamtion != null) {
           NavigateAndRemov(context, Layout());
         } else {
           NavigateAndRemov(context, SignIn());
         }
-        // }
       },
     );
   }

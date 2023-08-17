@@ -123,7 +123,7 @@ class SignIn extends StatelessWidget {
                                     if (e.runtimeType == DioError) {
                                       // print(dioException.response!.statusCode);
                                     }
-                                    if (status == 302) {
+                                    if (status == 200) {
                                       cubit.getEmail(context,
                                           email: cubit.emailController.text);
                                       NavigateAndRemov(context, LoginSuccess());

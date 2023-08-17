@@ -1,22 +1,15 @@
-// ignore_for_file: non_constant_identifier_names
-
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:custom_timer/custom_timer.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:xeats/controllers/Components/AppBar/AppBarCustomized.dart';
 import 'package:xeats/controllers/Components/General%20Components/Components.dart';
 import 'package:xeats/controllers/Components/PaymentSummary/PaymentSummary.dart';
-import 'package:xeats/controllers/Components/Product%20Class/Products_Class.dart';
 import 'package:xeats/controllers/Cubits/OrderCubit/OrderCubit.dart';
 import 'package:xeats/controllers/Cubits/OrderCubit/OrderStates.dart';
 import 'package:xeats/views/ThankYou/thankyou.dart';
 
-import '../../controllers/Components/Global Components/DefaultButton.dart';
-
+// ignore: must_be_immutable
 class WaitingRoom extends StatefulWidget {
   WaitingRoom(
       {Key? key,
@@ -52,8 +45,8 @@ class _WaitingRoomState extends State<WaitingRoom>
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
-    int minutes = widget.endingOrderTimeSecond * 60;
     _controller.start();
+
     Future.delayed(Duration(seconds: widget.endingOrderTimeSecond))
         .then((value) {
       OrderCubit.get(context).ConfirmAllPublicOrders(context);

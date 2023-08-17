@@ -12,6 +12,7 @@ import 'package:xeats/controllers/Components/Global%20Components/loading.dart';
 import 'package:xeats/controllers/Cubits/AuthCubit/cubit.dart';
 import 'package:xeats/controllers/Cubits/RestauratsCubit/RestaurantsStates.dart';
 import 'package:xeats/controllers/Dio/DioHelper.dart';
+import 'package:xeats/core/Constants/constants.dart';
 import 'package:xeats/views/CategoryView/categoryView.dart';
 import 'package:xeats/views/ResturantsMenu/ResturantsMenu.dart';
 
@@ -19,7 +20,6 @@ class RestuarantsCubit extends Cubit<RestuarantsStates> {
   RestuarantsCubit() : super(SuperRestuarantsStates());
   static RestuarantsCubit get(context) => BlocProvider.of(context);
 
-  String BASEURL = "https://www.x-eats.com";
 //--------- Get The All Resturants Inside The resturants Menu Widget --------/////////////
   Future<Widget> getRestaurantCategories(
     BuildContext context, {
@@ -29,7 +29,8 @@ class RestuarantsCubit extends Cubit<RestuarantsStates> {
   }) async {
     Widget result = Container();
     await Dio()
-        .get("$BASEURL/get_category_of_restaurants/$restaurantId")
+        .get(
+            "${AppConstants.BaseUrl}/get_category_of_restaurants/$restaurantId")
         .then((value) {
       result = ListView.separated(
           itemBuilder: ((context, index) {
@@ -46,7 +47,8 @@ class RestuarantsCubit extends Cubit<RestuarantsStates> {
                           category: value.data["Names"][index]['display_name'],
                           categoryId:
                               value.data["Names"][index]['id'].toString(),
-                          image: BASEURL + value.data["Names"][index]["image"],
+                          image: AppConstants.BaseUrl +
+                              value.data["Names"][index]["image"],
                           restaurantName: restaurantName,
                           restaurantID: restaurantId),
                     );
@@ -89,7 +91,7 @@ class RestuarantsCubit extends Cubit<RestuarantsStates> {
     required List<String>? restaurant_nameFromSearching,
   }) async {
     await Dio()
-        .get("$BASEURL/get_restaurants")
+        .get("${AppConstants.BaseUrl}/get_restaurants")
         .then((value) {})
         .catchError((onError) {});
     RestuarantsUI = Column(
@@ -246,13 +248,13 @@ class RestuarantsCubit extends Cubit<RestuarantsStates> {
   Future<void> getCurrentAvailableOrderRestauant(context) async {
     await Dio()
         .get(
-            "$BASEURL/get_user_cartItems/${AuthCubit.get(context).EmailInforamtion}")
+            "${AppConstants.BaseUrl}/get_user_cartItems/${AuthCubit.get(context).EmailInforamtion}")
         .then((value) async {
       if (value.data["Names"].length == 0) {
         currentRestaurant = {};
       } else {
         final dataFromApi = await Dio().get(
-            "$BASEURL/get_restaurants_by_id/${value.data["Names"][0]["Restaurant"]}");
+            "${AppConstants.BaseUrl}/get_restaurants_by_id/${value.data["Names"][0]["Restaurant"]}");
         currentRestaurant = dataFromApi.data["Names"][0];
       }
     });
@@ -260,7 +262,9 @@ class RestuarantsCubit extends Cubit<RestuarantsStates> {
 
   Future<String?> getRestaurantName(String id) async {
     String? restaurantName;
-    await Dio().get("$BASEURL/get_restaurants_by_id/$id").then((value) {
+    await Dio()
+        .get("${AppConstants.BaseUrl}/get_restaurants_by_id/$id")
+        .then((value) {
       restaurantName = value.data["Names"][0]["Name"].toString();
     }).catchError((onError) {
       restaurantName = onError.response!.statusCode.toString();

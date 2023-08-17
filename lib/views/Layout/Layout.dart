@@ -33,18 +33,7 @@ class Layout extends StatelessWidget {
         builder: ((context, state) {
           {
             var navcubit = NavBarCubitcubit.get(context);
-            return Scaffold(body: navcubit.Screens[navcubit.currentindex]
-
-                // bottomNavigationBar: BottomNavigationBar(
-                //   selectedLabelStyle: GoogleFonts.poppins(),
-                //   backgroundColor: Colors.white,
-                //   items: navcubit.bottomitems,
-                //   currentIndex: navcubit.currentindex,
-                //   // onTap: (index) {
-                //   //   navcubit.changebottomnavindex(index);
-                //   // },
-                // ),
-                );
+            return Scaffold(body: navcubit.Screens[navcubit.currentindex]);
           }
         }),
         listener: ((context, state) {}));

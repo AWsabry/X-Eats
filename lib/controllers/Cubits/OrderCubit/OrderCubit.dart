@@ -16,6 +16,7 @@ import 'package:xeats/controllers/Components/Requests%20Loading%20Components/Req
 import 'package:xeats/controllers/Cubits/AuthCubit/cubit.dart';
 import 'package:xeats/controllers/Cubits/OrderCubit/OrderStates.dart';
 import 'package:xeats/controllers/Dio/DioHelper.dart';
+import 'package:xeats/core/Constants/constants.dart';
 import 'package:xeats/views/CategoryView/categoryView.dart';
 import 'package:xeats/views/ThankYou/thankyou.dart';
 import 'package:xeats/views/WaitingRoom/waitingRoom.dart';
@@ -25,7 +26,6 @@ class OrderCubit extends Cubit<OrderStates> {
   OrderCubit() : super(SuperOrderStates());
   static OrderCubit get(context) => BlocProvider.of(context);
 
-  static String BASEURL = "https://www.x-eats.com";
   int? cartID;
 
   Future<void> getCartID(context) async {
@@ -39,7 +39,7 @@ class OrderCubit extends Cubit<OrderStates> {
       print("cart id is 2 : ${AuthCubit.get(context).EmailInforamtion}");
       await Dio()
           .get(
-              "$BASEURL/get_carts_by_id/${AuthCubit.get(context).EmailInforamtion}")
+              "${AppConstants.BaseUrl}/get_carts_by_id/${AuthCubit.get(context).EmailInforamtion}")
           .then((value) {
         userCartID.setInt("cartIDSaved", value.data["Names"][0]['id']);
         cartID = value.data["Names"][0]['id'];
@@ -68,7 +68,7 @@ class OrderCubit extends Cubit<OrderStates> {
     emit(ButtonPressedLoading());
 
     await Dio().post(
-      "$BASEURL/get_user_cartItems/${AuthCubit.get(context).EmailInforamtion}",
+      "${AppConstants.BaseUrl}/get_user_cartItems/${AuthCubit.get(context).EmailInforamtion}",
       data: {
         "user": AuthCubit.get(context).idInformation,
         "cart": cartID,
@@ -81,7 +81,7 @@ class OrderCubit extends Cubit<OrderStates> {
     ).then((value) async {
       if (value.statusCode == 202) {
         await Dio().put(
-          "$BASEURL/get_user_cartItems/${AuthCubit.get(context).EmailInforamtion}",
+          "${AppConstants.BaseUrl}/get_user_cartItems/${AuthCubit.get(context).EmailInforamtion}",
           data: {
             "id": cartItemId,
             "user": "${AuthCubit.get(context).idInformation}",
@@ -94,7 +94,7 @@ class OrderCubit extends Cubit<OrderStates> {
         ).catchError((e) {
           var dioException = e as DioError;
           var status = dioException.response!.statusCode;
-          if (status == 304) {
+          if (status == 403) {
             print("Data is Null or No Items in Cart");
           }
         });
@@ -231,9 +231,11 @@ class OrderCubit extends Cubit<OrderStates> {
   }
 
   void updateCartPrice(context) async {
-    await Dio().get("$BASEURL/get_Delivery_Fees").then((value) async {
+    await Dio()
+        .get("${AppConstants.BaseUrl}/get_Delivery_Fees")
+        .then((value) async {
       await Dio().put(
-          "$BASEURL/get_carts_by_id/${AuthCubit.get(context).EmailInforamtion}}",
+          "${AppConstants.BaseUrl}/get_carts_by_id/${AuthCubit.get(context).EmailInforamtion}}",
           data: {
             "total_price": ProductClass.getSubtotal(),
             "total_after_delivery": (value.data["Names"][0]["delivery_fees"] +
@@ -260,13 +262,15 @@ class OrderCubit extends Cubit<OrderStates> {
 
     Map itemImages = {};
 
-    await Dio().get("$BASEURL/get_user_cartItems/$email").then((value) async {
+    await Dio()
+        .get("${AppConstants.BaseUrl}/get_user_cartItems/$email")
+        .then((value) async {
       for (var i in value.data["Names"]) {
         ProductClass? theItem;
         print(i['id']);
         await Dio()
             .get(
-          "$BASEURL/get_products_by_id/${i["product"]}",
+          "${AppConstants.BaseUrl}/get_products_by_id/${i["product"]}",
         )
             .then((v2) async {
           theItem = ProductClass(
@@ -293,7 +297,7 @@ class OrderCubit extends Cubit<OrderStates> {
             print("1111");
             await Dio()
                 .get(
-                    "$BASEURL/get_category_by_id/${v2.data["Names"][0]["category"]}")
+                    "${AppConstants.BaseUrl}/get_category_by_id/${v2.data["Names"][0]["category"]}")
                 .then((value2) {
               print("2222");
               theItem!.itemImage = value2.data["Names"][0]["image"];
@@ -332,7 +336,7 @@ class OrderCubit extends Cubit<OrderStates> {
     emit(GetLocationsStatesLoading());
     Dio()
         .get(
-      "$BASEURL/get_locations/",
+      "${AppConstants.BaseUrl}/get_locations/",
     )
         .then((value) {
       Locations = value.data["Names"];
@@ -355,7 +359,7 @@ class OrderCubit extends Cubit<OrderStates> {
       if (slug["location_Name"] == currentLocation) {
         await Dio()
             .get(
-                "$BASEURL/get_restaurants_by_location/${slug["location_slug"]}")
+                "${AppConstants.BaseUrl}/get_restaurants_by_location/${slug["location_slug"]}")
             .then((value) {
           restuarantsOfSlugList = value.data["Names"];
           PublicLocationId = slug["id"] - 1;
@@ -372,7 +376,7 @@ class OrderCubit extends Cubit<OrderStates> {
   ) async {
     await Dio()
         .get(
-      "$BASEURL/get_24_orders/",
+      "${AppConstants.BaseUrl}/get_24_orders/",
     )
         .then((value) {
       for (var i in value.data["Names"]) {
@@ -385,7 +389,9 @@ class OrderCubit extends Cubit<OrderStates> {
   }
 
   Future<void> deleteCartItem(BuildContext context, String cartItemId) async {
-    await Dio().delete("$BASEURL/delete_cartItems/$cartItemId").then((value) {
+    await Dio()
+        .delete("${AppConstants.BaseUrl}/delete_cartItems/$cartItemId")
+        .then((value) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           duration: const Duration(milliseconds: 1000),
@@ -435,7 +441,8 @@ class OrderCubit extends Cubit<OrderStates> {
   }) async {
     Widget result = Container();
     await Dio()
-        .get("$BASEURL/get_category_of_restaurants/$restaurantId")
+        .get(
+            "${AppConstants.BaseUrl}/get_category_of_restaurants/$restaurantId")
         .then((value) {
       result = ListView.separated(
           itemBuilder: ((context, index) {
@@ -490,7 +497,7 @@ class OrderCubit extends Cubit<OrderStates> {
     print(token);
     await Dio()
         .post(
-          "$BASEURL/notification_tokens",
+          "${AppConstants.BaseUrl}/notification_tokens",
           data: {"token": token},
         )
         .then((value) => print("WELCOME" + "${value.data}"))
@@ -518,7 +525,7 @@ class OrderCubit extends Cubit<OrderStates> {
 
     await Dio()
         .get(
-            "$BASEURL/get_time_of_first_public_order_in_location/${PublicLocationId! + 1}")
+            "${AppConstants.BaseUrl}/get_time_of_first_public_order_in_location/${PublicLocationId! + 1}")
         .then((value) {
       OrdersssPendeing = value.data["Names"];
       EndingOrder = value.data["end_on"];
@@ -538,7 +545,7 @@ class OrderCubit extends Cubit<OrderStates> {
   Future<void> deliveryFees() async {
     emit(getDeliveryFeesLoadingState());
 
-    await Dio().get("$BASEURL/get_Delivery_Fees").then((value) {
+    await Dio().get("${AppConstants.BaseUrl}/get_Delivery_Fees").then((value) {
       deliveryfees = value.data["Names"][PublicLocationId]["delivery_fees"];
       LocationName = value.data["Names"][PublicLocationId]["location"];
       emit(getDeliveryFeesState());
@@ -549,13 +556,13 @@ class OrderCubit extends Cubit<OrderStates> {
 
   void ConfirmAllPublicOrders(context) {
     Dio().post(
-      "$BASEURL/get_time_of_first_public_order_in_location/${PublicLocationId! + 1}",
+      "${AppConstants.BaseUrl}/get_time_of_first_public_order_in_location/${PublicLocationId! + 1}",
     );
   }
 
   void switchOrderToPrivate(context) {
     Dio().post(
-        "$BASEURL/get_orders_by_email/${AuthCubit.get(context).EmailInforamtion}",
+        "${AppConstants.BaseUrl}/get_orders_by_email/${AuthCubit.get(context).EmailInforamtion}",
         data: {
           "first_name": AuthCubit.get(context).FirstName,
           "last_name": AuthCubit.get(context).LastName,
@@ -599,13 +606,13 @@ class OrderCubit extends Cubit<OrderStates> {
         if (CheckingDifference == false) {
           print("kakaka");
           await Dio().post(
-              "$BASEURL/get_time_of_first_public_order_in_location/${PublicLocationId! + 1}",
+              "${AppConstants.BaseUrl}/get_time_of_first_public_order_in_location/${PublicLocationId! + 1}",
               data: {}).then((value4) async {
             if (value4.statusCode == 200) {
               print("mm");
 
               Dio().post(
-                  "$BASEURL/get_orders_by_email/${AuthCubit.get(context).EmailInforamtion}",
+                  "${AppConstants.BaseUrl}/get_orders_by_email/${AuthCubit.get(context).EmailInforamtion}",
                   data: {
                     "first_name": AuthCubit.get(context).FirstName,
                     "last_name": AuthCubit.get(context).LastName,
@@ -642,7 +649,7 @@ class OrderCubit extends Cubit<OrderStates> {
           print("mmm");
 
           Dio().post(
-              "$BASEURL/get_orders_by_email/${AuthCubit.get(context).EmailInforamtion}",
+              "${AppConstants.BaseUrl}/get_orders_by_email/${AuthCubit.get(context).EmailInforamtion}",
               data: {
                 "first_name": AuthCubit.get(context).FirstName,
                 "last_name": AuthCubit.get(context).LastName,
@@ -682,7 +689,7 @@ class OrderCubit extends Cubit<OrderStates> {
       } on FormatException {
         print("mmaaaaaaam");
         Dio().post(
-            "$BASEURL/get_orders_by_email/${AuthCubit.get(context).EmailInforamtion}",
+            "${AppConstants.BaseUrl}/get_orders_by_email/${AuthCubit.get(context).EmailInforamtion}",
             data: {
               "first_name": AuthCubit.get(context).FirstName,
               "last_name": AuthCubit.get(context).LastName,

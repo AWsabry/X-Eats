@@ -3,13 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:xeats/controllers/Components/AppBar/AppBarCustomized.dart';
 import 'package:xeats/controllers/Components/General%20Components/Components.dart';
 import 'package:xeats/controllers/Cubits/OrderCubit/OrderCubit.dart';
 import 'package:xeats/controllers/Cubits/OrderCubit/OrderStates.dart';
 import 'package:xeats/core/Constants/constants.dart';
 import 'package:xeats/views/Cart/Cart.dart';
-import 'package:xeats/views/HomePage/HomePage.dart';
 
 class LocationBar extends StatelessWidget implements PreferredSizeWidget {
   @override
@@ -38,29 +36,29 @@ class LocationBar extends StatelessWidget implements PreferredSizeWidget {
                     Row(
                       children: [
                         Text(
-                          Appconstants.delivering,
+                          AppConstants.delivering,
                           style: GoogleFonts.poppins(
                               fontSize: 11, color: Colors.grey),
                         ),
                         SizedBox(
                           width: 10,
                         ),
-                        ConditionalBuilder(
-                            condition: OrderCubit.get(context)
-                                .LocationsNames
-                                .isNotEmpty,
-                            fallback: (context) {
-                              return const SpinKitThreeInOut(
-                                color: Color.fromARGB(255, 9, 134, 211),
-                                size: 10,
-                              );
-                            },
-                            builder: (
-                              context,
-                            ) {
-                              return BlocBuilder<OrderCubit, OrderStates>(
-                                builder: (context, state) {
-                                  var cubit = OrderCubit.get(context);
+                        BlocBuilder<OrderCubit, OrderStates>(
+                          builder: (context, state) {
+                            var cubit = OrderCubit.get(context);
+                            return ConditionalBuilder(
+                                condition: OrderCubit.get(context)
+                                    .LocationsNames
+                                    .isNotEmpty,
+                                fallback: (context) {
+                                  return const SpinKitThreeInOut(
+                                    color: Color.fromARGB(255, 9, 134, 211),
+                                    size: 10,
+                                  );
+                                },
+                                builder: (
+                                  context,
+                                ) {
                                   return DropdownButton(
                                     hint: Text("Select your Location"),
                                     items: cubit.LocationsNames.map<
@@ -81,9 +79,9 @@ class LocationBar extends StatelessWidget implements PreferredSizeWidget {
                                     value: OrderCubit.currentLocation,
                                     icon: Icon(Icons.arrow_drop_down),
                                   );
-                                },
-                              );
-                            })
+                                });
+                          },
+                        )
                       ],
                     )
                   ]),

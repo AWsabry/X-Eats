@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:xeats/controllers/Components/Product%20Class/Products_Class.dart';
 import 'package:xeats/controllers/Cubits/ProductsCubit/ProductsStates.dart';
 import 'package:xeats/controllers/Dio/DioHelper.dart';
+import 'package:xeats/core/Constants/constants.dart';
 
 enum Privacy { Private, Public }
 
@@ -11,8 +12,6 @@ class ProductsCubit extends Cubit<ProductsStates> {
   ProductsCubit() : super(SuperProductsStates());
   static ProductsCubit get(context) => BlocProvider.of(context);
   TextEditingController searchController = TextEditingController();
-
-  String BASEURL = "https://www.x-eats.com";
 
   List<dynamic> MostSold = [];
   Map itemImages = {};
@@ -46,6 +45,7 @@ class ProductsCubit extends Cubit<ProductsStates> {
 
   final List<String> EnglishName = [];
   final List<String> ArabicName = [];
+
   Future<void> ClearProductsId() async {
     category_name.clear();
     restaurant_name.clear();
@@ -73,7 +73,8 @@ class ProductsCubit extends Cubit<ProductsStates> {
     required String? restaurantName,
   }) async {
     await Dio()
-        .get("$BASEURL/get_products_of_restaurant_by_category/$id/$CatId")
+        .get(
+            "${AppConstants.BaseUrl}/get_products_of_restaurant_by_category/$id/$CatId")
         .then((value) {})
         .catchError((onError) {});
     data = Expanded(
@@ -122,8 +123,8 @@ class ProductsCubit extends Cubit<ProductsStates> {
   Future<void> SearchOnListOfProduct(BuildContext context) async {
     await Future.wait(ProductId.map((productId) async {
       try {
-        final response =
-            await Dio().get('$BASEURL/get_products_by_id/$productId');
+        final response = await Dio()
+            .get('${AppConstants.BaseUrl}/get_products_by_id/$productId');
         final name = response.data['Names'][0];
 
         image.add(name['image']);
@@ -161,7 +162,7 @@ class ProductsCubit extends Cubit<ProductsStates> {
     required String? id,
   }) async {
     await Dio()
-        .get("$BASEURL/get_products_by_restaurant_id/$id")
+        .get("${AppConstants.BaseUrl}/get_products_by_restaurant_id/$id")
         .then((value) async {
       var products = value.data["Names"].where((product) =>
           product["name"]
@@ -178,7 +179,7 @@ class ProductsCubit extends Cubit<ProductsStates> {
           .map<int>((product) => product["id"] as int)
           .toList();
     });
-    emit(ProductIdSuccefull());
+    emit(ProductIdSuccessful());
   }
 
   Future getCurrentProducts(
@@ -191,7 +192,8 @@ class ProductsCubit extends Cubit<ProductsStates> {
   }) async {
     var data;
     await Dio()
-        .get("$BASEURL/get_products_of_restaurant_by_category/$id/$CatId")
+        .get(
+            "${AppConstants.BaseUrl}/get_products_of_restaurant_by_category/$id/$CatId")
         .then((value) async {
       data = Expanded(
         child: ListView.separated(

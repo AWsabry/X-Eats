@@ -8,7 +8,6 @@ import 'package:xeats/controllers/Components/General%20Components/Components.dar
 import 'package:xeats/controllers/Cubits/AuthCubit/States.dart';
 import 'package:xeats/controllers/Cubits/AuthCubit/cubit.dart';
 import 'package:xeats/views/Verification/Verification.dart';
-import '../../controllers/Components/Auth Components/DropDownListTitle.dart';
 import '../../controllers/Components/Global Components/defaultFormField.dart';
 
 class Complete_Profile extends StatelessWidget {
@@ -99,21 +98,21 @@ class Complete_Profile extends StatelessWidget {
                         SizedBox(
                           height: 15,
                         ),
-                        Container(
-                          width: double.infinity,
-                          child: SelectedTitle(
-                            changed: (value) {
-                              value = cubit.ValueTitle;
-                              title = cubit.title;
-                              cubit.changetitle();
-                            },
-                            form: (value) =>
-                                value == null ? 'Select your title' : null,
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 15,
-                        ),
+                        // Container(
+                        //   width: double.infinity,
+                        //   child: SelectedTitle(
+                        //     changed: (value) {
+                        //       value = cubit.ValueTitle;
+                        //       title = cubit.title;
+                        //       cubit.changetitle();
+                        //     },
+                        //     form: (value) =>
+                        //         value == null ? 'Select your title' : null,
+                        //   ),
+                        // ),
+                        // const SizedBox(
+                        //   height: 15,
+                        // ),
                         Row(
                           children: [
                             const Spacer(),

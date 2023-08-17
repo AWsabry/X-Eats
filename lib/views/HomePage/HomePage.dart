@@ -138,7 +138,7 @@ class _HomePageState extends State<HomePage> {
                                     Center(
                                       child: Container(
                                         child: Text(
-                                          Appconstants.PleaseSelectLocation,
+                                          AppConstants.PleaseSelectLocation,
                                           style: GoogleFonts.openSans(
                                               fontSize: 18),
                                         ),
@@ -359,7 +359,7 @@ class _HomePageState extends State<HomePage> {
                                                                                       productName: product_api[index]["productName"],
                                                                                       id: product_api[index]["id"],
                                                                                       restaurant: product_api[index]["Restaurant"],
-                                                                                      image: "${OrderCubit.BASEURL + "/uploads/" + product_api[index]["image"]}",
+                                                                                      image: "${AppConstants.BaseUrl + "/uploads/" + product_api[index]["image"]}",
                                                                                       price: price,
                                                                                       englishName: product_api[index]["name"],
                                                                                       arabicName: product_api[index]["ArabicName"],

@@ -14,7 +14,7 @@ class ProductsFail extends SuperProductsStates {
 
 class SearhOnProductSuccessfull extends SuperProductsStates {}
 
-class ProductIdSuccefull extends SuperProductsStates {}
+class ProductIdSuccessful extends SuperProductsStates {}
 
 class SearhOnProductFail extends SuperProductsStates {
   final String error;
