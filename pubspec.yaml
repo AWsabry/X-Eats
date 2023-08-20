@@ -31,7 +31,7 @@ environment:
 dependencies:
   timer_count_down: ^2.2.0
   custom_timer: ^0.2.3
-  new_version_plus: ^0.0.9
+  # new_version_plus: 
   launch_review: ^3.0.1
   bloc:
   flutter_bloc:
@@ -42,9 +42,8 @@ dependencies:
   google_fonts:
   carousel_slider:
   flutter_spinkit:
-  connectivity_plus:
   internet_connection_checker:
-  google_mobile_ads: 
+  google_mobile_ads: ^2.4.0
   flutter_svg:
   animated_text_kit:
   page_transition:
@@ -60,10 +59,7 @@ dependencies:
   url_launcher:
   firebase_auth:
   pinput: ^2.2.30
-  json_annotation:
-  
-  google_maps_flutter:
-  geolocator: 
+  json_annotation:   
   flutter_polyline_points: 
   cached_network_image:
 

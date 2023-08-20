@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class RestaurantView extends StatefulWidget {
-  RestaurantView({
+  const RestaurantView({
     Key? key,
     this.image,
     this.Colors,
@@ -28,7 +28,7 @@ class _RestaurantViewState extends State<RestaurantView> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Container(
+        SizedBox(
           height: widget.Height,
           width: widget.Weight,
           child: Padding(

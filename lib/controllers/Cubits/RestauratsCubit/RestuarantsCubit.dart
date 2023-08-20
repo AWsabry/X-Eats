@@ -35,7 +35,7 @@ class RestuarantsCubit extends Cubit<RestuarantsStates> {
       result = ListView.separated(
           itemBuilder: ((context, index) {
             if (value.data["Names"][index] == null) {
-              return Loading();
+              return const Loading();
             } else {
               return SizedBox(
                 height: MediaQuery.of(context).size.height / 5,
@@ -64,9 +64,9 @@ class RestuarantsCubit extends Cubit<RestuarantsStates> {
             // "${value.data["Names"][index]["display_name"]}")),
           }),
           separatorBuilder: ((context, index) {
-            return SizedBox(
-              child: Divider(),
+            return const SizedBox(
               height: 20,
+              child: Divider(),
             );
           }),
           itemCount: value.data["Names"].length);
@@ -113,7 +113,7 @@ class RestuarantsCubit extends Cubit<RestuarantsStates> {
           physics: const BouncingScrollPhysics(),
           itemBuilder: (context, index) {
             if (imageOfRestaurant![index] == null) {
-              return Loading();
+              return const Loading();
             } else {
               return InkWell(
                 onTap: () {
@@ -129,11 +129,11 @@ class RestuarantsCubit extends Cubit<RestuarantsStates> {
                     height: 130.h,
                     decoration: BoxDecoration(
                       border:
-                          Border.all(color: Color.fromARGB(74, 158, 158, 158)),
+                          Border.all(color: const Color.fromARGB(74, 158, 158, 158)),
                       borderRadius: BorderRadius.circular(10.0),
                     ),
                     child: Padding(
-                      padding: EdgeInsets.all(16.0),
+                      padding: const EdgeInsets.all(16.0),
                       child: CachedNetworkImage(
                         progressIndicatorBuilder: (context, url, progress) =>
                             Center(
@@ -142,7 +142,7 @@ class RestuarantsCubit extends Cubit<RestuarantsStates> {
                           ),
                         ),
                         imageUrl:
-                            'https://www.x-eats.com' + imageOfRestaurant[index],
+                            'https://www.x-eats.com${imageOfRestaurant[index]}',
                       ),
                     ),
                   ),
@@ -150,7 +150,7 @@ class RestuarantsCubit extends Cubit<RestuarantsStates> {
                     width: 20.w,
                   ),
                   Expanded(
-                    child: Container(
+                    child: SizedBox(
                       height: MediaQuery.of(context).size.height / 7,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -160,7 +160,7 @@ class RestuarantsCubit extends Cubit<RestuarantsStates> {
                             Text(
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 1,
-                                '${restaurant_nameFromSearching![index]}',
+                                restaurant_nameFromSearching![index],
                                 style: GoogleFonts.poppins(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 18,
@@ -169,7 +169,7 @@ class RestuarantsCubit extends Cubit<RestuarantsStates> {
                           SizedBox(
                             height: 10.h,
                           ),
-                          Row(children: [
+                          const Row(children: [
                             Icon(
                               Icons.star,
                               color: Colors.amber,
@@ -181,7 +181,7 @@ class RestuarantsCubit extends Cubit<RestuarantsStates> {
                             scrollDirection: Axis.horizontal,
                             child: Row(
                               children: [
-                                Icon(Icons.timer_sharp),
+                                const Icon(Icons.timer_sharp),
                                 Text(
                                   ' 45 mins',
                                   style: GoogleFonts.poppins(
@@ -190,7 +190,7 @@ class RestuarantsCubit extends Cubit<RestuarantsStates> {
                                 SizedBox(
                                   width: 15.w,
                                 ),
-                                Icon(Icons.delivery_dining_outlined),
+                                const Icon(Icons.delivery_dining_outlined),
                                 SizedBox(
                                   width: 2.w,
                                 ),
@@ -211,7 +211,7 @@ class RestuarantsCubit extends Cubit<RestuarantsStates> {
             }
           },
           separatorBuilder: (context, index) {
-            return Divider();
+            return const Divider();
           },
           itemCount: RestaurantId!.length,
         )

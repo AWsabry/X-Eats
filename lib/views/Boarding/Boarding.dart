@@ -5,7 +5,7 @@ import 'dart:math' as math;
 import 'dart:ui';
 
 class Boarding extends StatelessWidget {
-  Boarding({super.key});
+  const Boarding({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -32,9 +32,9 @@ class Boarding extends StatelessWidget {
                 Text(
                   "ON TIME!!!",
                   style: GoogleFonts.poppins(
-                      fontSize: 40, textStyle: TextStyle(color: Colors.black)),
+                      fontSize: 40, textStyle: const TextStyle(color: Colors.black)),
                 ),
-                Spacer(),
+                const Spacer(),
                 Container(
                   color: Colors.blue,
                   child: CustomPaint(

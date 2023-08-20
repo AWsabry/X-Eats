@@ -47,11 +47,11 @@ class _ProductViewState extends State<ProductView> {
               onPressed: widget.Navigate,
               child: Image(
                 image: CachedNetworkImageProvider(
-                  "https://x-eats.com/uploads/" + widget.image!,
+                  "https://x-eats.com/uploads/${widget.image!}",
                 ),
                 loadingBuilder: (context, child, loadingProgress) {
                   if (loadingProgress == null) return child;
-                  return Center(
+                  return const Center(
                     child: Loading(),
                   );
                 },
@@ -61,7 +61,7 @@ class _ProductViewState extends State<ProductView> {
         ),
         Text(
           "${widget.data}",
-          style: TextStyle(
+          style: const TextStyle(
             fontWeight: FontWeight.bold,
           ),
         ),

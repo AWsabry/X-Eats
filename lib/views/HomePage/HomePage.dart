@@ -78,26 +78,23 @@ class _HomePageState extends State<HomePage> {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-            create: (context) => ProductsCubit()
-              ..GetMostSoldProducts()
-              ..getPoster()),
+          create: (context) => OrderCubit()
+            ..getCartID(context)
+            ..getLocation()
+            ..getRestaurantsOfLocation(context)
+            ..deliveryFees(),
+        ),
+        BlocProvider(create: (context) => ProductsCubit()..getPoster()),
         BlocProvider(
           create: (context) => RestuarantsCubit(),
         ),
         BlocProvider(create: (context) => AuthCubit()..GettingUserData()),
-        BlocProvider(
-          create: (context) => OrderCubit()
-            ..getCartID(context)
-            ..getLocation()
-            ..getRestaurantsOfLocation()
-            ..deliveryFees(),
-        )
       ],
       child: BlocBuilder<ProductsCubit, ProductsStates>(
         builder: ((context, state) {
           var cubit = AuthCubit.get(context);
           var navcubit = NavBarCubitcubit.get(context);
-          var product_api = ProductsCubit.get(context).MostSold;
+          var productApi = ProductsCubit.MostSold;
           var FirstName = cubit.FirstName ?? '';
           print(OrderCubit.currentLocation);
           return SafeArea(
@@ -125,7 +122,7 @@ class _HomePageState extends State<HomePage> {
                                     ),
                                     Center(
                                       child: Container(
-                                          child: CircularProgressIndicator()),
+                                          child: const CircularProgressIndicator()),
                                     ),
                                   ],
                                 );
@@ -148,7 +145,7 @@ class _HomePageState extends State<HomePage> {
                                 );
                               }
                             },
-                            condition: RestaurantsSlugApi.length != 0,
+                            condition: RestaurantsSlugApi.isNotEmpty,
                             builder: (context) {
                               if (OrderStates
                                   is getRestuarantSlugStateLoading) {
@@ -159,7 +156,7 @@ class _HomePageState extends State<HomePage> {
                                     ),
                                     Center(
                                       child: Container(
-                                          child: CircularProgressIndicator()),
+                                          child: const CircularProgressIndicator()),
                                     ),
                                   ],
                                 );
@@ -197,11 +194,9 @@ class _HomePageState extends State<HomePage> {
                                               ],
                                             ),
                                             ConditionalBuilder(
-                                                condition:
-                                                    ProductsCubit.get(context)
-                                                        .getposters
-                                                        .isNotEmpty,
-                                                fallback: (context) => Center(
+                                                condition: ProductsCubit
+                                                    .getposters.isNotEmpty,
+                                                fallback: (context) => const Center(
                                                       child: Loading(),
                                                     ),
                                                 builder: (context) =>
@@ -252,7 +247,7 @@ class _HomePageState extends State<HomePage> {
                                                             RestaurantsSlugApi[
                                                                         index]
                                                                     ['Name'] ??
-                                                                Loading(),
+                                                                const Loading(),
                                                         Colors: const Color
                                                                 .fromARGB(
                                                             255, 5, 95, 9),
@@ -313,13 +308,13 @@ class _HomePageState extends State<HomePage> {
                                               child: Row(
                                                 children: [
                                                   ...List.generate(
-                                                    product_api.length,
+                                                    productApi.length,
                                                     (index) {
                                                       return ConditionalBuilder(
                                                           fallback: (context) {
-                                                            return Loading();
+                                                            return const Loading();
                                                           },
-                                                          condition: product_api[
+                                                          condition: productApi[
                                                                       index]
                                                                   ["image"] !=
                                                               null,
@@ -327,14 +322,14 @@ class _HomePageState extends State<HomePage> {
                                                             context,
                                                           ) {
                                                             double? price =
-                                                                product_api[
+                                                                productApi[
                                                                         index]
                                                                     ['price'];
 
                                                             return GestureDetector(
                                                               child:
                                                                   ProductView(
-                                                                      image: product_api[
+                                                                      image: productApi[
                                                                               index][
                                                                           "image"],
                                                                       width:
@@ -343,7 +338,7 @@ class _HomePageState extends State<HomePage> {
                                                                       height:
                                                                           height /
                                                                               4.2,
-                                                                      data: product_api[
+                                                                      data: productApi[
                                                                               index]
                                                                           [
                                                                           "name"],
@@ -356,15 +351,15 @@ class _HomePageState extends State<HomePage> {
                                                                                     context,
                                                                                     ProductClass().productDetails(
                                                                                       context,
-                                                                                      productName: product_api[index]["productName"],
-                                                                                      id: product_api[index]["id"],
-                                                                                      restaurant: product_api[index]["Restaurant"],
-                                                                                      image: "${AppConstants.BaseUrl + "/uploads/" + product_api[index]["image"]}",
+                                                                                      productName: productApi[index]["productName"],
+                                                                                      id: productApi[index]["id"],
+                                                                                      restaurant: productApi[index]["Restaurant"],
+                                                                                      image: "${AppConstants.BaseUrl}/uploads/" + productApi[index]["image"],
                                                                                       price: price,
-                                                                                      englishName: product_api[index]["name"],
-                                                                                      arabicName: product_api[index]["ArabicName"],
-                                                                                      description: product_api[index]["description"] ?? "No Description for this Product",
-                                                                                      restaurantName: product_api[index]["Restaurant"].toString(),
+                                                                                      englishName: productApi[index]["name"],
+                                                                                      arabicName: productApi[index]["ArabicName"],
+                                                                                      description: productApi[index]["description"] ?? "No Description for this Product",
+                                                                                      restaurantName: productApi[index]["Restaurant"].toString(),
                                                                                     )),
                                                                               }),
                                                               onTap: () {},
@@ -409,7 +404,7 @@ class _HomePageState extends State<HomePage> {
                           currentLocation: OrderCubit.currentLocation,
                         ));
                   } else {
-                    Navigation(context, Profile());
+                    Navigation(context, const Profile());
                   }
                 },
               ),

@@ -27,10 +27,7 @@ class SignIn extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => AuthCubit()..GettingUserData()),
-        BlocProvider(
-            create: (context) => ProductsCubit()
-              ..GetMostSoldProducts()
-              ..getPoster()),
+        BlocProvider(create: (context) => ProductsCubit()..getPoster()),
         BlocProvider(
           create: (context) => RestuarantsCubit(),
         ),
@@ -42,123 +39,127 @@ class SignIn extends StatelessWidget {
           var cubit = AuthCubit.get(context);
           return Scaffold(
             backgroundColor: const Color(0xff0986d3),
-            body: Container(
-              width: width,
-              height: height,
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius:
-                      BorderRadius.only(topRight: Radius.circular(150.r))),
-              child: Form(
-                key: formkey,
-                child: SafeArea(
-                  child: SingleChildScrollView(
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(
-                          vertical: 15.h, horizontal: 26.w),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text("Login",
-                              style: TextStyle(
-                                fontFamily: 'UberMoveTextBold',
-                                fontSize: 25.0.sp,
-                                fontWeight: FontWeight.bold,
-                                color: const Color.fromARGB(255, 9, 134, 211),
-                              )),
-                          Center(
-                            child: Image(
-                              image:
-                                  const AssetImage('assets/Images/First.png'),
-                              width: width / 2,
-                              height: width / 2,
-                            ),
-                          ),
-                          // SocialAuth(),
-                          DefaultFormField(
-                              isPassword: false,
-                              prefix: Icons.email_outlined,
-                              controller: cubit.emailController,
-                              label: 'Email',
-                              type: TextInputType.emailAddress,
-                              validator: (value) => value!.isEmpty
-                                  ? 'Please enter your Email'
-                                  : null),
-                          SizedBox(
-                            height: 15.h,
-                          ),
-                          DefaultFormField(
-                              prefix: Icons.lock_open,
-                              controller: cubit.password,
-                              label: 'Password',
-                              suffix: cubit.isPassword_lpgin
-                                  ? Icons.visibility
-                                  : Icons.visibility_off,
-                              type: TextInputType.visiblePassword,
-                              isPassword: cubit.isPassword_lpgin,
-                              suffixpressed: () {
-                                cubit.changepasswordVisablityLogin();
-                              },
-                              validator: (value) => value!.isEmpty
-                                  ? 'Please Enter your Password'
-                                  : null),
-                          SizedBox(
-                            height: 15.h,
-                          ),
-                          DefaultButton(
-                              function: () {
-                                if (formkey.currentState!.validate()) {
-                                  cubit
-                                      .login(
-                                    context,
-                                    password: cubit.password.text,
-                                    email: cubit.emailController.text,
-                                  )
-                                      .catchError((e) {
-                                    var dioException = e as DioError;
-
-                                    var status =
-                                        dioException.response!.statusCode;
-                                    print(status);
-                                    if (e.runtimeType == DioError) {
-                                      // print(dioException.response!.statusCode);
-                                    }
-                                    if (status == 200) {
-                                      cubit.getEmail(context,
-                                          email: cubit.emailController.text);
-                                      NavigateAndRemov(context, LoginSuccess());
-                                    } else if (status == 404) {
-                                      const snackBar = SnackBar(
-                                        backgroundColor: Colors.red,
-                                        content: Text(
-                                            'Please Put The Right Credentials'),
-                                      );
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(snackBar);
-                                    }
-                                  });
-                                }
-                              },
-                              text: 'Login'),
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              Text(
-                                'Don\'t have an account?',
-                                style: TextStyle(fontSize: 15.sp),
+            body: SafeArea(
+              child: Container(
+                width: width,
+                height: height,
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius:
+                        BorderRadius.only(topRight: Radius.circular(150.r))),
+                child: Form(
+                  key: formkey,
+                  child: SafeArea(
+                    child: SingleChildScrollView(
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(
+                            vertical: 15.h, horizontal: 26.w),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text("Login",
+                                style: TextStyle(
+                                  fontFamily: 'UberMoveTextBold',
+                                  fontSize: 25.0.sp,
+                                  fontWeight: FontWeight.bold,
+                                  color: const Color.fromARGB(255, 9, 134, 211),
+                                )),
+                            Center(
+                              child: Image(
+                                image:
+                                    const AssetImage('assets/Images/First.png'),
+                                width: width / 2,
+                                height: width / 2,
                               ),
-                              TextButton(
-                                  onPressed: () {
-                                    NavigateAndRemov(context, Signup());
-                                  },
-                                  child: Text(
-                                    'Sign up',
-                                    style: TextStyle(fontSize: 15.sp),
-                                  ))
-                            ],
-                          )
-                        ],
+                            ),
+                            // SocialAuth(),
+                            DefaultFormField(
+                                isPassword: false,
+                                prefix: Icons.email_outlined,
+                                controller: AuthCubit.emailController,
+                                label: 'Email',
+                                type: TextInputType.emailAddress,
+                                validator: (value) => value!.isEmpty
+                                    ? 'Please enter your Email'
+                                    : null),
+                            SizedBox(
+                              height: 15.h,
+                            ),
+                            DefaultFormField(
+                                prefix: Icons.lock_open,
+                                controller: AuthCubit.password,
+                                label: 'Password',
+                                suffix: cubit.isPassword_lpgin
+                                    ? Icons.visibility
+                                    : Icons.visibility_off,
+                                type: TextInputType.visiblePassword,
+                                isPassword: cubit.isPassword_lpgin,
+                                suffixpressed: () {
+                                  cubit.changepasswordVisablityLogin();
+                                },
+                                validator: (value) => value!.isEmpty
+                                    ? 'Please Enter your Password'
+                                    : null),
+                            SizedBox(
+                              height: 15.h,
+                            ),
+                            DefaultButton(
+                                function: () {
+                                  if (formkey.currentState!.validate()) {
+                                    cubit
+                                        .login(
+                                      context,
+                                      password: AuthCubit.password.text,
+                                      email: AuthCubit.emailController.text,
+                                    )
+                                        .then((value) async {
+                                      await cubit.getEmail(context,
+                                          email: AuthCubit.emailController.text,
+                                          password: AuthCubit.password.text);
+
+                                      NavigateAndRemov(context, const LoginSuccess());
+                                    }).catchError((e) {
+                                      var dioException = e as DioError;
+
+                                      var status =
+                                          dioException.response!.statusCode;
+                                      print(status);
+                                      if (e.runtimeType == DioError) {
+                                        // print(dioException.response!.statusCode);
+                                      }
+                                      if (status == 403) {
+                                        const snackBar = SnackBar(
+                                          backgroundColor: Colors.red,
+                                          content: Text(
+                                              'Please Put The Right Credentials'),
+                                        );
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(snackBar);
+                                      }
+                                    });
+                                  }
+                                },
+                                text: 'Login'),
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                Text(
+                                  'Don\'t have an account?',
+                                  style: TextStyle(fontSize: 15.sp),
+                                ),
+                                TextButton(
+                                    onPressed: () {
+                                      NavigateAndRemov(context, const Signup());
+                                    },
+                                    child: Text(
+                                      'Sign up',
+                                      style: TextStyle(fontSize: 15.sp),
+                                    ))
+                              ],
+                            )
+                          ],
+                        ),
                       ),
                     ),
                   ),

@@ -120,11 +120,11 @@ class _MyAppState extends State<MyApp> {
           BlocProvider(create: (context) => AuthCubit()..GettingUserData()),
           BlocProvider(create: (context) => NavBarCubitcubit()),
           BlocProvider(
-            create: (context) => ProductsCubit()
-              ..GetMostSoldProducts()
-              ..getPoster()
-              ..NewProducts(),
-          ),
+              create: (context) => ProductsCubit()
+                // ..GetMostSoldProducts()
+                ..getPoster()
+              // ..NewProducts(),
+              ),
           BlocProvider(
             create: (context) => OrderCubit()
               ..getCartID(context)

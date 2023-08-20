@@ -26,7 +26,7 @@ class Profile extends StatelessWidget {
           var cubit = AuthCubit.get(context);
           var navcubit = NavBarCubitcubit.get(context);
           return ConditionalBuilder(
-            fallback: (context) => Center(child: Loading()),
+            fallback: (context) => const Center(child: Loading()),
             condition: cubit.EmailInforamtion != null,
             builder: (BuildContext context) {
               return Scaffold(

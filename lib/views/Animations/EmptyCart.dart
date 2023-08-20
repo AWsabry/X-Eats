@@ -19,10 +19,10 @@ class _EmptyCartState extends State<EmptyCart> {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           SizedBox(
-            child: Image.asset("assets/Images/emptyCart.gif"),
             width: 200,
+            child: Image.asset("assets/Images/emptyCart.gif"),
           ),
-          Text(
+          const Text(
             "Waiting for your orders",
             style: TextStyle(fontSize: 20),
           ),

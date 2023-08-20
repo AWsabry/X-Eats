@@ -16,12 +16,14 @@ class WaitingRoom extends StatefulWidget {
       this.endingOrderTimeSecond,
       this.count,
       this.TimeOfLastOrder,
-      this.LengthOfPublicOrders})
+      this.LengthOfPublicOrders,
+      this.OrderId})
       : super(key: key);
   var endingOrderTimeSecond;
   var count;
   DateTime? TimeOfLastOrder;
   var LengthOfPublicOrders;
+  int? OrderId;
   @override
   State<WaitingRoom> createState() => _WaitingRoomState();
 }
@@ -36,7 +38,7 @@ class _WaitingRoomState extends State<WaitingRoom>
   late final CustomTimerController _controller = CustomTimerController(
     vsync: this,
     begin: Duration(seconds: widget.endingOrderTimeSecond),
-    end: Duration(seconds: 0),
+    end: const Duration(seconds: 0),
     initialState: CustomTimerState.reset,
     interval: CustomTimerInterval.seconds,
   );
@@ -50,7 +52,7 @@ class _WaitingRoomState extends State<WaitingRoom>
     Future.delayed(Duration(seconds: widget.endingOrderTimeSecond))
         .then((value) {
       OrderCubit.get(context).ConfirmAllPublicOrders(context);
-      NavigateAndRemov(context, ThankYou());
+      NavigateAndRemov(context, const ThankYou());
     });
 
     return BlocProvider(
@@ -66,7 +68,7 @@ class _WaitingRoomState extends State<WaitingRoom>
                 await OrderCubit.get(context).getPublicOrder(context);
               },
               child: SingleChildScrollView(
-                child: Container(
+                child: SizedBox(
                   height: height - 45.h,
                   width: width,
                   child: Column(
@@ -76,7 +78,7 @@ class _WaitingRoomState extends State<WaitingRoom>
                         width: width,
                         color: Colors.transparent,
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 10,
                       ),
                       ConditionalBuilder(
@@ -101,7 +103,7 @@ class _WaitingRoomState extends State<WaitingRoom>
                                             return Text(
                                                 "${time.minutes}:${time.seconds}",
                                                 style:
-                                                    TextStyle(fontSize: 24.0));
+                                                    const TextStyle(fontSize: 24.0));
                                           },
                                         ),
                                       ),
@@ -121,7 +123,7 @@ class _WaitingRoomState extends State<WaitingRoom>
                                           return SizedBox(
                                               child: Column(
                                             children: [
-                                              SizedBox(
+                                              const SizedBox(
                                                 height: 10,
                                               ),
                                               Row(children: [
@@ -159,12 +161,12 @@ class _WaitingRoomState extends State<WaitingRoom>
                                                   widget.count != index + 1
                                                       ? "Item ${index + 1}"
                                                       : "Your order ${widget.count} ",
-                                                  style: TextStyle(
+                                                  style: const TextStyle(
                                                     fontFamily: "IntegralCf",
                                                   ),
                                                 ),
                                               ]),
-                                              SizedBox(
+                                              const SizedBox(
                                                 height: 10,
                                               ),
                                               Dividerr()
@@ -174,7 +176,7 @@ class _WaitingRoomState extends State<WaitingRoom>
                                         itemCount:
                                             OrderCubit.get(context).count!),
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 50,
                                   ),
                                   Column(
@@ -197,7 +199,7 @@ class _WaitingRoomState extends State<WaitingRoom>
                                                 EdgeInsets.only(right: 30.0.w),
                                             child: Text(
                                               "EGP ${OrderCubit.deliveryfees}",
-                                              style: TextStyle(
+                                              style: const TextStyle(
                                                   fontFamily: "IntegralCf"),
                                             ),
                                           )
@@ -207,6 +209,7 @@ class _WaitingRoomState extends State<WaitingRoom>
                                   ),
                                   PaymentSummary(
                                     widget: widget,
+                                    Orderid: widget.OrderId,
                                   )
                                 ],
                               ),

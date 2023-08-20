@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:xeats/controllers/Components/General%20Components/Components.dart';
 import 'package:xeats/controllers/Cubits/OrderCubit/OrderCubit.dart';
+import 'package:xeats/views/HomePage/HomePage.dart';
 import 'package:xeats/views/WaitingRoom/waitingRoom.dart';
 
 import '../Product Class/Products_Class.dart';
@@ -11,8 +12,9 @@ class PaymentSummary extends StatefulWidget {
   PaymentSummary({
     super.key,
     required this.widget,
+    this.Orderid,
   });
-
+  int? Orderid;
   final WaitingRoom widget;
 
   @override
@@ -56,7 +58,7 @@ class _PaymentSummaryState extends State<PaymentSummary> {
                         style: GoogleFonts.poppins(
                             fontSize: 15, color: Colors.white),
                       ),
-                      Spacer(),
+                      const Spacer(),
                       Padding(
                         padding: const EdgeInsets.only(right: 18.0),
                         child: Text(
@@ -77,7 +79,7 @@ class _PaymentSummaryState extends State<PaymentSummary> {
                         style: GoogleFonts.poppins(
                             fontSize: 15, color: Colors.white),
                       ),
-                      Spacer(),
+                      const Spacer(),
                       Padding(
                         padding: const EdgeInsets.only(right: 18.0),
                         child: Text(
@@ -98,7 +100,7 @@ class _PaymentSummaryState extends State<PaymentSummary> {
                         style: GoogleFonts.poppins(
                             fontSize: 15, color: Colors.white),
                       ),
-                      Spacer(),
+                      const Spacer(),
                       Padding(
                         padding: const EdgeInsets.only(right: 18.0),
                         child: Text(
@@ -122,7 +124,7 @@ class _PaymentSummaryState extends State<PaymentSummary> {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      Spacer(),
+                      const Spacer(),
                       Padding(
                         padding: const EdgeInsets.only(right: 18.0),
                         child: Text(
@@ -156,16 +158,14 @@ class _PaymentSummaryState extends State<PaymentSummary> {
                                 backgroundColor: MaterialStateProperty.all(
                                     const Color.fromARGB(255, 9, 134, 211))),
                             onPressed: () {
-                              NavigateAndRemov(
-                                  context,
-                                  WaitingRoom(
-                                      endingOrderTimeSecond:
-                                          widget.widget.endingOrderTimeSecond,
-                                      count: widget.widget.count));
+                              OrderCubit.get(context)
+                                  .cancelOrders(context, widget.Orderid);
+                              print(widget.Orderid);
+                              NavigateAndRemov(context, const HomePage());
                             },
                             child: const Center(
                               child: Text(
-                                "Switch to Private",
+                                "Cancel Your Order",
                                 style: TextStyle(
                                     color: Colors.black,
                                     fontFamily: "IntegralCf",
@@ -186,7 +186,7 @@ class _PaymentSummaryState extends State<PaymentSummary> {
                                   BorderRadius.all(Radius.circular(5))),
                           child: const Center(
                             child: Text(
-                              "Switch to Private",
+                              "Cancel Your Order",
                               style: TextStyle(
                                   color: Colors.black,
                                   fontFamily: "IntegralCf",

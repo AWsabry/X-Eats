@@ -3,7 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class DefaultButton extends StatefulWidget {
-  DefaultButton({
+  const DefaultButton({
     Key? key,
     required this.function,
     required this.text,
@@ -21,7 +21,7 @@ class DefaultButton extends StatefulWidget {
 class _DefaultButtonState extends State<DefaultButton> {
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: MediaQuery.of(context).size.width / 2,
       height: 55.h,
       child: ElevatedButton(

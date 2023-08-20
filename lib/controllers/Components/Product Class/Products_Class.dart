@@ -33,7 +33,7 @@ class ProductClass extends StatelessWidget {
 
   static List<Widget> CartItems = [];
 
-  ProductClass({
+  ProductClass({super.key, 
     this.deliveryFee,
     this.id,
     this.productName,
@@ -53,16 +53,16 @@ class ProductClass extends StatelessWidget {
     this.isBestOffer,
     this.cartItemId,
     this.totalPrice,
-  }) {}
+  });
 
   static double getSubtotal() {
     double total = 0;
     for (var i in CartItems) {
-      print("CartItems" + " " + "$CartItems");
+      print("CartItems $CartItems");
       try {
         i = i as ProductClass;
         total += i.price! * i.quantity;
-        print("TOTAL" + " " + "$total");
+        print("TOTAL $total");
       } catch (e) {
         continue;
       }
@@ -132,10 +132,10 @@ class ProductClass extends StatelessWidget {
                     child: Image(
                       width: width / 5,
                       image: CachedNetworkImageProvider(
-                          "https://x-eats.com${this.itemImage}"),
+                          "https://x-eats.com$itemImage"),
                       loadingBuilder: (context, child, loadingProgress) {
                         if (loadingProgress == null) return child;
-                        return Center(
+                        return const Center(
                           child: Loading(),
                         );
                       },
@@ -237,7 +237,7 @@ class ProductClass extends StatelessWidget {
               Navigation(
                   context,
                   productDetails(context,
-                      image: '${image}',
+                      image: '$image',
                       id: id,
                       restaurant: restaurant,
                       restaurantName: restaurantName,
@@ -247,7 +247,7 @@ class ProductClass extends StatelessWidget {
                           description ?? "No Description for this Product",
                       englishName: englishName,
                       productName: productName),
-                  duration: Duration(seconds: 2));
+                  duration: const Duration(seconds: 2));
             },
             child: Padding(
               padding: const EdgeInsets.all(8),
@@ -262,13 +262,13 @@ class ProductClass extends StatelessWidget {
                           height: 130.h,
                           decoration: BoxDecoration(
                             border: Border.all(
-                                color: Color.fromARGB(74, 158, 158, 158)),
+                                color: const Color.fromARGB(74, 158, 158, 158)),
                             borderRadius: BorderRadius.circular(10.0),
                           ),
                           child: Padding(
                             padding: const EdgeInsets.all(16.0),
                             child: Hero(
-                              tag: this.englishName.toString(),
+                              tag: englishName.toString(),
                               child: Image(
                                 image: NetworkImage(
                                   "https://x-eats.com${snapshot.data.data["Names"][0]["image"]}",
@@ -276,7 +276,7 @@ class ProductClass extends StatelessWidget {
                                 loadingBuilder:
                                     (context, child, loadingProgress) {
                                   if (loadingProgress == null) return child;
-                                  return Center(
+                                  return const Center(
                                     child: Loading(),
                                   );
                                 },
@@ -285,7 +285,7 @@ class ProductClass extends StatelessWidget {
                           ),
                         );
                       } else {
-                        return Loading();
+                        return const Loading();
                       }
                     }),
                   ),
@@ -293,7 +293,7 @@ class ProductClass extends StatelessWidget {
                     width: 20.w,
                   ),
                   Expanded(
-                    child: Container(
+                    child: SizedBox(
                       height: MediaQuery.of(context).size.height / 9,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -314,7 +314,7 @@ class ProductClass extends StatelessWidget {
                                 color: Colors.grey, fontSize: 11),
                           ),
                           Text(
-                            price.toString() + "  EGP",
+                            "$price  EGP",
                             style: GoogleFonts.poppins(
                                 color: Colors.black, fontSize: 14),
                           ),
@@ -350,7 +350,7 @@ class ProductClass extends StatelessWidget {
               Navigation(
                   context,
                   productDetails(context,
-                      image: '${image}',
+                      image: '$image',
                       id: id,
                       restaurant: restaurant,
                       restaurantName: restaurantName,
@@ -360,7 +360,7 @@ class ProductClass extends StatelessWidget {
                           description ?? "No Description for this Product",
                       englishName: englishName,
                       productName: productName),
-                  duration: Duration(seconds: 2));
+                  duration: const Duration(seconds: 2));
             },
             child: Padding(
               padding: const EdgeInsets.all(8),
@@ -375,13 +375,13 @@ class ProductClass extends StatelessWidget {
                           height: 130.h,
                           decoration: BoxDecoration(
                             border: Border.all(
-                                color: Color.fromARGB(74, 158, 158, 158)),
+                                color: const Color.fromARGB(74, 158, 158, 158)),
                             borderRadius: BorderRadius.circular(10.0),
                           ),
                           child: Padding(
                             padding: const EdgeInsets.all(16.0),
                             child: Hero(
-                              tag: this.englishName.toString(),
+                              tag: englishName.toString(),
                               child: Image(
                                 image: CachedNetworkImageProvider(
                                   "https://x-eats.com/uploads/$image",
@@ -389,7 +389,7 @@ class ProductClass extends StatelessWidget {
                                 loadingBuilder:
                                     (context, child, loadingProgress) {
                                   if (loadingProgress == null) return child;
-                                  return Center(
+                                  return const Center(
                                     child: Loading(),
                                   );
                                 },
@@ -398,7 +398,7 @@ class ProductClass extends StatelessWidget {
                           ),
                         );
                       } else {
-                        return Loading();
+                        return const Loading();
                       }
                     }),
                   ),
@@ -406,7 +406,7 @@ class ProductClass extends StatelessWidget {
                     width: 20.w,
                   ),
                   Expanded(
-                    child: Container(
+                    child: SizedBox(
                       height: MediaQuery.of(context).size.height / 9,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -427,7 +427,7 @@ class ProductClass extends StatelessWidget {
                                 color: Colors.grey, fontSize: 11),
                           ),
                           Text(
-                            price.toString() + "  EGP",
+                            "$price  EGP",
                             style: GoogleFonts.poppins(
                                 color: Colors.black, fontSize: 14),
                           ),
@@ -494,8 +494,8 @@ class ProductClass extends StatelessWidget {
                   child: const Icon(Icons.add_shopping_cart_rounded),
                 )
               : SizedBox(
-                  child: Image.asset("assets/Images/loading2.gif"),
                   width: 100,
+                  child: Image.asset("assets/Images/loading2.gif"),
                 ),
           appBar: appBar(context,
               subtitle: restaurantName.toString(), title: englishName),
@@ -520,7 +520,7 @@ class ProductClass extends StatelessWidget {
                               loadingBuilder:
                                   (context, child, loadingProgress) {
                                 if (loadingProgress == null) return child;
-                                return Center(
+                                return const Center(
                                   child: Loading(),
                                 );
                               },
@@ -594,7 +594,7 @@ class ProductClass extends StatelessWidget {
                                 padding: const EdgeInsets.all(8.0),
                                 child: Text(
                                   "$description",
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       fontSize: 12, color: Colors.grey),
                                 ),
                               ),
@@ -625,7 +625,7 @@ class ProductClass extends StatelessWidget {
                                             color: Color.fromARGB(
                                                 255, 9, 134, 211),
                                           )),
-                                      Text("${this.quantity}"),
+                                      Text("$quantity"),
                                       IconButton(
                                           onPressed: () {
                                             quantity++;
@@ -672,7 +672,7 @@ class ProductClass extends StatelessWidget {
               } else if (index == 0) {
                 Navigation(context, Layout());
               } else {
-                Navigation(context, Profile());
+                Navigation(context, const Profile());
               }
             },
           ),

@@ -15,6 +15,7 @@ import 'package:xeats/controllers/Components/Product%20Class/Products_Class.dart
 import 'package:xeats/controllers/Components/Requests%20Loading%20Components/RequstsLoading.dart';
 import 'package:xeats/controllers/Cubits/AuthCubit/cubit.dart';
 import 'package:xeats/controllers/Cubits/OrderCubit/OrderStates.dart';
+import 'package:xeats/controllers/Cubits/ProductsCubit/ProductsCubit.dart';
 import 'package:xeats/controllers/Dio/DioHelper.dart';
 import 'package:xeats/core/Constants/constants.dart';
 import 'package:xeats/views/CategoryView/categoryView.dart';
@@ -30,10 +31,10 @@ class OrderCubit extends Cubit<OrderStates> {
 
   Future<void> getCartID(context) async {
     SharedPreferences userCartID = await SharedPreferences.getInstance();
-    var d;
+    int? d;
     if (userCartID.containsKey("cartIDSaved") &&
         (d = userCartID.getInt("cartIDSaved")) != null) {
-      print("cart id is 1 : $cartID" + "$d");
+      print("cart id is 1 : $cartID" "$d");
       cartID = d;
     } else {
       print("cart id is 2 : ${AuthCubit.get(context).EmailInforamtion}");
@@ -54,11 +55,6 @@ class OrderCubit extends Cubit<OrderStates> {
       {int? productId,
       int? quantity,
       String? cartItemId,
-      // String? productName,
-      // String? image,
-      // String? phoneNumber,
-      // String? email,
-      // String? resturantName,
       double? price,
       double? totalPrice,
       int? restaurantId,
@@ -162,9 +158,7 @@ class OrderCubit extends Cubit<OrderStates> {
         try {
           ProductLoop = ProductLoop as ProductClass;
           if (ProductLoop.id == ProductObject.id) {
-            print(ProductLoop.quantity.toString() +
-                "  " +
-                ProductObject.quantity.toString());
+            print("${ProductLoop.quantity}  ${ProductObject.quantity}");
             ProductLoop.quantity = ProductObject.quantity;
             isAlreadyAdded = true;
             break;
@@ -246,7 +240,7 @@ class OrderCubit extends Cubit<OrderStates> {
       }).catchError((e) {
         var dioException = e as DioError;
         var status = dioException.response!.statusCode;
-        print("CARTITEM ERROR" + " " + '$status');
+        print("CARTITEM ERROR" " " '$status');
       });
     });
   }
@@ -322,7 +316,7 @@ class OrderCubit extends Cubit<OrderStates> {
   }
 
   static String? currentLocation;
-  void ChangeLocation(String value) {
+  void ChangeLocation(String value, context) {
     currentLocation = value;
     print(currentLocation);
     emit(ChangeLocationStatesSuccefullty());
@@ -340,11 +334,11 @@ class OrderCubit extends Cubit<OrderStates> {
     )
         .then((value) {
       Locations = value.data["Names"];
-      Locations.forEach((Location) {
+      for (var Location in Locations) {
         LocationsNames.add(Location["location_Name"]);
         LocationSlugList.add(Location["location_slug"]);
         LocationId.add(Location["id"]);
-      });
+      }
       emit(GetLocationNamesStatesSuccefully());
     }).catchError((onError) {
       print("7a7a $LocationsNames");
@@ -353,7 +347,7 @@ class OrderCubit extends Cubit<OrderStates> {
 
   static List<dynamic> restuarantsOfSlugList = [];
   static int? PublicLocationId;
-  void getRestaurantsOfLocation() {
+  void getRestaurantsOfLocation(context) {
     emit(getRestuarantSlugStateLoading());
     Locations.forEach((slug) async {
       if (slug["location_Name"] == currentLocation) {
@@ -363,6 +357,8 @@ class OrderCubit extends Cubit<OrderStates> {
             .then((value) {
           restuarantsOfSlugList = value.data["Names"];
           PublicLocationId = slug["id"] - 1;
+          ProductsCubit.get(context).GetMostSoldProducts(context);
+
           print(PublicLocationId);
           emit(getRestuarantsOfSlugStates());
         });
@@ -413,11 +409,11 @@ class OrderCubit extends Cubit<OrderStates> {
     }).catchError((onError) {
       print(onError);
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          duration: const Duration(milliseconds: 1000),
+        const SnackBar(
+          duration: Duration(milliseconds: 1000),
           backgroundColor: Colors.red,
           content: Row(
-            children: const [
+            children: [
               Icon(
                 Icons.error,
                 color: Colors.white,
@@ -447,7 +443,7 @@ class OrderCubit extends Cubit<OrderStates> {
       result = ListView.separated(
           itemBuilder: ((context, index) {
             if (value.data["Names"][index] == null) {
-              return Loading();
+              return const Loading();
             } else {
               return SizedBox(
                 height: MediaQuery.of(context).size.height / 5,
@@ -475,9 +471,9 @@ class OrderCubit extends Cubit<OrderStates> {
             // "${value.data["Names"][index]["display_name"]}")),
           }),
           separatorBuilder: ((context, index) {
-            return SizedBox(
-              child: Divider(),
+            return const SizedBox(
               height: 20,
+              child: Divider(),
             );
           }),
           itemCount: value.data["Names"].length);
@@ -500,14 +496,16 @@ class OrderCubit extends Cubit<OrderStates> {
           "${AppConstants.BaseUrl}/notification_tokens",
           data: {"token": token},
         )
-        .then((value) => print("WELCOME" + "${value.data}"))
+        .then((value) => print("WELCOME" "${value.data}"))
         .catchError((e) {
           var dioException = e as DioError;
 
           print(dioException.response!.statusCode);
-          if (dioException.response!.statusCode == 302) {
+          if (dioException.response!.statusCode == 200) {
             print(dioException.response!.statusCode);
             print('Token Exist');
+          } else {
+            print('HAMOKSHA');
           }
         });
   }
@@ -520,6 +518,7 @@ class OrderCubit extends Cubit<OrderStates> {
   int? count;
   String LastOrder = "";
   int? LengthOfPublicOrders;
+  int? OrderId;
   Future<void> getPublicOrder(context) async {
     emit(getTimeStateLoading());
 
@@ -532,6 +531,7 @@ class OrderCubit extends Cubit<OrderStates> {
       count = value.data["count"];
       LengthOfPublicOrders = value.data["Names"].length - 1;
       LastOrder = value.data["Names"][LengthOfPublicOrders]["ordered_date"];
+      // OrderId = value.data["Names"][LengthOfPublicOrders]["id"];
       print(count);
       emit(getTimeStateSuccess());
     }).catchError((error) {
@@ -560,9 +560,20 @@ class OrderCubit extends Cubit<OrderStates> {
     );
   }
 
+  void cancelOrders(context, Orderid) async {
+    await Dio()
+        .post("${AppConstants.BaseUrl}/cancel_order/$Orderid")
+        .then((value) {
+      emit(cancelOrderSuccefull());
+      print(cancelOrderSuccefull());
+    }).catchError((onError) {
+      print(onError);
+    });
+  }
+
   void switchOrderToPrivate(context) {
     Dio().post(
-        "${AppConstants.BaseUrl}/get_orders_by_email/${AuthCubit.get(context).EmailInforamtion}",
+        "${AppConstants.BaseUrl}/create_orders/${AuthCubit.get(context).EmailInforamtion}",
         data: {
           "first_name": AuthCubit.get(context).FirstName,
           "last_name": AuthCubit.get(context).LastName,
@@ -593,6 +604,7 @@ class OrderCubit extends Cubit<OrderStates> {
   }
 
   var endingOrderTimeSecond;
+
   void confirmOrder(context, bool? Private) async {
     await getPublicOrder(context).then((value) async {
       try {
@@ -612,7 +624,7 @@ class OrderCubit extends Cubit<OrderStates> {
               print("mm");
 
               Dio().post(
-                  "${AppConstants.BaseUrl}/get_orders_by_email/${AuthCubit.get(context).EmailInforamtion}",
+                  "${AppConstants.BaseUrl}/create_orders/${AuthCubit.get(context).EmailInforamtion}",
                   data: {
                     "first_name": AuthCubit.get(context).FirstName,
                     "last_name": AuthCubit.get(context).LastName,
@@ -629,17 +641,23 @@ class OrderCubit extends Cubit<OrderStates> {
                     "cart": cartID,
                     "deliver_to": PublicLocationId! + 1
                   }).then((value) {
-                if (Private == false) {
-                  NavigateAndRemov(
-                      context,
-                      WaitingRoom(
-                          endingOrderTimeSecond: 1200,
-                          count: 1,
-                          TimeOfLastOrder: DateTime.now(),
-                          LengthOfPublicOrders: 0));
-                } else {
-                  NavigateAndRemov(context, const ThankYou());
-                }
+                Dio()
+                    .get(
+                        "${AppConstants.BaseUrl}/get_time_of_first_public_order_in_location/${PublicLocationId! + 1}")
+                    .then((value1) {
+                  if (Private == false) {
+                    NavigateAndRemov(
+                        context,
+                        WaitingRoom(
+                            OrderId: value1.data["Names"][0]["id"],
+                            endingOrderTimeSecond: 1200,
+                            count: 1,
+                            TimeOfLastOrder: DateTime.now(),
+                            LengthOfPublicOrders: 0));
+                  } else {
+                    NavigateAndRemov(context, const ThankYou());
+                  }
+                });
               }).catchError((onError) {
                 print(onError.toString());
               });
@@ -648,8 +666,8 @@ class OrderCubit extends Cubit<OrderStates> {
         } else {
           print("mmm");
 
-          Dio().post(
-              "${AppConstants.BaseUrl}/get_orders_by_email/${AuthCubit.get(context).EmailInforamtion}",
+          await Dio().post(
+              "${AppConstants.BaseUrl}/create_orders/${AuthCubit.get(context).EmailInforamtion}",
               data: {
                 "first_name": AuthCubit.get(context).FirstName,
                 "last_name": AuthCubit.get(context).LastName,
@@ -668,10 +686,15 @@ class OrderCubit extends Cubit<OrderStates> {
               }).then((value) async {
             if (Private == false) {
               await getPublicOrder(context).then((value) {
+                var endingOrderTime = DateTime.parse(EndingOrder);
+                var TimeOfLastOrder = DateTime.parse(LastOrder);
+                endingOrderTimeSecond =
+                    endingOrderTime.difference(DateTime.now()).inSeconds;
                 var counter = count;
                 NavigateAndRemov(
                     context,
                     WaitingRoom(
+                        OrderId: OrderId,
                         endingOrderTimeSecond: endingOrderTimeSecond,
                         count: counter,
                         TimeOfLastOrder: TimeOfLastOrder,
@@ -680,7 +703,6 @@ class OrderCubit extends Cubit<OrderStates> {
             } else {
               NavigateAndRemov(context, const ThankYou());
             }
-            emit(confirmOrderBefore20MinutesState());
           }).catchError((onError) {
             print(onError.toString());
             print("mmaaam");
@@ -689,7 +711,7 @@ class OrderCubit extends Cubit<OrderStates> {
       } on FormatException {
         print("mmaaaaaaam");
         Dio().post(
-            "${AppConstants.BaseUrl}/get_orders_by_email/${AuthCubit.get(context).EmailInforamtion}",
+            "${AppConstants.BaseUrl}/create_orders/${AuthCubit.get(context).EmailInforamtion}",
             data: {
               "first_name": AuthCubit.get(context).FirstName,
               "last_name": AuthCubit.get(context).LastName,
@@ -706,28 +728,27 @@ class OrderCubit extends Cubit<OrderStates> {
               "cart": cartID,
               "deliver_to": PublicLocationId! + 1
             }).then((value) async {
-          await getPublicOrder(context).then((value) {
-            var endingOrderTime = DateTime.parse(EndingOrder);
-            var TimeOfLastOrder = DateTime.parse(LastOrder);
+          if (Private == false) {
+            // await getPublicOrder(context).then((value) {
+            // var endingOrderTime = DateTime.parse(EndingOrder);
+            // var TimeOfLastOrder = DateTime.parse(LastOrder);
 
-            endingOrderTimeSecond =
-                endingOrderTime.difference(DateTime.now()).inSeconds;
-            var counter = count;
-            print(counter);
-            if (Private == false) {
-              NavigateAndRemov(
-                  context,
-                  WaitingRoom(
-                      endingOrderTimeSecond: endingOrderTimeSecond,
-                      count: counter,
-                      TimeOfLastOrder: TimeOfLastOrder,
-                      LengthOfPublicOrders: LengthOfPublicOrders));
-            } else {
-              NavigateAndRemov(context, const ThankYou());
-            }
+            // endingOrderTimeSecond =
+            //     endingOrderTime.difference(DateTime.now()).inSeconds;
+            // var counter = count;
+            // print(counter);
 
-            emit(confirmOrderAfter20MinutesState());
-          });
+            NavigateAndRemov(
+                context,
+                WaitingRoom(
+                    OrderId: 1,
+                    endingOrderTimeSecond: 1200,
+                    count: 1,
+                    LengthOfPublicOrders: 2));
+            // });
+          } else {
+            NavigateAndRemov(context, const ThankYou());
+          }
         });
       }
     });

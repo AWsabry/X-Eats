@@ -6,11 +6,10 @@ import 'package:xeats/controllers/Cubits/AuthCubit/States.dart';
 import 'package:xeats/controllers/Cubits/AuthCubit/cubit.dart';
 import 'package:xeats/controllers/Components/Global%20Components/DefaultButton.dart';
 import 'package:xeats/controllers/Components/Global%20Components/defaultFormField.dart';
-import 'package:xeats/views/CompleteProfile/Complete_Profile.dart';
 import 'package:xeats/views/SignIn/SignIn.dart';
 
 class Signup extends StatefulWidget {
-  Signup({super.key});
+  const Signup({super.key});
 
   @override
   State<Signup> createState() => _SignupState();
@@ -52,11 +51,11 @@ class _SignupState extends State<Signup> {
                               fontFamily: 'UberMoveTextBold',
                               fontSize: 25.0.sp,
                               fontWeight: FontWeight.bold,
-                              color: Color.fromARGB(255, 9, 134, 211),
+                              color: const Color.fromARGB(255, 9, 134, 211),
                             )),
                         Center(
                           child: Image(
-                            image: AssetImage('assets/Images/First.png'),
+                            image: const AssetImage('assets/Images/First.png'),
                             width: width / 2,
                             height: width / 2,
                           ),
@@ -65,7 +64,7 @@ class _SignupState extends State<Signup> {
                         DefaultFormField(
                             isPassword: false,
                             prefix: Icons.email_outlined,
-                            controller: cubit.emailController,
+                            controller: AuthCubit.emailController,
                             label: 'Email',
                             type: TextInputType.emailAddress,
                             validator: (value) => value!.isEmpty
@@ -76,7 +75,7 @@ class _SignupState extends State<Signup> {
                         ),
                         DefaultFormField(
                             prefix: Icons.lock_open,
-                            controller: cubit.password,
+                            controller: AuthCubit.password,
                             label: 'Password',
                             suffix: cubit.isPassword_signup
                                 ? Icons.visibility
@@ -104,32 +103,32 @@ class _SignupState extends State<Signup> {
                             suffixpressed: () {
                               cubit.changepasswordVisablityConfirmSignup();
                             },
-                            validator: (value) =>
-                                value!.isEmpty || value != cubit.password.text
-                                    ? 'Password Doesn\'t match'
-                                    : null),
+                            validator: (value) => value!.isEmpty ||
+                                    value != AuthCubit.password.text
+                                ? 'Password Doesn\'t match'
+                                : null),
                         SizedBox(
                           height: 15.h,
                         ),
                         DefaultButton(
                             function: () {
-                              cubit.CheckExistEmail(context,
-                                      Email: cubit.emailController.text)
-                                  .then((value) {
-                                if (formkey.currentState!.validate()) {
-                                  if (cubit.EmailExist.length == 0) {
-                                    Navigation(context, Complete_Profile());
-                                  } else {
-                                    const snackBar = SnackBar(
-                                      backgroundColor: Colors.red,
-                                      content:
-                                          Text('This Email Already Signed up'),
-                                    );
-                                    ScaffoldMessenger.of(context)
-                                        .showSnackBar(snackBar);
-                                  }
-                                }
-                              });
+                              // cubit.CheckExistEmail(context,
+                              //         Email: AuthCubit.emailController.text)
+                              //     .then((value) {
+                              //   if (formkey.currentState!.validate()) {
+                              //     if (cubit.EmailExist.length == 0) {
+                              //       Navigation(context, Complete_Profile());
+                              //     } else {
+                              //       const snackBar = SnackBar(
+                              //         backgroundColor: Colors.red,
+                              //         content:
+                              //             Text('This Email Already Signed up'),
+                              //       );
+                              //       ScaffoldMessenger.of(context)
+                              //           .showSnackBar(snackBar);
+                              //     }
+                              //   }
+                              // });
                             },
                             text: 'Sign Up'),
                         Row(

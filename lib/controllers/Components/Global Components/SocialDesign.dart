@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SocialAuth extends StatefulWidget {
-  SocialAuth({Key? key}) : super(key: key);
+  const SocialAuth({Key? key}) : super(key: key);
 
   @override
   State<SocialAuth> createState() => _SocialAuthState();

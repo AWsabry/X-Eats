@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class CustomDivider extends StatefulWidget {
-  CustomDivider({Key? key}) : super(key: key);
+  const CustomDivider({Key? key}) : super(key: key);
 
   @override
   State<CustomDivider> createState() => _CustomDividerState();

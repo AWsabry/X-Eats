@@ -23,7 +23,7 @@ class Complete_Profile extends StatelessWidget {
       builder: (context, state) {
         var cubit = AuthCubit.get(context);
         return Scaffold(
-          backgroundColor: Color(0xff0986d3),
+          backgroundColor: const Color(0xff0986d3),
           body: Container(
             width: width,
             height: height,
@@ -47,16 +47,16 @@ class Complete_Profile extends StatelessWidget {
                               fontFamily: 'UberMoveTextBold',
                               fontSize: 25.0.sp,
                               fontWeight: FontWeight.bold,
-                              color: Color.fromARGB(255, 9, 134, 211),
+                              color: const Color.fromARGB(255, 9, 134, 211),
                             )),
                         Center(
                           child: Image(
-                            image: AssetImage('assets/Images/First.png'),
+                            image: const AssetImage('assets/Images/First.png'),
                             width: width / 2,
                             height: width / 2,
                           ),
                         ),
-                        Container(
+                        SizedBox(
                           width: double.infinity,
                           child: DefaultFormField(
                               isPassword: false,
@@ -70,7 +70,7 @@ class Complete_Profile extends StatelessWidget {
                         SizedBox(
                           height: 15.h,
                         ),
-                        Container(
+                        SizedBox(
                           width: double.infinity,
                           child: DefaultFormField(
                               isPassword: false,
@@ -80,10 +80,10 @@ class Complete_Profile extends StatelessWidget {
                               validator: (value) =>
                                   value!.isEmpty ? 'Put your Last Name' : null),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 15,
                         ),
-                        Container(
+                        SizedBox(
                           width: double.infinity,
                           child: DefaultFormField(
                               isPassword: false,
@@ -95,7 +95,7 @@ class Complete_Profile extends StatelessWidget {
                                   ? 'Put your Phone number'
                                   : null),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 15,
                         ),
                         // Container(
@@ -119,12 +119,10 @@ class Complete_Profile extends StatelessWidget {
                             FloatingActionButton(
                                 onPressed: () async {
                                   if (formkey.currentState!.validate()) {
-                                    print('+2' +
-                                        '${cubit.PhoneNumberController.text}');
                                     await FirebaseAuth.instance
                                         .verifyPhoneNumber(
                                       phoneNumber: '+2' +
-                                          '${cubit.PhoneNumberController.text}',
+                                          cubit.PhoneNumberController.text,
                                       verificationCompleted:
                                           (PhoneAuthCredential credential) {},
                                       verificationFailed:

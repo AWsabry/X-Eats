@@ -10,7 +10,7 @@ import 'package:xeats/controllers/Cubits/RestauratsCubit/RestuarantsCubit.dart';
 import 'package:xeats/views/Splash%20Screen/Splach%20Screen.dart';
 
 class LoginSuccess extends StatelessWidget {
-  LoginSuccess({super.key});
+  const LoginSuccess({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -19,11 +19,7 @@ class LoginSuccess extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => AuthCubit()..GettingUserData()),
-        BlocProvider(
-            create: (context) => ProductsCubit()
-              ..getPoster()
-              ..NewProducts()
-              ..GetMostSoldProducts()),
+        BlocProvider(create: (context) => ProductsCubit()..getPoster()),
         BlocProvider(create: (context) => RestuarantsCubit()),
         BlocProvider(create: (context) => OrderCubit()..getCartID(context)),
       ],
@@ -31,7 +27,7 @@ class LoginSuccess extends StatelessWidget {
         listener: ((context, state) {}),
         builder: (context, state) {
           return Scaffold(
-            backgroundColor: Color(0xff0986d3),
+            backgroundColor: const Color(0xff0986d3),
             body: Container(
               width: width,
               height: height,
@@ -53,12 +49,12 @@ class LoginSuccess extends StatelessWidget {
                             fontFamily: 'UberMoveTextBold',
                             fontSize: 25.0.sp,
                             fontWeight: FontWeight.bold,
-                            color: Color.fromARGB(255, 9, 134, 211),
+                            color: const Color.fromARGB(255, 9, 134, 211),
                           ),
                         ),
                         Center(
                           child: Image(
-                            image: AssetImage('assets/Images/01.webp'),
+                            image: const AssetImage('assets/Images/01.webp'),
                             width: width,
                             height: width,
                           ),
@@ -95,7 +91,7 @@ class LoginSuccess extends StatelessWidget {
                                 Container(
                                   child: Image(
                                     image:
-                                        AssetImage('assets/Images/First.png'),
+                                        const AssetImage('assets/Images/First.png'),
                                     width: width / 3,
                                     height: width / 3,
                                   ),
@@ -110,7 +106,7 @@ class LoginSuccess extends StatelessWidget {
                                           fontSize: 14.0.sp,
                                           fontWeight: FontWeight.bold,
                                           color:
-                                              Color.fromARGB(255, 9, 134, 211)),
+                                              const Color.fromARGB(255, 9, 134, 211)),
                                     ),
                                   ),
                                 ),

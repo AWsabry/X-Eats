@@ -1,6 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class DefaultFormField extends StatefulWidget {
@@ -59,13 +57,13 @@ class _DefaultFormFieldState extends State<DefaultFormField> {
           ),
           decoration: InputDecoration(
             enabledBorder: const OutlineInputBorder(
-                borderRadius: const BorderRadius.all(Radius.circular(20)),
-                borderSide: const BorderSide(color: Colors.grey)),
+                borderRadius: BorderRadius.all(Radius.circular(20)),
+                borderSide: BorderSide(color: Colors.grey)),
             fillColor: background,
             labelStyle: labelst,
             focusedBorder: const OutlineInputBorder(
-                borderSide: const BorderSide(color: Colors.grey),
-                borderRadius: const BorderRadius.all(Radius.circular(20))),
+                borderSide: BorderSide(color: Colors.grey),
+                borderRadius: BorderRadius.all(Radius.circular(20))),
             labelText: widget.label,
             prefixIcon: Icon(
               widget.prefix,
@@ -81,7 +79,7 @@ class _DefaultFormFieldState extends State<DefaultFormField> {
                   )
                 : null,
             border: const OutlineInputBorder(
-              borderRadius: const BorderRadius.all(Radius.circular(20)),
+              borderRadius: BorderRadius.all(Radius.circular(20)),
             ),
           )),
     );

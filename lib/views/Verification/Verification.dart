@@ -43,10 +43,10 @@ class Verify extends StatelessWidget {
         var cubit = AuthCubit.get(context);
         return Scaffold(
           appBar: AppBar(
-            backgroundColor: Color(0xff0986d3),
+            backgroundColor: const Color(0xff0986d3),
             elevation: 0,
           ),
-          backgroundColor: Color(0xff0986d3),
+          backgroundColor: const Color(0xff0986d3),
           body: Container(
             width: width,
             height: height,
@@ -68,7 +68,8 @@ class Verify extends StatelessWidget {
                       children: [
                         Center(
                           child: Image(
-                            image: AssetImage('assets/Images/password.png'),
+                            image:
+                                const AssetImage('assets/Images/password.png'),
                             width: width / 2,
                             height: width / 2,
                           ),
@@ -79,7 +80,7 @@ class Verify extends StatelessWidget {
                                 fontFamily: 'UberMoveTextBold',
                                 fontSize: 30.0.sp,
                                 fontWeight: FontWeight.bold,
-                                color: Color.fromARGB(255, 9, 134, 211),
+                                color: const Color.fromARGB(255, 9, 134, 211),
                               )),
                         ),
                         SizedBox(
@@ -120,7 +121,7 @@ class Verify extends StatelessWidget {
                                         .verifyPhoneNumber(
                                       timeout: const Duration(seconds: 5),
                                       phoneNumber: '+2' +
-                                          '${cubit.PhoneNumberController.text}',
+                                          cubit.PhoneNumberController.text,
                                       verificationCompleted:
                                           (PhoneAuthCredential credential) {},
                                       verificationFailed:
@@ -141,11 +142,11 @@ class Verify extends StatelessWidget {
                                   'Resend Code',
                                   style: GoogleFonts.poppins(
                                       fontWeight: FontWeight.w600,
-                                      textStyle: TextStyle(color: Colors.blue)),
+                                      textStyle:
+                                          const TextStyle(color: Colors.blue)),
                                 )),
-                            Spacer(),
+                            const Spacer(),
                             FloatingActionButton(
-                              child: Icon(Icons.arrow_forward_ios),
                               backgroundColor: Colors.black,
                               onPressed: () async {
                                 PhoneAuthCredential credential =
@@ -157,8 +158,8 @@ class Verify extends StatelessWidget {
                                   await auth.signInWithCredential(credential);
                                   cubit.CreateUser(
                                     context,
-                                    password: cubit.password.text,
-                                    email: cubit.emailController.text,
+                                    password: AuthCubit.password.text,
+                                    email: AuthCubit.emailController.text,
                                     first_name: cubit.first_nameController.text,
                                     last_name: cubit.last_nameController.text,
                                     title: cubit.title,
@@ -175,6 +176,7 @@ class Verify extends StatelessWidget {
                                       .showSnackBar(snackBar);
                                 }
                               },
+                              child: const Icon(Icons.arrow_forward_ios),
                             ),
                           ],
                         ),

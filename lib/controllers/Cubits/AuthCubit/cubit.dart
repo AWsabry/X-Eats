@@ -1,11 +1,12 @@
 // ignore_for_file: non_constant_identifier_names
-
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:xeats/controllers/Cubits/AuthCubit/States.dart';
 import 'package:xeats/controllers/Components/General%20Components/Components.dart';
 import 'package:xeats/controllers/Dio/DioHelper.dart';
+import 'package:xeats/core/Constants/constants.dart';
 import 'package:xeats/views/SignIn/SignIn.dart';
 
 class AuthCubit extends Cubit<AuthStates> {
@@ -24,7 +25,7 @@ class AuthCubit extends Cubit<AuthStates> {
 
   //----------------Signup form Variables ------------------------//
 
-  TextEditingController password = TextEditingController();
+  static TextEditingController password = TextEditingController();
   TextEditingController signup_confirm_password = TextEditingController();
   bool isPassword_signup = true;
   bool isPassword_confirm_signup = true;
@@ -32,7 +33,7 @@ class AuthCubit extends Cubit<AuthStates> {
   //---------------Complete Profile Form Variables---------------//
 
   TextEditingController datecontroller = TextEditingController();
-  TextEditingController emailController = TextEditingController();
+  static TextEditingController emailController = TextEditingController();
   TextEditingController first_nameController = TextEditingController();
   TextEditingController last_nameController = TextEditingController();
   TextEditingController PhoneNumberController = TextEditingController();
@@ -73,29 +74,49 @@ class AuthCubit extends Cubit<AuthStates> {
     String? email,
     String? password,
   }) async {
-    await DioHelper.PostData(data: {
-      "password": password,
+    await Dio().get("${AppConstants.BaseUrl}/get_csrf_token_api/", data: {
       "email": email,
-    }, url: "login_users_API/")
-        .then((value) async {
-      user = value.data['Names'];
-      print(user);
+      "password": password,
+    }).then((value) async {
+      print(value.data['token']);
+      await DioHelper.PostData(
+        data: {
+          "password": password,
+          "email": email,
+        },
+        url: "login_view/",
+      ).then((value) async {
+        print("token");
+      });
     });
   }
 
-  List<dynamic> EmailExist = [];
-  Future<List> CheckExistEmail(context, {String? Email}) async {
-    await DioHelper.getdata(url: "get_user_by_id/$Email", query: {})
-        .then((value) {
-      EmailExist = value.data['Names'];
-      print(EmailExist);
-      emit(CheckEmailExistSuccess());
-    }).catchError((error) {
-      print(CheckEmailFailed(error.toString()));
-      emit(CheckEmailFailed(error.toString()));
-    });
-    return EmailExist;
-  }
+  // List<dynamic> EmailExist = [];
+  // static String? Token;
+  // Future<List> CheckExistEmail(context,
+  //     {String? Email, String? password}) async {
+  //   Dio().post("${AppConstants.BaseUrl}/api/token/", data: {
+  //     "email": Email,
+  //     "password": password,
+  //   }).then((value) async {
+  //     // Token = value.data["access"];
+  //     // print(Token);
+  //     await DioHelper.getdata(
+  //             url: "get_user_by_email/$Email",
+  //             query: {},
+  //             token: value.data["access"])
+  //         .then((value) {
+  //       EmailExist = value.data['Names'];
+  //       print(EmailExist);
+  //       emit(CheckEmailExistSuccess());
+  //     }).catchError((error) {
+  //       print(CheckEmailFailed(error.toString()));
+  //       emit(CheckEmailFailed(error.toString()));
+  //     });
+  //   });
+
+  //   return EmailExist;
+  // }
 
   //-------------Show password method-------------------//
 
@@ -117,33 +138,62 @@ class AuthCubit extends Cubit<AuthStates> {
   //-----------------Sign In------------//
   //This Function Will Call when user Sign In Succefuly
   List<dynamic> EmailInList = [];
-  Future<List> getEmail(
-    context, {
-    // The Function Will Get The email of user and take it as EndPoint to show his information
-    String? email,
-  }) async {
-    await DioHelper.getdata(url: "get_user_by_id/$email", query: {})
-        .then((value) async {
-      //EmailInformationList
-      EmailInList = value.data['Names'];
-      SharedPreferences userInf = await SharedPreferences.getInstance();
-      userInf.setString('EmailInf', EmailInList[0]['email']);
-      userInf.setString('FirstName', EmailInList[0]['first_name']);
-      userInf.setString('LastName', EmailInList[0]['last_name']);
-      userInf.setInt("Id", EmailInList[0]['id']);
-      userInf.setDouble("wallet", EmailInList[0]['Wallet']);
-      userInf.setString("phonenumber", EmailInList[0]['PhoneNumber']);
-
-      emit(SuccessGetInformation());
-    }).catchError((onError) {
-      emit(FailgetInformation());
-      print(FailgetInformation());
+  Future<List> getEmail(context,
+      {
+      // The Function Will Get The email of user and take it as EndPoint to show his information
+      String? email,
+      String? password}) async {
+    emit(initialGetEmailState());
+    await Dio().post("${AppConstants.BaseUrl}/api/token/", data: {
+      "email": email,
+      "password": password,
+    }).then((token) async {
+      emit(initialGetTokenState());
+      await Dio()
+          .get("${AppConstants.BaseUrl}/get_user_by_email/$email",
+              options: Options(headers: {
+                "Authorization": "Bearer ${token.data['access']}"
+              }))
+          .then((value) async {
+        print("User Token is" " " + token.data['access']);
+        // print("User Data" + " " + "${value.data['Names'][0]}");
+        EmailInList = value.data['Names'];
+        SharedPreferences userInf = await SharedPreferences.getInstance();
+        userInf.setString('EmailInf', EmailInList[0]['email']);
+        userInf.setString('FirstName', EmailInList[0]['first_name']);
+        userInf.setString('LastName', EmailInList[0]['last_name']);
+        userInf.setInt("Id", EmailInList[0]['id']);
+        userInf.setDouble("wallet", EmailInList[0]['Wallet']);
+        userInf.setString("phonenumber", EmailInList[0]['PhoneNumber']);
+        emit(SuccessGetInformation());
+      }).catchError((e) {
+        print("error message $e");
+        emit(FailgetInformation());
+      });
+      // .catchError((onError) {
+      //   DioHelper.PostData(
+      //           url: "get_user_by_email/$email",
+      //           data: {
+      //             "password": password,
+      //             "email": email,
+      //           },
+      //           token: token.data["access"])
+      //       .then(
+      //     (value) {
+      //       print("User Token is" + " " + value.data['exist']);
+      //       emit(FailgetInformation());
+      //       print(FailgetInformation());
+      //     },
+      //   );
+      // });
     });
+
     return EmailInList;
   }
 
 //-------------------- Function Separated to get his email if his email null then it will go to login if not then it will go to home page
 
+// Getting USER DATA FROM SHARED PREFREANCE
   String? EmailInforamtion;
   String? FirstName;
   String? LastName;
@@ -151,7 +201,7 @@ class AuthCubit extends Cubit<AuthStates> {
   double? wallet;
   String? PhoneNumber;
 
-  Future<void> GettingUserData() async {
+  void GettingUserData() async {
     SharedPreferences User = await SharedPreferences.getInstance();
     EmailInforamtion = User.getString('EmailInf');
     FirstName = User.getString('FirstName');

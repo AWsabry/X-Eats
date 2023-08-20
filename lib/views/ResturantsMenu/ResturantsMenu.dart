@@ -192,7 +192,7 @@ class ResturantsMenu extends StatelessWidget {
                                 ),
                                 Row(
                                   children: [
-                                    Container(
+                                    SizedBox(
                                       width: width / 7,
                                       height: height / 13,
                                       child: const Image(
@@ -240,7 +240,7 @@ class ResturantsMenu extends StatelessWidget {
                       if (snapshot.hasData) {
                         return snapshot.data!;
                       } else {
-                        return Loading();
+                        return const Loading();
                       }
                     }),
                     future:
@@ -266,7 +266,7 @@ class ResturantsMenu extends StatelessWidget {
               } else if (index == 0) {
                 Navigation(context, Layout());
               } else {
-                Navigation(context, Profile());
+                Navigation(context, const Profile());
               }
             },
           ),

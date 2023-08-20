@@ -7,9 +7,9 @@ class AlertDialogNotify extends StatelessWidget {
   Widget build(BuildContext context) {
     return AlertDialog(
       title: const Text('Error !!'),
-      content: SingleChildScrollView(
+      content: const SingleChildScrollView(
         child: ListBody(
-          children: const <Widget>[
+          children: <Widget>[
             Text(
                 'You can\'t order from different reataurants\nPlease make your order with the same restaurant only.'),
           ],

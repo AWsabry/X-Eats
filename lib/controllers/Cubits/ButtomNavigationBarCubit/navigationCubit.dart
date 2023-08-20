@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:xeats/controllers/Cubits/ButtomNavigationBarCubit/NavStates.dart';
 import 'package:xeats/views/HomePage/HomePage.dart';
@@ -11,9 +10,9 @@ class NavBarCubitcubit extends Cubit<NavBarCubitStates> {
 
   int currentindex = 0;
   List<Widget> Screens = [
-    HomePage(),
+    const HomePage(),
     Restaurants(),
-    Profile(),
+    const Profile(),
   ];
 
   static NavBarCubitcubit get(context) => BlocProvider.of(context);

@@ -45,7 +45,7 @@ class ThankYou extends StatelessWidget {
                   height: height / 5,
                   loadingBuilder: (context, child, loadingProgress) {
                     if (loadingProgress == null) return child;
-                    return Center(
+                    return const Center(
                       child: Loading(),
                     );
                   },

@@ -1,9 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:xeats/controllers/Components/AppBar/AppBarCustomized.dart';
@@ -16,7 +13,7 @@ import 'package:xeats/views/Layout/Layout.dart';
 import 'package:xeats/views/Profile/Profile.dart';
 
 class SearchProductsScreen extends StatefulWidget {
-  SearchProductsScreen({
+  const SearchProductsScreen({
     super.key,
     this.restaurantID,
     required this.category,
@@ -44,7 +41,7 @@ class _SearchScreenState extends State<SearchProductsScreen> {
           appBar: appBar(context,
               title: widget.category, subtitle: widget.restaurantName),
           body: Padding(
-            padding: EdgeInsets.all(15.0),
+            padding: const EdgeInsets.all(15.0),
             child: Column(
               children: [
                 Container(
@@ -117,7 +114,7 @@ class _SearchScreenState extends State<SearchProductsScreen> {
                           ProductsCubit.get(context).data != null) {
                         return snapshot.data!;
                       } else {
-                        return Center(
+                        return const Center(
                           child: Loading(),
                         );
                       }
@@ -140,7 +137,7 @@ class _SearchScreenState extends State<SearchProductsScreen> {
                 Navigation(context, Layout());
               } else {
                 await ProductsCubit.get(context).ClearProductsId();
-                Navigation(context, Profile());
+                Navigation(context, const Profile());
               }
             },
           ),

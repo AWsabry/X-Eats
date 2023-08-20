@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:xeats/controllers/Components/Global%20Components/loading.dart';
 
 class NewProducts extends StatefulWidget {
-  NewProducts({
+  const NewProducts({
     Key? key,
     this.image,
     this.Colors,
@@ -29,7 +29,7 @@ class _NewProductsState extends State<NewProducts> {
     double height = MediaQuery.of(context).size.height / 4;
     return Column(
       children: [
-        Container(
+        SizedBox(
           height: height,
           width: width,
           child: Padding(
@@ -44,11 +44,11 @@ class _NewProductsState extends State<NewProducts> {
               child: Image(
                 width: 200,
                 image: CachedNetworkImageProvider(
-                  'https://x-eats.com/uploads/' + widget.image!,
+                  'https://x-eats.com/uploads/${widget.image!}',
                 ),
                 loadingBuilder: (context, child, loadingProgress) {
                   if (loadingProgress == null) return child;
-                  return Center(
+                  return const Center(
                     child: Loading(),
                   );
                 },
@@ -58,7 +58,7 @@ class _NewProductsState extends State<NewProducts> {
         ),
         Text(
           widget.title,
-          style: TextStyle(
+          style: const TextStyle(
             fontWeight: FontWeight.bold,
           ),
         ),

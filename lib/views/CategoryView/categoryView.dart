@@ -37,7 +37,7 @@ class CategoriesView extends StatelessWidget {
         return Scaffold(
           appBar: appBar(context, subtitle: restaurantName, title: category),
           body: Padding(
-            padding: EdgeInsets.all(15.0),
+            padding: const EdgeInsets.all(15.0),
             child: Column(
               children: [
                 FutureBuilder(
@@ -51,7 +51,7 @@ class CategoriesView extends StatelessWidget {
                     if (snapshot.hasData) {
                       return snapshot.data!;
                     } else {
-                      return Loading();
+                      return const Loading();
                     }
                   }),
                 ),
@@ -73,7 +73,7 @@ class CategoriesView extends StatelessWidget {
                 Navigation(context, Layout());
               } else {
                 await ProductsCubit.get(context).ClearProductsId();
-                Navigation(context, Profile());
+                Navigation(context, const Profile());
               }
             },
           ),

@@ -3,7 +3,6 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:new_version_plus/new_version_plus.dart';
 import 'package:xeats/controllers/Components/General%20Components/Components.dart';
 import 'package:xeats/controllers/Cubits/AuthCubit/States.dart';
 import 'package:xeats/controllers/Cubits/AuthCubit/cubit.dart';
@@ -20,24 +19,25 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
   bool? Check;
-  Future<bool> checkVersion() async {
-    final newVersion = NewVersionPlus(
-      androidId: "com.xeats.egy",
-    );
-    final status = await newVersion.getVersionStatus();
+  // Future<bool> checkVersion() async {
+  //   final newVersion = NewVersionPlus(
+  //     androidId: "com.xeats.egy",
+  //   );
+  //   final status = await newVersion.getVersionStatus();
 
-    Check = status!.canUpdate;
-    if (status.canUpdate) {
-      return true;
-    } else {
-      print(status.localVersion);
-      print(status.storeVersion);
-      return false;
-    }
-  }
+  //   Check = status!.canUpdate;
+  //   if (status.canUpdate) {
+  //     return true;
+  //   } else {
+  //     print(status.localVersion);
+  //     print(status.storeVersion);
+  //     return false;
+  //   }
+  // }
 
+  @override
   void initState() {
-    print("Check Version Method is ${checkVersion()}");
+    // print("Check Version Method is ${checkVersion()}");
     super.initState();
     inittiken();
     FirebaseMessaging.onMessage.listen(
@@ -94,7 +94,7 @@ class _SplashScreenState extends State<SplashScreen> {
   Future init(context) async {
     AuthCubit.get(context).GettingUserData();
     OrderCubit.get(context).getCartID(context);
-    print(AuthCubit.get(context).GettingUserData());
+    // print(AuthCubit.get(context).GettingUserData());
 
     Future.delayed(const Duration(seconds: 6)).then(
       (value) {
@@ -135,9 +135,9 @@ class _SplashScreenState extends State<SplashScreen> {
                   SizedBox(
                     height: height / 6,
                   ),
-                  Column(
+                  const Column(
                     mainAxisAlignment: MainAxisAlignment.end,
-                    children: const [
+                    children: [
                       SpinKitThreeInOut(
                         color: Color.fromARGB(255, 9, 134, 211),
                         size: 35,

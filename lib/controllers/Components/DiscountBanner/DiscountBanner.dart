@@ -11,23 +11,23 @@ class DiscountBanner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var data_from_api = ProductsCubit.get(context).getposters;
+    var dataFromApi = ProductsCubit.getposters;
     return Column(
       children: [
         CarouselSlider.builder(
-          itemCount: data_from_api.length,
+          itemCount: dataFromApi.length,
           itemBuilder: (BuildContext context, int index, int pageViewIndex) {
             return Container(
               child: Image(
                 loadingBuilder: (context, child, loadingProgress) {
                   if (loadingProgress == null) return child;
-                  return Center(
+                  return const Center(
                     child: Loading(),
                   );
                 },
                 image: CachedNetworkImageProvider(
                   'https://www.x-eats.com' +
-                      data_from_api[index]['background_image'],
+                      dataFromApi[index]['background_image'],
                 ),
               ),
             );

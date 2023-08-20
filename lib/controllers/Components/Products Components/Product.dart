@@ -3,7 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:xeats/controllers/Components/General%20Components/Components.dart';
 
 class Product extends StatefulWidget {
-  Product({
+  const Product({
     Key? key,
     this.Data,
     this.Assets,
@@ -21,7 +21,7 @@ class _ProductState extends State<Product> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Container(
+        SizedBox(
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height / 4,
         ),
@@ -43,11 +43,11 @@ class _ProductState extends State<Product> {
                         fit: BoxFit.cover,
                       )),
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 20,
                 ),
                 Expanded(
-                  child: Container(
+                  child: SizedBox(
                     height: 120,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -63,7 +63,7 @@ class _ProductState extends State<Product> {
                         ),
                         Text(
                           '${widget.Price}',
-                          style: TextStyle(color: Colors.black),
+                          style: const TextStyle(color: Colors.black),
                         ),
                       ],
                     ),

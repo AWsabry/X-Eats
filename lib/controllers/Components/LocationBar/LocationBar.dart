@@ -40,7 +40,7 @@ class LocationBar extends StatelessWidget implements PreferredSizeWidget {
                           style: GoogleFonts.poppins(
                               fontSize: 11, color: Colors.grey),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           width: 10,
                         ),
                         BlocBuilder<OrderCubit, OrderStates>(
@@ -60,7 +60,7 @@ class LocationBar extends StatelessWidget implements PreferredSizeWidget {
                                   context,
                                 ) {
                                   return DropdownButton(
-                                    hint: Text("Select your Location"),
+                                    hint: const Text("Select your Location"),
                                     items: cubit.LocationsNames.map<
                                         DropdownMenuItem<String>>((value) {
                                       return DropdownMenuItem<String>(
@@ -73,11 +73,11 @@ class LocationBar extends StatelessWidget implements PreferredSizeWidget {
                                       );
                                     }).toList(),
                                     onChanged: (dynamic value) {
-                                      cubit.ChangeLocation(value);
-                                      cubit.getRestaurantsOfLocation();
+                                      cubit.ChangeLocation(value, context);
+                                      cubit.getRestaurantsOfLocation(context);
                                     },
                                     value: OrderCubit.currentLocation,
-                                    icon: Icon(Icons.arrow_drop_down),
+                                    icon: const Icon(Icons.arrow_drop_down),
                                   );
                                 });
                           },

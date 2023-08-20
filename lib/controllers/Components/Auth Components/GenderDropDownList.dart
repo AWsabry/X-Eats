@@ -37,7 +37,7 @@ class _DropDownListGenderState extends State<DropDownListGender> {
       validator: widget.form,
       alignment: AlignmentDirectional.bottomStart,
       value: widget.gender,
-      icon: Image(
+      icon: const Image(
         width: 20,
         height: 20,
         fit: BoxFit.fill,
@@ -50,17 +50,17 @@ class _DropDownListGenderState extends State<DropDownListGender> {
       style: GoogleFonts.poppins(height: 1.5),
       decoration: InputDecoration(
         enabledBorder: const OutlineInputBorder(
-            borderRadius: const BorderRadius.all(Radius.circular(20)),
-            borderSide: const BorderSide(color: Colors.grey)),
+            borderRadius: BorderRadius.all(Radius.circular(20)),
+            borderSide: BorderSide(color: Colors.grey)),
         fillColor: widget.background,
         labelStyle: widget.labelst,
         focusedBorder: const OutlineInputBorder(
-            borderSide: const BorderSide(color: Colors.grey),
-            borderRadius: const BorderRadius.all(Radius.circular(20))),
+            borderSide: BorderSide(color: Colors.grey),
+            borderRadius: BorderRadius.all(Radius.circular(20))),
         prefixIcon: Image(
           width: 1.w,
           height: 1.w,
-          image: AssetImage(
+          image: const AssetImage(
             'assets/Images/gender.png',
           ),
         ),
@@ -84,14 +84,15 @@ class _DropDownListGenderState extends State<DropDownListGender> {
           ))),
       items: widget.Gender.map((String genderr) {
         return DropdownMenuItem<String>(
+          value: genderr,
           child: Row(children: [
             genderr.toString() == 'Male'
-                ? Icon(Icons.male)
-                : Icon(Icons.female),
+                ? const Icon(Icons.male)
+                : const Icon(Icons.female),
             Text(
               genderr.toString(),
               style: GoogleFonts.poppins(
-                  textStyle: TextStyle(
+                  textStyle: const TextStyle(
                 fontFamily: 'UberMoveTextBold',
                 fontSize: 20.0,
                 fontStyle: FontStyle.normal,
@@ -99,7 +100,6 @@ class _DropDownListGenderState extends State<DropDownListGender> {
               )),
             ),
           ]),
-          value: genderr,
         );
       }).toList(),
     );

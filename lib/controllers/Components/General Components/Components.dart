@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 void NavigateAndRemov(context, widget) => Navigator.pushAndRemoveUntil(
@@ -61,21 +60,21 @@ List<DropdownMenuItem> getTimings() {
   List<DropdownMenuItem> timings = [];
 
   if (hour < 11) {
-    timings.add(DropdownMenuItem(
-      child: Text("11:00 AM"),
+    timings.add(const DropdownMenuItem(
       value: "11:00 AM",
+      child: Text("11:00 AM"),
     ));
   }
   if (hour < 13) {
-    timings.add(DropdownMenuItem(
-      child: Text("1:00 PM"),
+    timings.add(const DropdownMenuItem(
       value: "1:00 PM",
+      child: Text("1:00 PM"),
     ));
   }
   if (hour < 15) {
-    timings.add(DropdownMenuItem(
-      child: Text("3:00 PM"),
+    timings.add(const DropdownMenuItem(
       value: "3:00 PM",
+      child: Text("3:00 PM"),
     ));
   }
   return timings;

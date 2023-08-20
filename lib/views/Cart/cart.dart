@@ -25,7 +25,7 @@ class Cart extends StatefulWidget {
 
 late Future FutureRestaurants;
 late Future getCartItemsFuture;
-late List<Widget> allWhatInCart = [];
+List<Widget> allWhatInCart = [];
 
 class _CartState extends State<Cart> {
   @override
@@ -39,6 +39,7 @@ class _CartState extends State<Cart> {
     );
   }
 
+  @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
@@ -115,9 +116,10 @@ class _CartState extends State<Cart> {
                                               "https://x-eats.com${RestuarantsCubit.currentRestaurant["logo"]}"),
                                           loadingBuilder: (context, child,
                                               loadingProgress) {
-                                            if (loadingProgress == null)
+                                            if (loadingProgress == null) {
                                               return child;
-                                            return Center(
+                                            }
+                                            return const Center(
                                               child: Loading(),
                                             );
                                           },
@@ -315,7 +317,7 @@ class _CartState extends State<Cart> {
                         } else {
                           return SizedBox(
                             height: MediaQuery.of(context).size.height / 1.5,
-                            child: Loading(),
+                            child: const Loading(),
                           );
                         }
                       }),

@@ -22,7 +22,7 @@ class SecondaryButton extends StatefulWidget {
 class _SecondaryButtonState extends State<SecondaryButton> {
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: widget.width,
       height: 65,
       child: ElevatedButton(
@@ -31,7 +31,7 @@ class _SecondaryButtonState extends State<SecondaryButton> {
                 borderRadius: BorderRadius.circular(widget.radius))),
         onPressed: widget.function,
         child: Row(children: [
-          SizedBox(
+          const SizedBox(
             width: 117,
           ),
           Text(widget.isUppercase ? widget.text : widget.text,

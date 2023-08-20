@@ -30,16 +30,16 @@ class Restaurants extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (context) => ProductsCubit()..NewProducts(),
+          create: (context) => ProductsCubit()..NewProducts(context),
         ),
         BlocProvider(
-          create: (context) => OrderCubit()..getRestaurantsOfLocation(),
+          create: (context) => OrderCubit()..getRestaurantsOfLocation(context),
         )
       ],
       child: BlocConsumer<ProductsCubit, ProductsStates>(
         listener: (context, state) {},
         builder: (context, state) {
-          var newProducts = ProductsCubit.get(context).new_products;
+          var newProducts = ProductsCubit.new_products;
           var navcubit = NavBarCubitcubit.get(context);
           var Connection = false;
 
@@ -67,7 +67,7 @@ class Restaurants extends StatelessWidget {
                           (index) {
                             return ConditionalBuilder(
                                 fallback: (context) {
-                                  return Loading();
+                                  return const Loading();
                                 },
                                 condition: newProducts[index]["image"] != null,
                                 builder: (context) {
@@ -81,8 +81,7 @@ class Restaurants extends StatelessWidget {
                                                 context,
                                                 ProductClass().productDetails(
                                                   context,
-                                                  image: AppConstants.BaseUrl +
-                                                      "/uploads/" +
+                                                  image: "${AppConstants.BaseUrl}/uploads/" +
                                                       newProducts[index]
                                                           ["image"],
                                                   id: newProducts[index]['id'],
@@ -146,7 +145,7 @@ class Restaurants extends StatelessWidget {
                               itemBuilder: (context, index) {
                                 if (restuarantsOfSlugListApi[index]['logo'] ==
                                     null) {
-                                  return Loading();
+                                  return const Loading();
                                 } else {
                                   return InkWell(
                                     onTap: () {
@@ -167,7 +166,7 @@ class Restaurants extends StatelessWidget {
                                           height: 130.h,
                                           decoration: BoxDecoration(
                                             border: Border.all(
-                                                color: Color.fromARGB(
+                                                color: const Color.fromARGB(
                                                     74, 158, 158, 158)),
                                             borderRadius:
                                                 BorderRadius.circular(10.0),
@@ -194,7 +193,7 @@ class Restaurants extends StatelessWidget {
                                           width: 20.w,
                                         ),
                                         Expanded(
-                                          child: Container(
+                                          child: SizedBox(
                                             height: height / 7,
                                             child: Column(
                                               crossAxisAlignment:
@@ -218,7 +217,7 @@ class Restaurants extends StatelessWidget {
                                                 SizedBox(
                                                   height: 10.h,
                                                 ),
-                                                Row(children: const [
+                                                const Row(children: [
                                                   Icon(
                                                     Icons.star,
                                                     color: Colors.amber,
@@ -244,7 +243,7 @@ class Restaurants extends StatelessWidget {
                                                       SizedBox(
                                                         width: 25.w,
                                                       ),
-                                                      Icon(Icons
+                                                      const Icon(Icons
                                                           .delivery_dining_outlined),
                                                       SizedBox(
                                                         width: 2.w,

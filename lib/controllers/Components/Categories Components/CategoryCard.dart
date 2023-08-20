@@ -44,7 +44,7 @@ class CategoryCard extends StatelessWidget {
                         ),
                         loadingBuilder: (context, child, loadingProgress) {
                           if (loadingProgress == null) return child;
-                          return Center(
+                          return const Center(
                             child: Loading(),
                           );
                         },
@@ -59,8 +59,8 @@ class CategoryCard extends StatelessWidget {
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
                     colors: [
-                      Color.fromARGB(255, 255, 255, 255).withOpacity(0.15),
-                      Color.fromARGB(255, 255, 255, 255).withOpacity(0.15),
+                      const Color.fromARGB(255, 255, 255, 255).withOpacity(0.15),
+                      const Color.fromARGB(255, 255, 255, 255).withOpacity(0.15),
 
                       // Color(0x0489cc).withOpacity(0.4),
                     ],
@@ -75,19 +75,19 @@ class CategoryCard extends StatelessWidget {
                     child: Text.rich(
                       TextSpan(
                         style: TextStyle(
-                          color: Color(0x0489cc).withOpacity(1),
+                          color: const Color(0x000489cc).withOpacity(1),
                         ),
                         children: [
                           TextSpan(
-                            text: '$category',
-                            style: TextStyle(
+                            text: category,
+                            style: const TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
                           TextSpan(
                             text: description,
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 12,
                               color: Colors.grey,
                             ),

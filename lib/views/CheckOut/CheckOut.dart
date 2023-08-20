@@ -60,12 +60,12 @@ class CheckOut extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  Text(
+                  const Text(
                     "Delivery Fee ",
-                    style: const TextStyle(fontSize: 20),
+                    style: TextStyle(fontSize: 20),
                   ),
                   Text(
-                    "${deliveryFees} EGP ",
+                    "$deliveryFees EGP ",
                     style: const TextStyle(fontSize: 20),
                   )
                 ],

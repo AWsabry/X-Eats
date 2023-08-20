@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:xeats/controllers/Components/Product%20Class/Products_Class.dart';
+import 'package:xeats/controllers/Cubits/OrderCubit/OrderCubit.dart';
 import 'package:xeats/controllers/Cubits/ProductsCubit/ProductsStates.dart';
 import 'package:xeats/controllers/Dio/DioHelper.dart';
 import 'package:xeats/core/Constants/constants.dart';
@@ -13,28 +14,31 @@ class ProductsCubit extends Cubit<ProductsStates> {
   static ProductsCubit get(context) => BlocProvider.of(context);
   TextEditingController searchController = TextEditingController();
 
-  List<dynamic> MostSold = [];
+  static List<dynamic> MostSold = [];
   Map itemImages = {};
 
-  void GetMostSoldProducts() {
-    DioHelper.getdata(url: 'get_products_mostSold_products/', query: {})
-        .then((value) async {
+  void GetMostSoldProducts(context) {
+    DioHelper.getdata(
+        url:
+            'get_products_mostSold_products/${OrderCubit.PublicLocationId! + 1}',
+        query: {}).then((value) async {
       MostSold = value.data['Names'];
 
       emit(ProductsSuccess());
     }).catchError((error) {});
   }
 
-  List<dynamic> new_products = [];
-  void NewProducts() {
-    DioHelper.getdata(url: 'get_products_new_products/', query: {})
-        .then((value) {
+  static List<dynamic> new_products = [];
+  void NewProducts(context) {
+    DioHelper.getdata(
+        url: 'get_products_new_products/${OrderCubit.PublicLocationId! + 1}',
+        query: {}).then((value) {
       new_products = value.data['Names'];
       emit(ProductsSuccess());
     }).catchError((error) {});
   }
 
-  List<dynamic> getposters = [];
+  static List<dynamic> getposters = [];
   void getPoster() {
     DioHelper.getdata(url: 'get_poster/', query: {}).then((value) {
       getposters = value.data['Names'];
@@ -80,7 +84,7 @@ class ProductsCubit extends Cubit<ProductsStates> {
     data = Expanded(
       child: ListView.separated(
           separatorBuilder: ((context, index) {
-            return Divider();
+            return const Divider();
           }),
           itemBuilder: (context, index) {
             return ProductClass(
@@ -218,7 +222,7 @@ class ProductsCubit extends Cubit<ProductsStates> {
                   price: value.data["Names"][index]["price"]);
             },
             separatorBuilder: ((context, index) {
-              return Divider();
+              return const Divider();
             }),
             itemCount: value.data["Names"].length),
       );
