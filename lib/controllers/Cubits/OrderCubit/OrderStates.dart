@@ -44,7 +44,6 @@ class getTimePublicStateSuccess extends SuperOrderStates {}
 
 class getTimeStateFailier extends SuperOrderStates {
   final String error;
-
   getTimeStateFailier(this.error);
 }
 
@@ -75,7 +74,7 @@ class InitialcheckOrderExistance extends SuperOrderStates {}
 class checkOrderExistanceSuccessfuly extends SuperOrderStates {}
 
 class checkOrderExistanceFailed extends SuperOrderStates {
-  final String Error;
+  final RangeError Error;
 
   checkOrderExistanceFailed(this.Error);
 }

@@ -7,6 +7,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:xeats/controllers/Components/Global%20Components/DefaultButton.dart';
 import 'package:xeats/controllers/Components/Global%20Components/loading.dart';
 import 'package:xeats/controllers/Components/AppBar/AppBarCustomized.dart';
 import 'package:xeats/controllers/Components/Requests%20Loading%20Components/RequstsLoading.dart';
@@ -33,7 +34,8 @@ class ProductClass extends StatelessWidget {
 
   static List<Widget> CartItems = [];
 
-  ProductClass({super.key, 
+  ProductClass({
+    super.key,
     this.deliveryFee,
     this.id,
     this.productName,
@@ -475,28 +477,28 @@ class ProductClass extends StatelessWidget {
         double width = MediaQuery.of(context).size.width;
         double height = MediaQuery.of(context).size.height;
         return Scaffold(
-          floatingActionButton: isRequestFinished
-              ? FloatingActionButton(
-                  backgroundColor: const Color.fromARGB(255, 9, 134, 211),
-                  //add to cart button
-                  onPressed: () async {
-                    await OrderCubit.get(context).addToCart(context,
-                        cartItemId: cartItemId,
-                        productId: id,
-                        quantity: quantity,
-                        price: price,
-                        totalPrice: price! * quantity,
-                        restaurantId: restaurant,
-                        timeShift: currentTiming,
-                        ProductObject: this);
-                  },
+          // floatingActionButton: isRequestFinished
+          //     ? FloatingActionButton(
+          //         backgroundColor: const Color.fromARGB(255, 9, 134, 211),
+          //         //add to cart button
+          //         onPressed: () async {
+          //           await OrderCubit.get(context).addToCart(context,
+          //               cartItemId: cartItemId,
+          //               productId: id,
+          //               quantity: quantity,
+          //               price: price,
+          //               totalPrice: price! * quantity,
+          //               restaurantId: restaurant,
+          //               timeShift: currentTiming,
+          //               ProductObject: this);
+          //         },
 
-                  child: const Icon(Icons.add_shopping_cart_rounded),
-                )
-              : SizedBox(
-                  width: 100,
-                  child: Image.asset("assets/Images/loading2.gif"),
-                ),
+          //         child: const Icon(Icons.add_shopping_cart_rounded),
+          //       )
+          //     : SizedBox(
+          //         width: 100,
+          //         child: Image.asset("assets/Images/loading2.gif"),
+          //       ),
           appBar: appBar(context,
               subtitle: restaurantName.toString(), title: englishName),
           body: SingleChildScrollView(
@@ -649,13 +651,30 @@ class ProductClass extends StatelessWidget {
                     ),
                   ),
                 ),
+                isRequestFinished
+                    ? DefaultButton(
+                        function: () async {
+                          // OrderCubit.get(context).getPublicOrder(context);
+
+                          await OrderCubit.get(context).addToCart(context,
+                              cartItemId: cartItemId,
+                              productId: id,
+                              quantity: quantity,
+                              price: price,
+                              totalPrice: price! * quantity,
+                              restaurantId: restaurant,
+                              timeShift: currentTiming,
+                              ProductObject: this);
+                        },
+                        text: "Add to Cart")
+                    : SizedBox(
+                        width: 100,
+                        child: Image.asset("assets/Images/loading2.gif"),
+                      ),
                 SizedBox(
                   height: 50,
                   width: double.maxFinite,
-                  child: AdWidget(ad: bannerAd),
-                ),
-                const SizedBox(
-                  height: 40,
+                  // child: AdWidget(ad: bannerAd),
                 ),
               ],
             ),

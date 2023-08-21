@@ -6,7 +6,7 @@ import 'package:xeats/controllers/Cubits/OrderCubit/OrderCubit.dart';
 import 'package:xeats/views/HomePage/HomePage.dart';
 import 'package:xeats/views/WaitingRoom/waitingRoom.dart';
 
-import '../Product Class/Products_Class.dart';
+import 'Product Class/Products_Class.dart';
 
 class PaymentSummary extends StatefulWidget {
   PaymentSummary({

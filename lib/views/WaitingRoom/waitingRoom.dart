@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:xeats/controllers/Components/General%20Components/Components.dart';
-import 'package:xeats/controllers/Components/PaymentSummary/PaymentSummary.dart';
+import 'package:xeats/controllers/Components/PaymentSummary.dart';
 import 'package:xeats/controllers/Cubits/OrderCubit/OrderCubit.dart';
 import 'package:xeats/controllers/Cubits/OrderCubit/OrderStates.dart';
 import 'package:xeats/views/ThankYou/thankyou.dart';
@@ -155,7 +155,7 @@ class _WaitingRoomState extends State<WaitingRoom>
                                                                     index + 1
                                                                 ? Colors.black
                                                                 : const Color
-                                                                    .fromARGB(
+                                                                        .fromARGB(
                                                                     255,
                                                                     9,
                                                                     134,

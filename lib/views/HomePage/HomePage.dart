@@ -251,7 +251,7 @@ class _HomePageState extends State<HomePage> {
                                                                     ['Name'] ??
                                                                 const Loading(),
                                                         Colors: const Color
-                                                            .fromARGB(
+                                                                .fromARGB(
                                                             255, 5, 95, 9),
                                                         image: Image(
                                                           // loadingBuilder:

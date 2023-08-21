@@ -19,6 +19,7 @@ import 'package:xeats/controllers/Cubits/OrderCubit/OrderStates.dart';
 import 'package:xeats/controllers/Cubits/ProductsCubit/ProductsCubit.dart';
 import 'package:xeats/controllers/Dio/DioHelper.dart';
 import 'package:xeats/core/Constants/constants.dart';
+import 'package:xeats/core/logger.dart';
 import 'package:xeats/views/CategoryView/categoryView.dart';
 import 'package:xeats/views/ThankYou/thankyou.dart';
 import 'package:xeats/views/WaitingRoom/waitingRoom.dart';
@@ -46,6 +47,8 @@ class OrderCubit extends Cubit<OrderStates> {
         userCartID.setInt("cartIDSaved", value.data["Names"][0]['id']);
         cartID = value.data["Names"][0]['id'];
         print("cart id is 3 : $cartID");
+      }).catchError((error) {
+        print("User Didn't Logged in yet to have an id");
       });
     }
     emit(SuccessGetCartID());
@@ -210,7 +213,7 @@ class OrderCubit extends Cubit<OrderStates> {
                 Container(
                   margin: EdgeInsets.only(left: 10.w),
                   child: Text(
-                    "",
+                    "Feeh Eah",
                     style: GoogleFonts.poppins(
                       fontSize: 10,
                       color: Colors.white,
@@ -544,7 +547,7 @@ class OrderCubit extends Cubit<OrderStates> {
     }).catchError((error) {
       print("7a7a $error");
       print(PublicLocationId! + 1);
-      emit(getTimeStateFailier(error));
+      emit(getTimeStateFailier(error.toString()));
     });
   }
 
@@ -589,8 +592,9 @@ class OrderCubit extends Cubit<OrderStates> {
       emit(cancelOrderSuccefull());
       print(cancelOrderSuccefull());
     }).catchError((onError) {
+      AppLogger.e(onError.toString());
       emit(cancelOrderError(onError.toString()));
-      print(cancelOrderError(onError));
+      // print(cancelOrderError(onError));
       print(onError);
     });
   }
@@ -633,8 +637,6 @@ class OrderCubit extends Cubit<OrderStates> {
     await getPublicOrder(context).then((value) async {
       try {
         var endingOrderTime = DateTime.parse(EndingOrder);
-        var TimeOfLastOrder = DateTime.parse(LastOrder);
-
         bool CheckingDifference = DateTime.now()
             .isBefore(endingOrderTime.add(const Duration(minutes: 1)));
         endingOrderTimeSecond =
@@ -685,7 +687,7 @@ class OrderCubit extends Cubit<OrderStates> {
               }).catchError((onError) {
                 print(onError.toString());
               });
-            }
+            } else {}
           });
         } else {
           print("mmm");
@@ -734,6 +736,8 @@ class OrderCubit extends Cubit<OrderStates> {
         }
       } on FormatException {
         print("mmaaaaaaam");
+
+        // print("VALUE 4" + " " + "${value.data['Message']}");
         Dio().post(
             "${AppConstants.BaseUrl}/create_orders/${AuthCubit.get(context).EmailInforamtion}",
             data: {
@@ -795,6 +799,8 @@ class OrderCubit extends Cubit<OrderStates> {
         emit(checkOrderExistanceSuccessfuly());
         orderExistance = false;
         print("a7a");
+      } else if (AuthCubit.get(context).EmailInforamtion == null) {
+        print("User doesn't Login Yet");
       } else {
         LocationNumber = value.data["Names"][0]["deliver_to"];
         totalPrice = value.data["Names"][0]["totalPrice"];

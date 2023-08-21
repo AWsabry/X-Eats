@@ -62,6 +62,7 @@ dependencies:
   json_annotation:   
   flutter_polyline_points: 
   cached_network_image:
+  logger:
 
   flutter:
     sdk: flutter
