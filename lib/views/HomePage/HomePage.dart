@@ -93,7 +93,6 @@ class _HomePageState extends State<HomePage> {
         builder: ((context, state) {
           var cubit = AuthCubit.get(context);
           var navcubit = NavBarCubitcubit.get(context);
-          var productApi = ProductsCubit.MostSold;
           var FirstName = cubit.FirstName ?? '';
           print(OrderCubit.currentLocation);
           return SafeArea(
@@ -105,7 +104,7 @@ class _HomePageState extends State<HomePage> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     BlocBuilder<OrderCubit, OrderStates>(
-                      builder: (context, OrderStates) {
+                      builder: (Ordercontext, OrderStates) {
                         print(" Khaled $OrderStates");
 
                         var RestaurantsSlugApi =
@@ -251,13 +250,15 @@ class _HomePageState extends State<HomePage> {
                                                                     ['Name'] ??
                                                                 const Loading(),
                                                         Colors: const Color
-                                                                .fromARGB(
+                                                            .fromARGB(
                                                             255, 5, 95, 9),
                                                         image: Image(
-                                                          // loadingBuilder:
-                                                          //     (context, child, loadingProgress) {
-                                                          //   if (loadingProgress == null) {
-                                                          //     return text;
+                                                          // loadingBuilder: (context,
+                                                          //     child,
+                                                          //     loadingProgress) {
+                                                          //   if (loadingProgress ==
+                                                          //       null) {
+                                                          //     return Center();
                                                           //   }
                                                           //   return Center(
                                                           //     child: Loading(),
@@ -307,31 +308,40 @@ class _HomePageState extends State<HomePage> {
                                             ),
                                             SingleChildScrollView(
                                               scrollDirection: Axis.horizontal,
-                                              child: Row(
-                                                children: [
-                                                  ...List.generate(
-                                                    productApi.length,
-                                                    (index) {
-                                                      return ConditionalBuilder(
-                                                          fallback: (context) {
-                                                            return const Loading();
-                                                          },
-                                                          condition: productApi[
-                                                                      index]
-                                                                  ["image"] !=
-                                                              null,
-                                                          builder: (
-                                                            context,
-                                                          ) {
-                                                            double? price =
-                                                                productApi[
-                                                                        index]
-                                                                    ['price'];
-
+                                              child: ConditionalBuilder(
+                                                  fallback: (context) {
+                                                    return Padding(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              15.0),
+                                                      child: Text(
+                                                        'Coming Soon',
+                                                        style:
+                                                            GoogleFonts.poppins(
+                                                                fontSize: 16,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold),
+                                                      ),
+                                                    );
+                                                  },
+                                                  condition: ProductsCubit.get(
+                                                              context)
+                                                          .NoMostSoldProducts ==
+                                                      false,
+                                                  builder: (context) {
+                                                    return Row(
+                                                      children: [
+                                                        ...List.generate(
+                                                          ProductsCubit.get(
+                                                                  context)
+                                                              .MostSold
+                                                              .length,
+                                                          (index) {
                                                             return GestureDetector(
                                                               child:
                                                                   ProductView(
-                                                                      image: productApi[
+                                                                      image: ProductsCubit.get(context).MostSold[
                                                                               index][
                                                                           "image"],
                                                                       width:
@@ -340,8 +350,8 @@ class _HomePageState extends State<HomePage> {
                                                                       height:
                                                                           height /
                                                                               4.2,
-                                                                      data: productApi[
-                                                                              index]
+                                                                      data: ProductsCubit.get(context)
+                                                                              .MostSold[index]
                                                                           [
                                                                           "name"],
                                                                       Colors: Colors
@@ -353,24 +363,24 @@ class _HomePageState extends State<HomePage> {
                                                                                     context,
                                                                                     ProductClass().productDetails(
                                                                                       context,
-                                                                                      productName: productApi[index]["productName"],
-                                                                                      id: productApi[index]["id"],
-                                                                                      restaurant: productApi[index]["Restaurant"],
-                                                                                      image: "${AppConstants.BaseUrl}/uploads/" + productApi[index]["image"],
-                                                                                      price: price,
-                                                                                      englishName: productApi[index]["name"],
-                                                                                      arabicName: productApi[index]["ArabicName"],
-                                                                                      description: productApi[index]["description"] ?? "No Description for this Product",
-                                                                                      restaurantName: productApi[index]["Restaurant"].toString(),
+                                                                                      productName: ProductsCubit.get(context).MostSold[index]["productName"],
+                                                                                      id: ProductsCubit.get(context).MostSold[index]["id"],
+                                                                                      restaurant: ProductsCubit.get(context).MostSold[index]["Restaurant"],
+                                                                                      image: "${AppConstants.BaseUrl}/uploads/" + ProductsCubit.get(context).MostSold[index]["image"],
+                                                                                      price: ProductsCubit.get(context).MostSold[index]['price'],
+                                                                                      englishName: ProductsCubit.get(context).MostSold[index]["name"],
+                                                                                      arabicName: ProductsCubit.get(context).MostSold[index]["ArabicName"],
+                                                                                      description: ProductsCubit.get(context).MostSold[index]["description"] ?? "No Description for this Product",
+                                                                                      restaurantName: ProductsCubit.get(context).MostSold[index]["Restaurant"].toString(),
                                                                                     )),
                                                                               }),
                                                               onTap: () {},
                                                             );
-                                                          });
-                                                    },
-                                                  ),
-                                                ],
-                                              ),
+                                                          },
+                                                        ),
+                                                      ],
+                                                    );
+                                                  }),
                                             ),
                                           ],
                                         ),

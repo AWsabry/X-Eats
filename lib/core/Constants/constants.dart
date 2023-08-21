@@ -6,4 +6,6 @@ class AppConstants {
   static String restaurants = "Restaurants";
   static String PleaseSelectLocation = "Please Select Your Current Location";
   static String BaseUrl = "https://www.x-eats.com";
+  static String BackToHomePage =
+      "Please Select Your Current Location In HomePage";
 }

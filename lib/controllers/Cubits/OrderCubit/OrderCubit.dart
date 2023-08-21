@@ -2,6 +2,7 @@
 
 import 'dart:async';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:custom_timer/custom_timer.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -358,11 +359,13 @@ class OrderCubit extends Cubit<OrderStates> {
         await Dio()
             .get(
                 "${AppConstants.BaseUrl}/get_restaurants_by_location/${slug["location_slug"]}")
-            .then((value) {
+            .then((value) async {
           restuarantsOfSlugList = value.data["Names"];
           PublicLocationId = slug["id"] - 1;
+          ProductsCubit.get(context).NoNewProducts = false;
+          ProductsCubit.get(context).NoMostSoldProducts = false;
+          ProductsCubit.get(context).NewProducts(context);
           ProductsCubit.get(context).GetMostSoldProducts(context);
-
           print(PublicLocationId);
           emit(getRestuarantsOfSlugStates());
         });

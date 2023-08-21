@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:xeats/controllers/Components/General%20Components/Components.dart';
 import 'package:xeats/controllers/Cubits/OrderCubit/OrderCubit.dart';
 import 'package:xeats/controllers/Cubits/OrderCubit/OrderStates.dart';
+import 'package:xeats/controllers/Cubits/ProductsCubit/ProductsCubit.dart';
 import 'package:xeats/core/Constants/constants.dart';
 import 'package:xeats/views/Cart/Cart.dart';
 

@@ -162,8 +162,10 @@ class _PaymentSummaryState extends State<PaymentSummary> {
                             style: ButtonStyle(
                                 backgroundColor: MaterialStateProperty.all(
                                     const Color.fromARGB(255, 9, 134, 211))),
-                            onPressed: () {
-                              OrderCubit.get(context).clostTime().then((value) {
+                            onPressed: () async {
+                              await OrderCubit.get(context)
+                                  .clostTime()
+                                  .then((value) {
                                 OrderCubit.get(context)
                                     .cancelOrders(widget.Orderid, context);
                                 NavigateAndRemov(context, const HomePage());

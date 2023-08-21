@@ -14,28 +14,44 @@ class ProductsCubit extends Cubit<ProductsStates> {
   static ProductsCubit get(context) => BlocProvider.of(context);
   TextEditingController searchController = TextEditingController();
 
-  static List<dynamic> MostSold = [];
+  List<dynamic> MostSold = [];
   Map itemImages = {};
-
+  bool? NoMostSoldProducts;
   void GetMostSoldProducts(context) {
+    MostSold.clear();
+    emit(mostSoldProductsStateLoading());
     DioHelper.getdata(
         url:
             'get_products_mostSold_products/${OrderCubit.PublicLocationId! + 1}',
         query: {}).then((value) async {
       MostSold = value.data['Names'];
-
-      emit(ProductsSuccess());
+      if (MostSold.isEmpty) {
+        NoMostSoldProducts = true;
+      } else {
+        NoMostSoldProducts = false;
+      }
+      emit(MostSoldProductsStateSuccessfull());
     }).catchError((error) {});
   }
 
   static List<dynamic> new_products = [];
+  bool NoNewProducts = false;
+
   void NewProducts(context) {
+    emit(newProductsStateLoading());
     DioHelper.getdata(
         url: 'get_products_new_products/${OrderCubit.PublicLocationId! + 1}',
         query: {}).then((value) {
       new_products = value.data['Names'];
-      emit(ProductsSuccess());
-    }).catchError((error) {});
+      if (new_products.isEmpty) {
+        NoNewProducts = true;
+      } else {
+        NoNewProducts = false;
+      }
+      emit(NewProductsStateSuccessfull());
+    }).catchError((error) {
+      emit(newProductsStateFailed(error));
+    });
   }
 
   static List<dynamic> getposters = [];
@@ -43,7 +59,7 @@ class ProductsCubit extends Cubit<ProductsStates> {
     DioHelper.getdata(url: 'get_poster/', query: {}).then((value) {
       getposters = value.data['Names'];
 
-      emit(ProductsSuccess());
+      emit(getPosterStateSuccessfull());
     }).catchError((error) {});
   }
 
