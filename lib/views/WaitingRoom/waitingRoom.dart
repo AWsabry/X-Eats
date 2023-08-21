@@ -17,13 +17,19 @@ class WaitingRoom extends StatefulWidget {
       this.count,
       this.TimeOfLastOrder,
       this.LengthOfPublicOrders,
+      this.LocationNumber,
+      this.canCancelled,
+      this.subtotal,
       this.OrderId})
       : super(key: key);
   var endingOrderTimeSecond;
   var count;
+  int? LocationNumber;
   DateTime? TimeOfLastOrder;
   var LengthOfPublicOrders;
   int? OrderId;
+  double? subtotal;
+  bool? canCancelled;
   @override
   State<WaitingRoom> createState() => _WaitingRoomState();
 }
@@ -35,20 +41,20 @@ class _WaitingRoomState extends State<WaitingRoom>
     super.initState();
   }
 
-  late final CustomTimerController _controller = CustomTimerController(
-    vsync: this,
-    begin: Duration(seconds: widget.endingOrderTimeSecond),
-    end: const Duration(seconds: 0),
-    initialState: CustomTimerState.reset,
-    interval: CustomTimerInterval.seconds,
-  );
-
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
-    _controller.start();
-
+    OrderCubit.timerController = CustomTimerController(
+      vsync: this,
+      begin: Duration(seconds: widget.endingOrderTimeSecond),
+      end: const Duration(seconds: 0),
+      initialState: CustomTimerState.reset,
+      interval: CustomTimerInterval.seconds,
+    );
+    setState(() {
+      OrderCubit.get(context).startTime(context);
+    });
     Future.delayed(Duration(seconds: widget.endingOrderTimeSecond))
         .then((value) {
       OrderCubit.get(context).ConfirmAllPublicOrders(context);
@@ -57,15 +63,16 @@ class _WaitingRoomState extends State<WaitingRoom>
 
     return BlocProvider(
       create: (context) => OrderCubit()
-        ..deliveryFees()
         ..clickableChange()
-        ..getPublicOrder(context),
+        ..getPublicOrder(context, LocationNumber: widget.LocationNumber)
+        ..deliveryFees(context, locaionNumber: widget.LocationNumber),
       child: BlocBuilder<OrderCubit, OrderStates>(builder: (context, state) {
         return Scaffold(
           body: SafeArea(
             child: RefreshIndicator(
               onRefresh: () async {
-                await OrderCubit.get(context).getPublicOrder(context);
+                OrderCubit.get(context).getPublicOrder(context,
+                    LocationNumber: widget.LocationNumber);
               },
               child: SingleChildScrollView(
                 child: SizedBox(
@@ -98,12 +105,13 @@ class _WaitingRoomState extends State<WaitingRoom>
                                     children: [
                                       Center(
                                         child: CustomTimer(
-                                          controller: _controller,
+                                          controller:
+                                              OrderCubit.timerController!,
                                           builder: (state, time) {
                                             return Text(
                                                 "${time.minutes}:${time.seconds}",
-                                                style:
-                                                    const TextStyle(fontSize: 24.0));
+                                                style: const TextStyle(
+                                                    fontSize: 24.0));
                                           },
                                         ),
                                       ),
@@ -147,7 +155,7 @@ class _WaitingRoomState extends State<WaitingRoom>
                                                                     index + 1
                                                                 ? Colors.black
                                                                 : const Color
-                                                                        .fromARGB(
+                                                                    .fromARGB(
                                                                     255,
                                                                     9,
                                                                     134,
@@ -210,6 +218,8 @@ class _WaitingRoomState extends State<WaitingRoom>
                                   PaymentSummary(
                                     widget: widget,
                                     Orderid: widget.OrderId,
+                                    SubTotal: widget.subtotal,
+                                    CanCancelled: widget.canCancelled,
                                   )
                                 ],
                               ),

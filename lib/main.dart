@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:xeats/controllers/Components/ObServer/BlocObserver.dart';
 import 'package:xeats/controllers/Cubits/AuthCubit/cubit.dart';
 import 'package:xeats/controllers/Cubits/ButtomNavigationBarCubit/navigationCubit.dart';
 import 'package:xeats/controllers/Cubits/OrderCubit/OrderCubit.dart';
@@ -23,6 +24,8 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 }
 
 void main() async {
+  Bloc.observer = MyBlocObserver();
+
   DioHelper.init();
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
@@ -119,18 +122,13 @@ class _MyAppState extends State<MyApp> {
           BlocProvider(create: (context) => RestuarantsCubit()),
           BlocProvider(create: (context) => AuthCubit()..GettingUserData()),
           BlocProvider(create: (context) => NavBarCubitcubit()),
-          BlocProvider(
-              create: (context) => ProductsCubit()
-                // ..GetMostSoldProducts()
-                ..getPoster()
+          BlocProvider(create: (context) => ProductsCubit()
+              // ..GetMostSoldProducts()
+
               // ..NewProducts(),
               ),
           BlocProvider(
-            create: (context) => OrderCubit()
-              ..getCartID(context)
-              ..getLocation()
-              ..deliveryFees(),
-          )
+              create: (context) => OrderCubit()..checkOrderExistence(context))
         ],
         child: ScreenUtilInit(
           designSize: const Size(415, 900),

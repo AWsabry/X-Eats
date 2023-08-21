@@ -42,7 +42,11 @@ class getDeliveryFeesStateError extends SuperOrderStates {
 
 class getTimePublicStateSuccess extends SuperOrderStates {}
 
-class getTimeStateFailier extends SuperOrderStates {}
+class getTimeStateFailier extends SuperOrderStates {
+  final String error;
+
+  getTimeStateFailier(this.error);
+}
 
 class getRestuarantsOfSlugStates extends SuperOrderStates {}
 
@@ -55,3 +59,23 @@ class confirmOrderBefore20MinutesState extends SuperOrderStates {}
 class ClickableState extends SuperOrderStates {}
 
 class cancelOrderSuccefull extends SuperOrderStates {}
+
+class cancelOrderError extends SuperOrderStates {
+  final String error;
+
+  cancelOrderError(this.error);
+}
+
+class timeStartedState extends SuperOrderStates {}
+
+class timeFinishedState extends SuperOrderStates {}
+
+class InitialcheckOrderExistance extends SuperOrderStates {}
+
+class checkOrderExistanceSuccessfuly extends SuperOrderStates {}
+
+class checkOrderExistanceFailed extends SuperOrderStates {
+  final String Error;
+
+  checkOrderExistanceFailed(this.Error);
+}

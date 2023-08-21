@@ -7,7 +7,7 @@ import Foundation
 
 import awesome_notifications
 import cloud_firestore
-import connectivity_macos
+import connectivity_plus
 import firebase_auth
 import firebase_core
 import firebase_messaging

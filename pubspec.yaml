@@ -32,7 +32,7 @@ dependencies:
   timer_count_down: ^2.2.0
   custom_timer: ^0.2.3
   # new_version_plus: 
-  launch_review: ^3.0.1
+  # launch_review: ^3.0.1
   bloc:
   flutter_bloc:
   intl:
@@ -54,7 +54,7 @@ dependencies:
   cupertino_icons:
   conditional_builder_null_safety:
   flutter_launcher_icons:
-  connectivity:
+  connectivity_plus:
   pull_to_refresh:
   url_launcher:
   firebase_auth:

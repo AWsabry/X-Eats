@@ -13,9 +13,13 @@ class PaymentSummary extends StatefulWidget {
     super.key,
     required this.widget,
     this.Orderid,
+    this.CanCancelled,
+    this.SubTotal,
   });
   int? Orderid;
+  double? SubTotal;
   final WaitingRoom widget;
+  bool? CanCancelled;
 
   @override
   State<PaymentSummary> createState() => _PaymentSummaryState();
@@ -62,7 +66,7 @@ class _PaymentSummaryState extends State<PaymentSummary> {
                       Padding(
                         padding: const EdgeInsets.only(right: 18.0),
                         child: Text(
-                          "EGP ${ProductClass.getSubtotal()}",
+                          "EGP ${ProductClass.getSubtotal() == 0.0 ? widget.SubTotal : ProductClass.getSubtotal()}",
                           style: GoogleFonts.poppins(
                               fontSize: 15, color: Colors.white),
                         ),
@@ -128,7 +132,7 @@ class _PaymentSummaryState extends State<PaymentSummary> {
                       Padding(
                         padding: const EdgeInsets.only(right: 18.0),
                         child: Text(
-                          "EGP ${ProductClass.getSubtotal() + (OrderCubit.deliveryfees! / 4) + (OrderCubit.deliveryfees! / widget.widget.count)}",
+                          "EGP ${(ProductClass.getSubtotal() == 0.0 ? widget.SubTotal : ProductClass.getSubtotal())! + (OrderCubit.deliveryfees! / 4) + (OrderCubit.deliveryfees! / widget.widget.count)}",
                           style: GoogleFonts.poppins(
                             fontSize: 15,
                             color: Colors.white,
@@ -144,7 +148,8 @@ class _PaymentSummaryState extends State<PaymentSummary> {
                   Padding(
                     padding: const EdgeInsets.only(right: 18.0),
                     child: ConditionalBuilder(
-                      condition: OrderCubit.get(context).clikable == false,
+                      condition: OrderCubit.get(context).clikable == false ||
+                          widget.CanCancelled == false,
                       fallback: (context) {
                         return Container(
                           width: 353,
@@ -158,10 +163,11 @@ class _PaymentSummaryState extends State<PaymentSummary> {
                                 backgroundColor: MaterialStateProperty.all(
                                     const Color.fromARGB(255, 9, 134, 211))),
                             onPressed: () {
-                              OrderCubit.get(context)
-                                  .cancelOrders(context, widget.Orderid);
-                              print(widget.Orderid);
-                              NavigateAndRemov(context, const HomePage());
+                              OrderCubit.get(context).clostTime().then((value) {
+                                OrderCubit.get(context)
+                                    .cancelOrders(widget.Orderid, context);
+                                NavigateAndRemov(context, const HomePage());
+                              });
                             },
                             child: const Center(
                               child: Text(

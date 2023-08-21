@@ -210,7 +210,7 @@ class _CartState extends State<Cart> {
                                                           20))),
                                           onPressed: () async {
                                             await OrderCubit.get(context)
-                                                .deliveryFees();
+                                                .deliveryFees(context);
                                             if (ProductsCubit.get(context)
                                                     .privacy ==
                                                 Privacy.Private) {

@@ -2,6 +2,7 @@
 
 import 'dart:async';
 
+import 'package:custom_timer/custom_timer.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -496,7 +497,7 @@ class OrderCubit extends Cubit<OrderStates> {
           "${AppConstants.BaseUrl}/notification_tokens",
           data: {"token": token},
         )
-        .then((value) => print("WELCOME" "${value.data}"))
+        .then((value) => print("WELCOMEEEEEE" "${value.data}"))
         .catchError((e) {
           var dioException = e as DioError;
 
@@ -519,35 +520,47 @@ class OrderCubit extends Cubit<OrderStates> {
   String LastOrder = "";
   int? LengthOfPublicOrders;
   int? OrderId;
-  Future<void> getPublicOrder(context) async {
+  int? FirstOrderId;
+  Future<void> getPublicOrder(context, {int? LocationNumber}) async {
     emit(getTimeStateLoading());
 
     await Dio()
         .get(
-            "${AppConstants.BaseUrl}/get_time_of_first_public_order_in_location/${PublicLocationId! + 1}")
+            "${AppConstants.BaseUrl}/get_time_of_first_public_order_in_location/${PublicLocationId != null ? PublicLocationId! + 1 : LocationNumber}")
         .then((value) {
-      OrdersssPendeing = value.data["Names"];
-      EndingOrder = value.data["end_on"];
-      count = value.data["count"];
-      LengthOfPublicOrders = value.data["Names"].length - 1;
-      LastOrder = value.data["Names"][LengthOfPublicOrders]["ordered_date"];
-      // OrderId = value.data["Names"][LengthOfPublicOrders]["id"];
-      print(count);
+      if (value.data["count"] == 0) {
+        count = value.data["count"];
+      } else {
+        count = value.data["count"];
+
+        OrdersssPendeing = value.data["Names"];
+        EndingOrder = value.data["end_on"];
+        LengthOfPublicOrders = value.data["Names"].length - 1;
+        LastOrder = value.data["Names"][LengthOfPublicOrders]["ordered_date"];
+        // OrderId = value.data["Names"][LengthOfPublicOrders]["id"];
+        print(count);
+      }
       emit(getTimeStateSuccess());
     }).catchError((error) {
       print("7a7a $error");
-      emit(getTimeStateFailier());
+      print(PublicLocationId! + 1);
+      emit(getTimeStateFailier(error));
     });
   }
 
   static double? deliveryfees;
   static String? LocationName;
-  Future<void> deliveryFees() async {
+  Future<void> deliveryFees(context, {var locaionNumber}) async {
     emit(getDeliveryFeesLoadingState());
+    print("semosemosemo $locaionNumber");
+    await Dio().get("${AppConstants.BaseUrl}/get_Delivery_Fees/").then((value) {
+      deliveryfees = value.data["Names"]
+              [PublicLocationId == null ? locaionNumber - 1 : PublicLocationId]
+          ["delivery_fees"];
+      LocationName = value.data["Names"]
+              [PublicLocationId == null ? locaionNumber - 1 : PublicLocationId]
+          ["location"];
 
-    await Dio().get("${AppConstants.BaseUrl}/get_Delivery_Fees").then((value) {
-      deliveryfees = value.data["Names"][PublicLocationId]["delivery_fees"];
-      LocationName = value.data["Names"][PublicLocationId]["location"];
       emit(getDeliveryFeesState());
     }).catchError((onError) {
       print(onError);
@@ -560,13 +573,24 @@ class OrderCubit extends Cubit<OrderStates> {
     );
   }
 
-  void cancelOrders(context, Orderid) async {
-    await Dio()
-        .post("${AppConstants.BaseUrl}/cancel_order/$Orderid")
-        .then((value) {
+  static CustomTimerController? timerController;
+  void startTime(context) {
+    timerController!.start();
+    emit(timeStartedState());
+  }
+
+  Future<void> clostTime() async {
+    timerController!.dispose();
+    emit(timeFinishedState());
+  }
+
+  void cancelOrders(Orderid, context) {
+    Dio().post("${AppConstants.BaseUrl}/cancel_order/$Orderid").then((value) {
       emit(cancelOrderSuccefull());
       print(cancelOrderSuccefull());
     }).catchError((onError) {
+      emit(cancelOrderError(onError.toString()));
+      print(cancelOrderError(onError));
       print(onError);
     });
   }
@@ -751,6 +775,67 @@ class OrderCubit extends Cubit<OrderStates> {
           }
         });
       }
+    });
+  }
+
+  int? LocationNumber;
+  bool? orderExistance;
+  var TimeOf5minutes;
+  bool CanCancelled = true;
+  var OrderIdOfExistence;
+  double? totalPrice;
+  void checkOrderExistence(context) {
+    emit(InitialcheckOrderExistance());
+    Dio()
+        .get(
+            "${AppConstants.BaseUrl}/check_order_existence/${AuthCubit.get(context).EmailInforamtion}")
+        .then((value) {
+      if (value.data["Names"] == "[]" ||
+          value.data["Names"][0]["status"] != "Pending") {
+        emit(checkOrderExistanceSuccessfuly());
+        orderExistance = false;
+        print("a7a");
+      } else {
+        LocationNumber = value.data["Names"][0]["deliver_to"];
+        totalPrice = value.data["Names"][0]["totalPrice"];
+        print("aaaaaaa$totalPrice");
+        emit(checkOrderExistanceSuccessfuly());
+
+        Dio()
+            .get(
+                "${AppConstants.BaseUrl}/get_time_of_first_public_order_in_location/$LocationNumber")
+            .then((value1) {
+          OrderIdOfExistence = value.data["Names"][0]["id"];
+          FirstOrderId = value1.data["Names"][0]["id"];
+          count = (OrderIdOfExistence - FirstOrderId) + 1;
+          EndingOrder = value1.data["end_on"];
+          var endingOrderTime = DateTime.parse(EndingOrder);
+          print(endingOrderTime.difference(DateTime.now()).inMinutes);
+          var OrderedDateExistance =
+              DateTime.parse(value.data["Names"][0]["ordered_date"]);
+
+          endingOrderTimeSecond =
+              endingOrderTime.difference(DateTime.now()).inSeconds;
+          TimeOf5minutes =
+              DateTime.now().difference(OrderedDateExistance).inMinutes;
+          if (TimeOf5minutes >= 5) {
+            CanCancelled = false;
+          } else {}
+          bool CheckingDifference = DateTime.now()
+              .isBefore(endingOrderTime.add(const Duration(minutes: 1)));
+          if (CheckingDifference == false) {
+            Dio().post(
+                "${AppConstants.BaseUrl}/get_time_of_first_public_order_in_location/$LocationNumber");
+            print("om");
+          } else {
+            orderExistance = true;
+          }
+        });
+      }
+      emit(checkOrderExistanceSuccessfuly());
+    }).catchError((error) {
+      emit(checkOrderExistanceFailed(error));
+      print(checkOrderExistanceFailed(error).toString());
     });
   }
 }

@@ -9,6 +9,7 @@ import 'package:xeats/controllers/Cubits/AuthCubit/cubit.dart';
 import 'package:xeats/controllers/Cubits/OrderCubit/OrderCubit.dart';
 import 'package:xeats/views/Layout/Layout.dart';
 import 'package:xeats/views/SignIn/SignIn.dart';
+import 'package:xeats/views/WaitingRoom/waitingRoom.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -94,12 +95,36 @@ class _SplashScreenState extends State<SplashScreen> {
   Future init(context) async {
     AuthCubit.get(context).GettingUserData();
     OrderCubit.get(context).getCartID(context);
-    // print(AuthCubit.get(context).GettingUserData());
-
+    Future.delayed(const Duration(seconds: 0)).then((value) {
+      OrderCubit.get(context).checkOrderExistence(context);
+    });
     Future.delayed(const Duration(seconds: 6)).then(
       (value) {
         if (AuthCubit.get(context).EmailInforamtion != null) {
-          NavigateAndRemov(context, Layout());
+          print(
+            OrderCubit.get(context).endingOrderTimeSecond,
+          );
+          print(
+            OrderCubit.get(context).count,
+          );
+          print(
+            OrderCubit.get(context).OrderIdOfExistence,
+          );
+          if (OrderCubit.get(context).orderExistance == true) {
+            NavigateAndRemov(
+                context,
+                WaitingRoom(
+                  canCancelled: OrderCubit.get(context).CanCancelled,
+                  LocationNumber: OrderCubit.get(context).LocationNumber,
+                  endingOrderTimeSecond:
+                      OrderCubit.get(context).endingOrderTimeSecond,
+                  count: OrderCubit.get(context).count,
+                  subtotal: OrderCubit.get(context).totalPrice,
+                  OrderId: OrderCubit.get(context).OrderIdOfExistence,
+                ));
+          } else {
+            NavigateAndRemov(context, Layout());
+          }
         } else {
           NavigateAndRemov(context, SignIn());
         }
@@ -124,6 +149,7 @@ class _SplashScreenState extends State<SplashScreen> {
               body: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  // Text(OrderCubit.get(context).orderExistance.toString()),
                   Padding(
                     padding: const EdgeInsets.only(left: 5),
                     child: Image(

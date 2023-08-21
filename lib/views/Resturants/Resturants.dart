@@ -81,9 +81,10 @@ class Restaurants extends StatelessWidget {
                                                 context,
                                                 ProductClass().productDetails(
                                                   context,
-                                                  image: "${AppConstants.BaseUrl}/uploads/" +
-                                                      newProducts[index]
-                                                          ["image"],
+                                                  image:
+                                                      "${AppConstants.BaseUrl}/uploads/" +
+                                                          newProducts[index]
+                                                              ["image"],
                                                   id: newProducts[index]['id'],
                                                   restaurant: newProducts[index]
                                                       ['Restaurant'],

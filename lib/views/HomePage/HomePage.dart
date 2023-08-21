@@ -1,8 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
-
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
-import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -82,7 +81,7 @@ class _HomePageState extends State<HomePage> {
             ..getCartID(context)
             ..getLocation()
             ..getRestaurantsOfLocation(context)
-            ..deliveryFees(),
+            ..deliveryFees(context),
         ),
         BlocProvider(create: (context) => ProductsCubit()..getPoster()),
         BlocProvider(
@@ -122,7 +121,8 @@ class _HomePageState extends State<HomePage> {
                                     ),
                                     Center(
                                       child: Container(
-                                          child: const CircularProgressIndicator()),
+                                          child:
+                                              const CircularProgressIndicator()),
                                     ),
                                   ],
                                 );
@@ -156,7 +156,8 @@ class _HomePageState extends State<HomePage> {
                                     ),
                                     Center(
                                       child: Container(
-                                          child: const CircularProgressIndicator()),
+                                          child:
+                                              const CircularProgressIndicator()),
                                     ),
                                   ],
                                 );
@@ -196,7 +197,8 @@ class _HomePageState extends State<HomePage> {
                                             ConditionalBuilder(
                                                 condition: ProductsCubit
                                                     .getposters.isNotEmpty,
-                                                fallback: (context) => const Center(
+                                                fallback: (context) =>
+                                                    const Center(
                                                       child: Loading(),
                                                     ),
                                                 builder: (context) =>
@@ -249,7 +251,7 @@ class _HomePageState extends State<HomePage> {
                                                                     ['Name'] ??
                                                                 const Loading(),
                                                         Colors: const Color
-                                                                .fromARGB(
+                                                            .fromARGB(
                                                             255, 5, 95, 9),
                                                         image: Image(
                                                           // loadingBuilder:

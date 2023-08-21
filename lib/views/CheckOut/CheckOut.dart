@@ -105,6 +105,7 @@ class CheckOut extends StatelessWidget {
                       )),
                   DefaultButton(
                       function: () {
+                        // OrderCubit.get(context).getPublicOrder(context);
                         OrderCubit.get(context).confirmOrder(context, Private);
                       },
                       text: "Order Now")
