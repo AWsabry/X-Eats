@@ -1,5 +1,4 @@
 // ignore_for_file: use_build_context_synchronously
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
@@ -90,7 +89,7 @@ class HomePage extends StatelessWidget {
           var navcubit = NavBarCubitcubit.get(context);
           var FirstName = cubit.FirstName ?? '';
           Logger().i(MostSoldProducts);
-          Logger().e(ProductsCubit.NoMostSoldProducts);
+
           return SafeArea(
             child: Scaffold(
               appBar: LocationBar(context),
@@ -246,7 +245,7 @@ class HomePage extends StatelessWidget {
                                                                     ['Name'] ??
                                                                 const Loading(),
                                                         Colors: const Color
-                                                            .fromARGB(
+                                                                .fromARGB(
                                                             255, 5, 95, 9),
                                                         image: Image(
                                                           // loadingBuilder: (context,

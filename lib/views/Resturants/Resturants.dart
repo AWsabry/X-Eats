@@ -15,7 +15,6 @@ import 'package:xeats/controllers/Cubits/ProductsCubit/ProductsCubit.dart';
 import 'package:xeats/controllers/Cubits/ProductsCubit/ProductsStates.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:xeats/core/Constants/constants.dart';
-import 'package:xeats/views/HomePage/HomePage.dart';
 import 'package:xeats/views/Layout/Layout.dart';
 import 'package:xeats/views/Profile/Profile.dart';
 import 'package:xeats/views/ResturantsMenu/ResturantsMenu.dart';
@@ -48,7 +47,7 @@ class Restaurants extends StatelessWidget {
               ProductsCubit.get(context).new_products ?? [];
           var navcubit = NavBarCubitcubit.get(context);
           var Connection = false;
-          Logger().e(newProducts);
+          Logger().i(newProducts);
 
           return Scaffold(
             appBar: appBar(context, subtitle: 'X-Eats', title: 'Restaurants'),

@@ -1,8 +1,6 @@
 // ignore_for_file: invalid_return_type_for_catch_error, body_might_complete_normally_catch_error
 
 import 'dart:async';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:custom_timer/custom_timer.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';

@@ -30,3 +30,38 @@ This project is a starting point for a Flutter application, the website is X-Eat
     <img src="assets/06.jpg" width="200px"</img>
     <img src="assets/07.jpg" width="200px"</img>
 </div>
+
+<div align="right">
+- Restaurant Error when doesn't logged in -- Done
+
+- Order From Multiable Restaurant not added
+
+- Image doesn't load coming from the cart & going to the product Details, Story :
+When I add a product to the carrt, then click on the product to update the quantity, the product detail screen doesn't load the image -- Done
+
+- The app bar when it returns back from the cart takes to much time to load
+
+-Messages on mobile check by status code & get it from the backend message.
+
+- When Deleting cartItem, it should auto navigate to home page if cart is empty
+
+- if location is not containing restaurants, return a message in the center of the screen that x-eats will be operating to your location soon, not the same message "Please select your current location" 
+
+Cancelling : -- done
+
+Cancelling orders is not working due to the emitting bug
+
+When I press cancel, the order is not cancelled, but it navigate to the home page and after even refreshing the order existence is not working to return me to the waiting room
+
+Note : The order is not cancelled after the first request, but after refreshing, it returns me to the home page, after another refresh, it returns me to the waiting room then the order is cancelled successfully
+
+- The Search from the endpoint
+
+- Change the getRestaurantsOfLocation, location from the order cubit to the restaurant cubit
+
+- What is the diff between the general & the global components
+
+- Give Me Direct Loading after pressing order not in checkout
+
+- Give me message when cancelled
+</div>

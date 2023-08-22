@@ -19,7 +19,7 @@ class CheckOut extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<OrderCubit, OrderStates>(builder: (context, state) {
-      double deliveryFees = OrderCubit.deliveryfees ?? 15;
+      double deliveryFees = OrderCubit.deliveryfees ?? 20;
 
       return Scaffold(
         appBar: AppBar(

@@ -6,6 +6,7 @@ import 'package:xeats/controllers/Cubits/OrderCubit/OrderCubit.dart';
 import 'package:xeats/controllers/Cubits/ProductsCubit/ProductsStates.dart';
 import 'package:xeats/controllers/Dio/DioHelper.dart';
 import 'package:xeats/core/Constants/constants.dart';
+import 'package:xeats/core/logger.dart';
 
 enum Privacy { Private, Public }
 
@@ -30,7 +31,9 @@ class ProductsCubit extends Cubit<ProductsStates> {
         NoMostSoldProducts = false;
       }
       emit(MostSoldProductsStateSuccessfull());
-    }).catchError((error) {});
+    }).catchError((error) {
+      AppLogger.i(NoMostSoldProducts.toString());
+    });
   }
 
   List<dynamic> new_products = [];
