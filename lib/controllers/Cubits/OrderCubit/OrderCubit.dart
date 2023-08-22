@@ -369,9 +369,10 @@ class OrderCubit extends Cubit<OrderStates> {
           restuarantsOfSlugList = value.data["Names"];
           PublicLocationId = slug["id"] - 1;
           ProductsCubit.NoNewProducts = false;
-          ProductsCubit.NoMostSoldProducts = false;
           ProductsCubit.get(context).NewProducts(context);
+          ProductsCubit.NoMostSoldProducts = false;
           ProductsCubit.get(context).GetMostSoldProducts(context);
+          Logger().e(value);
           print(PublicLocationId);
           emit(getRestuarantsOfSlugStates());
         });

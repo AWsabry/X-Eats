@@ -161,7 +161,7 @@ class _CartState extends State<Cart> {
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
                                   const Text(
-                                    "Slide Left to delete an Item",
+                                    "Slide Left or Right to delete an Item",
                                     style: TextStyle(color: Colors.red),
                                   ),
                                   SizedBox(

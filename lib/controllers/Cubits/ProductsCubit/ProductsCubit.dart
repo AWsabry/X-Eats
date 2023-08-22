@@ -14,7 +14,7 @@ class ProductsCubit extends Cubit<ProductsStates> {
   static ProductsCubit get(context) => BlocProvider.of(context);
   TextEditingController searchController = TextEditingController();
 
-  List<dynamic> MostSold = [];
+  static List<dynamic> MostSold = [];
   Map itemImages = {};
   static bool? NoMostSoldProducts;
   void GetMostSoldProducts(context) {
@@ -22,7 +22,7 @@ class ProductsCubit extends Cubit<ProductsStates> {
     DioHelper.getdata(
         url:
             'get_products_mostSold_products/${OrderCubit.PublicLocationId! + 1}',
-        query: {}).then((value) async {
+        query: {}).then((value) {
       MostSold = value.data['Names'];
       if (MostSold.isEmpty) {
         NoMostSoldProducts = true;

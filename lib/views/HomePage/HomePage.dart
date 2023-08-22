@@ -27,23 +27,17 @@ import 'package:xeats/views/Profile/Profile.dart';
 import 'package:xeats/views/Resturants/Resturants.dart';
 import 'package:xeats/views/ResturantsMenu/ResturantsMenu.dart';
 
-class HomePage extends StatefulWidget {
+// Future<bool> check() async {
+//     var connectivityResult = await (Connectivity().checkConnectivity());
+//     if (connectivityResult == ConnectivityResult.mobile) {
+//       return true;
+//     } else if (connectivityResult == ConnectivityResult.wifi) {
+//       return true;
+//     }
+//     return false;
+//   }
+class HomePage extends StatelessWidget {
   const HomePage({super.key});
-
-  @override
-  State<HomePage> createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
-  Future<bool> check() async {
-    var connectivityResult = await (Connectivity().checkConnectivity());
-    if (connectivityResult == ConnectivityResult.mobile) {
-      return true;
-    } else if (connectivityResult == ConnectivityResult.wifi) {
-      return true;
-    }
-    return false;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -91,11 +85,12 @@ class _HomePageState extends State<HomePage> {
       child: BlocConsumer<ProductsCubit, ProductsStates>(
         listener: (context, state) {},
         builder: ((context, state) {
-          var MostSoldProducts = ProductsCubit.get(context).MostSold;
+          List<dynamic> MostSoldProducts = ProductsCubit.MostSold ?? [];
           var cubit = AuthCubit.get(context);
           var navcubit = NavBarCubitcubit.get(context);
           var FirstName = cubit.FirstName ?? '';
           Logger().i(MostSoldProducts);
+          Logger().e(ProductsCubit.NoMostSoldProducts);
           return SafeArea(
             child: Scaffold(
               appBar: LocationBar(context),
@@ -327,8 +322,11 @@ class _HomePageState extends State<HomePage> {
                                                     );
                                                   },
                                                   condition: ProductsCubit
-                                                          .NoMostSoldProducts ==
-                                                      false,
+                                                              .NoMostSoldProducts ==
+                                                          false ||
+                                                      ProductsCubit
+                                                              .NoMostSoldProducts ==
+                                                          null,
                                                   builder: (context) {
                                                     return Row(
                                                       children: [
@@ -348,8 +346,8 @@ class _HomePageState extends State<HomePage> {
                                                                       height:
                                                                           height /
                                                                               4.2,
-                                                                      data: ProductsCubit.get(context)
-                                                                              .MostSold[index]
+                                                                      data: MostSoldProducts[
+                                                                              index]
                                                                           [
                                                                           "name"],
                                                                       Colors: Colors
