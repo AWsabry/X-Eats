@@ -16,9 +16,8 @@ class ProductsCubit extends Cubit<ProductsStates> {
 
   List<dynamic> MostSold = [];
   Map itemImages = {};
-  bool? NoMostSoldProducts;
+  static bool? NoMostSoldProducts;
   void GetMostSoldProducts(context) {
-    MostSold.clear();
     emit(mostSoldProductsStateLoading());
     DioHelper.getdata(
         url:
@@ -34,8 +33,8 @@ class ProductsCubit extends Cubit<ProductsStates> {
     }).catchError((error) {});
   }
 
-  static List<dynamic> new_products = [];
-  bool NoNewProducts = false;
+  List<dynamic> new_products = [];
+  static bool? NoNewProducts;
 
   void NewProducts(context) {
     emit(newProductsStateLoading());

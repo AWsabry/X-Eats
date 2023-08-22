@@ -52,9 +52,7 @@ class _WaitingRoomState extends State<WaitingRoom>
       initialState: CustomTimerState.reset,
       interval: CustomTimerInterval.seconds,
     );
-    setState(() {
-      OrderCubit.get(context).startTime(context);
-    });
+
     Future.delayed(Duration(seconds: widget.endingOrderTimeSecond))
         .then((value) {
       OrderCubit.get(context).ConfirmAllPublicOrders(context);
@@ -63,6 +61,7 @@ class _WaitingRoomState extends State<WaitingRoom>
 
     return BlocProvider(
       create: (context) => OrderCubit()
+        ..startTime()
         ..clickableChange()
         ..getPublicOrder(context, LocationNumber: widget.LocationNumber)
         ..deliveryFees(context, locaionNumber: widget.LocationNumber),
@@ -155,7 +154,7 @@ class _WaitingRoomState extends State<WaitingRoom>
                                                                     index + 1
                                                                 ? Colors.black
                                                                 : const Color
-                                                                        .fromARGB(
+                                                                    .fromARGB(
                                                                     255,
                                                                     9,
                                                                     134,

@@ -22,8 +22,9 @@ import '../../controllers/Components/Products Components/NewProducts.dart';
 
 // ignore: must_be_immutable
 class Restaurants extends StatelessWidget {
-  Restaurants({super.key, this.currentLocation});
+  Restaurants({super.key, this.currentLocation, this.Locations});
   String? currentLocation;
+  List<dynamic>? Locations;
 
   @override
   Widget build(BuildContext context) {
@@ -34,13 +35,15 @@ class Restaurants extends StatelessWidget {
           create: (context) => ProductsCubit(),
         ),
         BlocProvider(
-          create: (context) => OrderCubit()..getRestaurantsOfLocation(context),
+          create: (context) => OrderCubit()
+            ..getLocation(context)
+            ..getRestaurantsOfLocation(context),
         )
       ],
       child: BlocConsumer<ProductsCubit, ProductsStates>(
         listener: (context, state) {},
         builder: (context, state) {
-          var newProducts = ProductsCubit.new_products ?? [];
+          var newProducts = ProductsCubit.get(context).new_products ?? [];
           var navcubit = NavBarCubitcubit.get(context);
           var Connection = false;
           Logger().e(newProducts);
@@ -99,7 +102,7 @@ class Restaurants extends StatelessWidget {
                           ),
                         ),
                         ConditionalBuilder(
-                            condition: ProductsCubit.get(context).NoNewProducts,
+                            condition: ProductsCubit.NoNewProducts == false,
                             fallback: (context) {
                               return Padding(
                                 padding: const EdgeInsets.all(15.0),

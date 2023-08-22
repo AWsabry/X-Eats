@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:logger/logger.dart';
 import 'package:xeats/controllers/Components/General%20Components/Components.dart';
 import 'package:xeats/controllers/Components/DiscountBanner/DiscountBanner.dart';
 import 'package:xeats/controllers/Components/Global%20Components/loading.dart';
@@ -77,24 +78,24 @@ class _HomePageState extends State<HomePage> {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (context) => OrderCubit()
-            ..getCartID(context)
-            ..getLocation()
-            ..getRestaurantsOfLocation(context)
-            ..deliveryFees(context),
-        ),
+            create: (context) => OrderCubit()
+              ..getCartID(context)
+              ..getLocation(context)
+              ..getRestaurantsOfLocation(context)),
         BlocProvider(create: (context) => ProductsCubit()..getPoster()),
         BlocProvider(
           create: (context) => RestuarantsCubit(),
         ),
         BlocProvider(create: (context) => AuthCubit()..GettingUserData()),
       ],
-      child: BlocBuilder<ProductsCubit, ProductsStates>(
+      child: BlocConsumer<ProductsCubit, ProductsStates>(
+        listener: (context, state) {},
         builder: ((context, state) {
+          var MostSoldProducts = ProductsCubit.get(context).MostSold;
           var cubit = AuthCubit.get(context);
           var navcubit = NavBarCubitcubit.get(context);
           var FirstName = cubit.FirstName ?? '';
-          print(OrderCubit.currentLocation);
+          Logger().i(MostSoldProducts);
           return SafeArea(
             child: Scaffold(
               appBar: LocationBar(context),
@@ -325,23 +326,20 @@ class _HomePageState extends State<HomePage> {
                                                       ),
                                                     );
                                                   },
-                                                  condition: ProductsCubit.get(
-                                                              context)
+                                                  condition: ProductsCubit
                                                           .NoMostSoldProducts ==
                                                       false,
                                                   builder: (context) {
                                                     return Row(
                                                       children: [
                                                         ...List.generate(
-                                                          ProductsCubit.get(
-                                                                  context)
-                                                              .MostSold
+                                                          MostSoldProducts
                                                               .length,
                                                           (index) {
                                                             return GestureDetector(
                                                               child:
                                                                   ProductView(
-                                                                      image: ProductsCubit.get(context).MostSold[
+                                                                      image: MostSoldProducts[
                                                                               index][
                                                                           "image"],
                                                                       width:
@@ -363,15 +361,15 @@ class _HomePageState extends State<HomePage> {
                                                                                     context,
                                                                                     ProductClass().productDetails(
                                                                                       context,
-                                                                                      productName: ProductsCubit.get(context).MostSold[index]["productName"],
-                                                                                      id: ProductsCubit.get(context).MostSold[index]["id"],
-                                                                                      restaurant: ProductsCubit.get(context).MostSold[index]["Restaurant"],
-                                                                                      image: "${AppConstants.BaseUrl}/uploads/" + ProductsCubit.get(context).MostSold[index]["image"],
-                                                                                      price: ProductsCubit.get(context).MostSold[index]['price'],
-                                                                                      englishName: ProductsCubit.get(context).MostSold[index]["name"],
-                                                                                      arabicName: ProductsCubit.get(context).MostSold[index]["ArabicName"],
-                                                                                      description: ProductsCubit.get(context).MostSold[index]["description"] ?? "No Description for this Product",
-                                                                                      restaurantName: ProductsCubit.get(context).MostSold[index]["Restaurant"].toString(),
+                                                                                      productName: MostSoldProducts[index]["productName"],
+                                                                                      id: MostSoldProducts[index]["id"],
+                                                                                      restaurant: MostSoldProducts[index]["Restaurant"],
+                                                                                      image: "${AppConstants.BaseUrl}/uploads/" + MostSoldProducts[index]["image"],
+                                                                                      price: MostSoldProducts[index]['price'],
+                                                                                      englishName: MostSoldProducts[index]["name"],
+                                                                                      arabicName: MostSoldProducts[index]["ArabicName"],
+                                                                                      description: MostSoldProducts[index]["description"] ?? "No Description for this Product",
+                                                                                      restaurantName: MostSoldProducts[index]["Restaurant"].toString(),
                                                                                     )),
                                                                               }),
                                                               onTap: () {},

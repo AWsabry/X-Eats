@@ -7,6 +7,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:logger/logger.dart';
 import 'package:xeats/controllers/Components/Global%20Components/DefaultButton.dart';
 import 'package:xeats/controllers/Components/Global%20Components/loading.dart';
 import 'package:xeats/controllers/Components/AppBar/AppBarCustomized.dart';
@@ -15,6 +16,7 @@ import 'package:xeats/controllers/Cubits/ButtomNavigationBarCubit/navigationCubi
 import 'package:xeats/controllers/Cubits/OrderCubit/OrderCubit.dart';
 import 'package:xeats/controllers/Cubits/OrderCubit/OrderStates.dart';
 import 'package:xeats/controllers/Components/General%20Components/Components.dart';
+import 'package:xeats/core/Constants/constants.dart';
 import 'package:xeats/views/Layout/Layout.dart';
 import 'package:xeats/views/Profile/Profile.dart';
 import 'package:xeats/views/Resturants/Resturants.dart';
@@ -85,7 +87,7 @@ class ProductClass extends StatelessWidget {
               productDetails(
                 context,
                 productName: productName,
-                image: itemImage,
+                image: AppConstants.BaseUrl + "/" + itemImage!,
                 id: id,
                 restaurant: restaurant,
                 price: price,

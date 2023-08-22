@@ -128,7 +128,9 @@ class _MyAppState extends State<MyApp> {
               // ..NewProducts(),
               ),
           BlocProvider(
-              create: (context) => OrderCubit()..checkOrderExistence(context))
+              create: (context) => OrderCubit()
+                ..getLocation(context)
+                ..checkOrderExistence(context))
         ],
         child: ScreenUtilInit(
           designSize: const Size(415, 900),

@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:logger/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:xeats/controllers/Components/Categories%20Components/CategoryCard.dart';
 import 'package:xeats/controllers/Components/General%20Components/Components.dart';
@@ -331,7 +332,8 @@ class OrderCubit extends Cubit<OrderStates> {
   List<dynamic> Locations = [];
   static List<dynamic> LocationSlugList = [];
   static List<dynamic> LocationId = [];
-  void getLocation() {
+  static List<dynamic> LocationsStatic = [];
+  void getLocation(context) {
     emit(GetLocationsStatesLoading());
     Dio()
         .get(
@@ -339,6 +341,7 @@ class OrderCubit extends Cubit<OrderStates> {
     )
         .then((value) {
       Locations = value.data["Names"];
+      LocationsStatic = Locations;
       for (var Location in Locations) {
         LocationsNames.add(Location["location_Name"]);
         LocationSlugList.add(Location["location_slug"]);
@@ -353,17 +356,20 @@ class OrderCubit extends Cubit<OrderStates> {
   static List<dynamic> restuarantsOfSlugList = [];
   static int? PublicLocationId;
   void getRestaurantsOfLocation(context) {
+    Logger().i(currentLocation);
+    Logger().i(Locations);
+
     emit(getRestuarantSlugStateLoading());
-    Locations.forEach((slug) async {
+    LocationsStatic.forEach((slug) async {
       if (slug["location_Name"] == currentLocation) {
         await Dio()
             .get(
                 "${AppConstants.BaseUrl}/get_restaurants_by_location/${slug["location_slug"]}")
-            .then((value) async {
+            .then((value) {
           restuarantsOfSlugList = value.data["Names"];
           PublicLocationId = slug["id"] - 1;
-          ProductsCubit.get(context).NoNewProducts = false;
-          ProductsCubit.get(context).NoMostSoldProducts = false;
+          ProductsCubit.NoNewProducts = false;
+          ProductsCubit.NoMostSoldProducts = false;
           ProductsCubit.get(context).NewProducts(context);
           ProductsCubit.get(context).GetMostSoldProducts(context);
           print(PublicLocationId);
@@ -543,7 +549,7 @@ class OrderCubit extends Cubit<OrderStates> {
         EndingOrder = value.data["end_on"];
         LengthOfPublicOrders = value.data["Names"].length - 1;
         LastOrder = value.data["Names"][LengthOfPublicOrders]["ordered_date"];
-        // OrderId = value.data["Names"][LengthOfPublicOrders]["id"];
+        OrderId = value.data["Names"][LengthOfPublicOrders]["id"];
         print(count);
       }
       emit(getTimeStateSuccess());
@@ -580,17 +586,19 @@ class OrderCubit extends Cubit<OrderStates> {
   }
 
   static CustomTimerController? timerController;
-  void startTime(context) {
+  void startTime() {
     timerController!.start();
     emit(timeStartedState());
   }
 
-  Future<void> clostTime() async {
+  void clostTime(context) {
     timerController!.dispose();
     emit(timeFinishedState());
   }
 
-  void cancelOrders(Orderid, context) {
+  void cancelOrders(
+    Orderid,
+  ) {
     Dio().post("${AppConstants.BaseUrl}/cancel_order/$Orderid").then((value) {
       emit(cancelOrderSuccefull());
       print(cancelOrderSuccefull());
@@ -739,8 +747,6 @@ class OrderCubit extends Cubit<OrderStates> {
         }
       } on FormatException {
         print("mmaaaaaaam");
-
-        // print("VALUE 4" + " " + "${value.data['Message']}");
         Dio().post(
             "${AppConstants.BaseUrl}/create_orders/${AuthCubit.get(context).EmailInforamtion}",
             data: {
@@ -760,22 +766,15 @@ class OrderCubit extends Cubit<OrderStates> {
               "deliver_to": PublicLocationId! + 1
             }).then((value) async {
           if (Private == false) {
-            // await getPublicOrder(context).then((value) {
-            // var endingOrderTime = DateTime.parse(EndingOrder);
-            // var TimeOfLastOrder = DateTime.parse(LastOrder);
-
-            // endingOrderTimeSecond =
-            //     endingOrderTime.difference(DateTime.now()).inSeconds;
-            // var counter = count;
-            // print(counter);
-
-            NavigateAndRemov(
-                context,
-                WaitingRoom(
-                    OrderId: 1,
-                    endingOrderTimeSecond: 1200,
-                    count: 1,
-                    LengthOfPublicOrders: 2));
+            await getPublicOrder(context).then((value) {
+              NavigateAndRemov(
+                  context,
+                  WaitingRoom(
+                      OrderId: OrderId,
+                      endingOrderTimeSecond: 1200,
+                      count: 1,
+                      LengthOfPublicOrders: 2));
+            });
             // });
           } else {
             NavigateAndRemov(context, const ThankYou());
@@ -797,19 +796,15 @@ class OrderCubit extends Cubit<OrderStates> {
         .get(
             "${AppConstants.BaseUrl}/check_order_existence/${AuthCubit.get(context).EmailInforamtion}")
         .then((value) {
+      Logger().i(value);
       if (value.data["Names"] == "[]" ||
           value.data["Names"][0]["status"] != "Pending") {
-        emit(checkOrderExistanceSuccessfuly());
         orderExistance = false;
         print("a7a");
-      } else if (AuthCubit.get(context).EmailInforamtion == null) {
-        print("User doesn't Login Yet");
       } else {
         LocationNumber = value.data["Names"][0]["deliver_to"];
         totalPrice = value.data["Names"][0]["totalPrice"];
         print("aaaaaaa$totalPrice");
-        emit(checkOrderExistanceSuccessfuly());
-
         Dio()
             .get(
                 "${AppConstants.BaseUrl}/get_time_of_first_public_order_in_location/$LocationNumber")
