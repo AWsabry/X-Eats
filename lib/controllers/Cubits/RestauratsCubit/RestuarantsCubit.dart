@@ -128,8 +128,8 @@ class RestuarantsCubit extends Cubit<RestuarantsStates> {
                   Container(
                     height: 130.h,
                     decoration: BoxDecoration(
-                      border:
-                          Border.all(color: const Color.fromARGB(74, 158, 158, 158)),
+                      border: Border.all(
+                          color: const Color.fromARGB(74, 158, 158, 158)),
                       borderRadius: BorderRadius.circular(10.0),
                     ),
                     child: Padding(

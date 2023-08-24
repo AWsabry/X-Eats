@@ -21,6 +21,7 @@ import 'package:xeats/controllers/Dio/DioHelper.dart';
 import 'package:xeats/core/Constants/constants.dart';
 import 'package:xeats/core/logger.dart';
 import 'package:xeats/views/CategoryView/categoryView.dart';
+import 'package:xeats/views/HomePage/HomePage.dart';
 import 'package:xeats/views/ThankYou/thankyou.dart';
 import 'package:xeats/views/WaitingRoom/waitingRoom.dart';
 import '../../../views/Cart/cart.dart';
@@ -354,9 +355,6 @@ class OrderCubit extends Cubit<OrderStates> {
   static List<dynamic> restuarantsOfSlugList = [];
   static int? PublicLocationId;
   void getRestaurantsOfLocation(context) {
-    Logger().i(currentLocation);
-    Logger().i(Locations);
-
     emit(getRestuarantSlugStateLoading());
     LocationsStatic.forEach((slug) async {
       if (slug["location_Name"] == currentLocation) {
@@ -584,6 +582,27 @@ class OrderCubit extends Cubit<OrderStates> {
     );
   }
 
+  void confirmAllPublicOrders(context, int? seconds) {
+    Future.delayed(Duration(seconds: seconds!)).then((value) {
+      OrderCubit.get(context).ConfirmAllPublicOrders(context);
+      NavigateAndRemov(context, const ThankYou());
+    });
+  }
+  // void startBackgroundTask() {
+  //   emit(RunningBackgroundState());
+
+  //   // Start your background task using FlutterBackgroundService
+  //   FlutterBackgroundService.initialize(onStart);
+  // }
+  // void onStart() {
+  //   // Do your background task here
+  //   // You can emit different states based on the task's progress
+  //   emit(CompletedBackgroundState());
+
+  //   // Don't forget to call this when the task is done
+  //   FlutterBackgroundService().stop();
+  // }
+
   static CustomTimerController? timerController;
   void startTime() {
     timerController!.start();
@@ -635,7 +654,7 @@ class OrderCubit extends Cubit<OrderStates> {
   bool clikable = true;
 
   void clickableChange() {
-    Future.delayed(const Duration(minutes: 5, seconds: 4)).then((value) {
+    Future.delayed(const Duration(minutes: 5, seconds: 0)).then((value) {
       clikable = false;
       emit(ClickableState());
     });
@@ -789,6 +808,7 @@ class OrderCubit extends Cubit<OrderStates> {
   bool CanCancelled = true;
   var OrderIdOfExistence;
   double? totalPrice;
+
   void checkOrderExistence(context) {
     emit(InitialcheckOrderExistance());
     Dio()
@@ -825,7 +845,7 @@ class OrderCubit extends Cubit<OrderStates> {
             CanCancelled = false;
           } else {}
           bool CheckingDifference = DateTime.now()
-              .isBefore(endingOrderTime.add(const Duration(minutes: 1)));
+              .isBefore(endingOrderTime.add(const Duration(minutes: 0)));
           if (CheckingDifference == false) {
             Dio().post(
                 "${AppConstants.BaseUrl}/get_time_of_first_public_order_in_location/$LocationNumber");

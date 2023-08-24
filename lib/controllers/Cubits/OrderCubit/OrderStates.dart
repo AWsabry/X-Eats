@@ -74,7 +74,15 @@ class InitialcheckOrderExistance extends SuperOrderStates {}
 class checkOrderExistanceSuccessfuly extends SuperOrderStates {}
 
 class checkOrderExistanceFailed extends SuperOrderStates {
-  final RangeError Error;
+  final String Error;
 
   checkOrderExistanceFailed(this.Error);
 }
+
+class InitialcheckTimeExistence extends SuperOrderStates {}
+
+class OrderExistanceTrue extends SuperOrderStates {}
+
+class RunningBackgroundState extends SuperOrderStates {}
+
+class CompletedBackgroundState extends SuperOrderStates {}

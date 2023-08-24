@@ -58,9 +58,14 @@ dependencies:
   pull_to_refresh:
   url_launcher:
   firebase_auth:
-  pinput: ^2.2.30
+  pinput: 
   json_annotation:   
   flutter_polyline_points: 
+  flutter_background_service: 
+  flutter_local_notifications: 
+  device_info_plus: 
+
+
   cached_network_image:
   logger:
 

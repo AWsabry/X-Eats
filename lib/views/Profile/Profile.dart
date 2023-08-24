@@ -27,7 +27,7 @@ class Profile extends StatelessWidget {
           var navcubit = NavBarCubitcubit.get(context);
           return ConditionalBuilder(
             fallback: (context) => const Center(child: Loading()),
-            condition: cubit.EmailInforamtion != null,
+            condition: AuthCubit.get(context).EmailInforamtion != null,
             builder: (BuildContext context) {
               return Scaffold(
                 appBar: appBar(context, subtitle: 'Your', title: 'Profile'),
@@ -52,11 +52,12 @@ class Profile extends StatelessWidget {
                                       style: const TextStyle(
                                           fontSize: 14,
                                           fontWeight: FontWeight.bold,
-                                          color: Colors.lightBlue),
+                                          color: Color.fromARGB(
+                                              255, 201, 238, 255)),
                                     ),
                                     TextSpan(
                                       text:
-                                          "Email: ${cubit.EmailInforamtion}\n",
+                                          "Email: ${AuthCubit.get(context).EmailInforamtion}\n",
                                       style: const TextStyle(
                                           fontSize: 14,
                                           fontWeight: FontWeight.bold,

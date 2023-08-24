@@ -1,13 +1,14 @@
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:custom_timer/custom_timer.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:logger/logger.dart';
 import 'package:xeats/controllers/Components/General%20Components/Components.dart';
 import 'package:xeats/controllers/Components/PaymentSummary.dart';
 import 'package:xeats/controllers/Cubits/OrderCubit/OrderCubit.dart';
 import 'package:xeats/controllers/Cubits/OrderCubit/OrderStates.dart';
-import 'package:xeats/views/ThankYou/thankyou.dart';
 
 // ignore: must_be_immutable
 class WaitingRoom extends StatefulWidget {
@@ -24,7 +25,7 @@ class WaitingRoom extends StatefulWidget {
       : super(key: key);
   var endingOrderTimeSecond;
   var count;
-  int? LocationNumber;
+  var LocationNumber;
   DateTime? TimeOfLastOrder;
   var LengthOfPublicOrders;
   int? OrderId;
@@ -53,11 +54,8 @@ class _WaitingRoomState extends State<WaitingRoom>
       interval: CustomTimerInterval.seconds,
     );
 
-    Future.delayed(Duration(seconds: widget.endingOrderTimeSecond))
-        .then((value) {
-      OrderCubit.get(context).ConfirmAllPublicOrders(context);
-      NavigateAndRemov(context, const ThankYou());
-    });
+    OrderCubit.get(context)
+        .confirmAllPublicOrders(context, widget.endingOrderTimeSecond);
 
     return BlocProvider(
       create: (context) => OrderCubit()
@@ -66,6 +64,7 @@ class _WaitingRoomState extends State<WaitingRoom>
         ..getPublicOrder(context, LocationNumber: widget.LocationNumber)
         ..deliveryFees(context, locaionNumber: widget.LocationNumber),
       child: BlocBuilder<OrderCubit, OrderStates>(builder: (context, state) {
+        Logger().f(widget.LocationNumber);
         return Scaffold(
           body: SafeArea(
             child: RefreshIndicator(

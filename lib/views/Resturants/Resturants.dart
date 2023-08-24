@@ -43,8 +43,7 @@ class Restaurants extends StatelessWidget {
       child: BlocConsumer<ProductsCubit, ProductsStates>(
         listener: (context, state) {},
         builder: (context, state) {
-          List<dynamic> newProducts =
-              ProductsCubit.get(context).new_products ?? [];
+          List<dynamic> newProducts = ProductsCubit.get(context).new_products;
           var navcubit = NavBarCubitcubit.get(context);
           var Connection = false;
           Logger().i(newProducts);

@@ -60,46 +60,47 @@ class _SearchScreenState extends State<SearchProductsScreen> {
                         hintText: "Search For Products",
                         prefixIcon: Icon(Icons.search)),
                     controller: ProductsCubit.get(context).searchController,
-                    onSubmitted: (value) async {
-                      setState(() async {
-                        await ProductsCubit.get(context)
-                            .ClearProductsId()
-                            .then((value) async {
-                          await ProductsCubit.get(context).GetIdOfProducts(
-                            context,
-                            id: widget.restaurantID,
-                          );
-                          await ProductsCubit.get(context)
-                              .SearchOnListOfProduct(
-                            context,
-                          );
-                          if (ProductsCubit.get(context)
-                                  .ArabicName
-                                  .toString()
-                                  .toLowerCase()
-                                  .contains(ProductsCubit.get(context)
-                                      .searchController
-                                      .text
-                                      .toLowerCase()) ||
-                              ProductsCubit.get(context)
-                                  .EnglishName
-                                  .toString()
-                                  .toLowerCase()
-                                  .contains(ProductsCubit.get(context)
-                                      .searchController
-                                      .text
-                                      .toLowerCase())) {
-                            super.widget;
-                          } else {
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                              duration: const Duration(milliseconds: 1500),
-                              content: Text(
-                                  "There isn't product called ${ProductsCubit.get(context).searchController.text}"),
-                              backgroundColor: Colors.red,
-                            ));
-                          }
-                        });
-                      });
+                    onSubmitted: (value) {
+                      // setState(() async {
+                      //   await ProductsCubit.get(context)
+                      //       .ClearProductsId()
+                      //       .then((value) async {
+                      //     await ProductsCubit.get(context).GetIdOfProducts(
+                      //       context,
+                      //       id: widget.restaurantID,
+                      //     );
+                      //     await ProductsCubit.get(context)
+                      //         .SearchOnListOfProduct(
+                      //       context,
+                      //     );
+                      //     if (ProductsCubit.get(context)
+                      //             .ArabicName
+                      //             .toString()
+                      //             .toLowerCase()
+                      //             .contains(ProductsCubit.get(context)
+                      //                 .searchController
+                      //                 .text
+                      //                 .toLowerCase()) ||
+                      //         ProductsCubit.get(context)
+                      //             .EnglishName
+                      //             .toString()
+                      //             .toLowerCase()
+                      //             .contains(ProductsCubit.get(context)
+                      //                 .searchController
+                      //                 .text
+                      //                 .toLowerCase())) {
+                      //       super.widget;
+                      //     }
+                      //     else {
+                      //       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      //         duration: const Duration(milliseconds: 1500),
+                      //         content: Text(
+                      //             "There isn't product called ${ProductsCubit.get(context).searchController.text}"),
+                      //         backgroundColor: Colors.red,
+                      //       ));
+                      //     }
+                      //   });
+                      // });
                     },
                   ),
                 ),

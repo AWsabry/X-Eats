@@ -7,8 +7,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:logger/logger.dart';
 import 'package:xeats/controllers/Components/Global%20Components/DefaultButton.dart';
-import 'package:xeats/controllers/Components/Global%20Components/defaultFormField.dart';
 import 'package:xeats/controllers/Components/Global%20Components/loading.dart';
 import 'package:xeats/controllers/Components/AppBar/AppBarCustomized.dart';
 import 'package:xeats/controllers/Components/Requests%20Loading%20Components/RequstsLoading.dart';
@@ -475,7 +475,7 @@ class ProductClass extends StatelessWidget {
         adUnitId: "ca-app-pub-5674432343391353/3216382829",
         listener: BannerAdListener(
           // Called when an ad is successfully received.
-          onAdLoaded: (Ad ad) => print('Ad loaded.'),
+          onAdLoaded: (Ad ad) => Logger().d('Ad loaded.'),
           // Called when an ad request failed.
           onAdFailedToLoad: (Ad ad, LoadAdError error) {
             // Dispose the ad here to free resources.
@@ -487,7 +487,6 @@ class ProductClass extends StatelessWidget {
     return BlocConsumer<OrderCubit, OrderStates>(
       builder: (context, state) {
         var navcubit = NavBarCubitcubit.get(context);
-        TextEditingController note_controller = TextEditingController();
         double width = MediaQuery.of(context).size.width;
         double height = MediaQuery.of(context).size.height;
         return Scaffold(

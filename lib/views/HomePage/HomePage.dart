@@ -84,12 +84,10 @@ class HomePage extends StatelessWidget {
       child: BlocConsumer<ProductsCubit, ProductsStates>(
         listener: (context, state) {},
         builder: ((context, state) {
-          List<dynamic> MostSoldProducts = ProductsCubit.MostSold ?? [];
+          List<dynamic> MostSoldProducts = ProductsCubit.MostSold;
           var cubit = AuthCubit.get(context);
           var navcubit = NavBarCubitcubit.get(context);
           var FirstName = cubit.FirstName ?? '';
-          Logger().i(MostSoldProducts);
-
           return SafeArea(
             child: Scaffold(
               appBar: LocationBar(context),
@@ -245,7 +243,7 @@ class HomePage extends StatelessWidget {
                                                                     ['Name'] ??
                                                                 const Loading(),
                                                         Colors: const Color
-                                                                .fromARGB(
+                                                            .fromARGB(
                                                             255, 5, 95, 9),
                                                         image: Image(
                                                           // loadingBuilder: (context,

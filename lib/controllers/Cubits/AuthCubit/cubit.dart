@@ -151,9 +151,8 @@ class AuthCubit extends Cubit<AuthStates> {
       emit(initialGetTokenState());
       await Dio()
           .get("${AppConstants.BaseUrl}/get_user_by_email/$email",
-              options: Options(headers: {
-                "Authorization": "Bearer ${token.data['access']}"
-              }))
+              options: Options(
+                  headers: {"Authorization": "Bearer ${token.data['access']}"}))
           .then((value) async {
         print("User Token is" " " + token.data['access']);
         // print("User Data" + " " + "${value.data['Names'][0]}");

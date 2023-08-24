@@ -3,6 +3,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:logger/logger.dart';
 import 'package:xeats/controllers/Components/General%20Components/Components.dart';
 import 'package:xeats/controllers/Cubits/AuthCubit/States.dart';
 import 'package:xeats/controllers/Cubits/AuthCubit/cubit.dart';
@@ -95,22 +96,13 @@ class _SplashScreenState extends State<SplashScreen> {
   Future init(context) async {
     AuthCubit.get(context).GettingUserData();
     OrderCubit.get(context).getCartID(context);
-    Future.delayed(const Duration(seconds: 0)).then((value) {
-      OrderCubit.get(context).checkOrderExistence(context);
-    });
+    OrderCubit.get(context).checkOrderExistence(context);
+
     Future.delayed(const Duration(seconds: 6)).then(
       (value) {
         if (AuthCubit.get(context).EmailInforamtion != null) {
-          print(
-            OrderCubit.get(context).endingOrderTimeSecond,
-          );
-          print(
-            OrderCubit.get(context).count,
-          );
-          print(
-            OrderCubit.get(context).OrderIdOfExistence,
-          );
           if (OrderCubit.get(context).orderExistance == true) {
+            Logger().f(OrderCubit.get(context).LocationNumber!);
             NavigateAndRemov(
                 context,
                 WaitingRoom(
