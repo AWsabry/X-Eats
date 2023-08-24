@@ -6,24 +6,19 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:xeats/controllers/Components/AppBar/AppBarCustomized.dart';
 import 'package:xeats/controllers/Components/General%20Components/Components.dart';
 import 'package:xeats/controllers/Components/Global%20Components/loading.dart';
+import 'package:xeats/controllers/Components/Product%20Class/Products_Class.dart';
 import 'package:xeats/controllers/Cubits/ButtomNavigationBarCubit/navigationCubit.dart';
 import 'package:xeats/controllers/Cubits/ProductsCubit/ProductsCubit.dart';
 import 'package:xeats/controllers/Cubits/ProductsCubit/ProductsStates.dart';
+import 'package:xeats/core/logger.dart';
 import 'package:xeats/views/Layout/Layout.dart';
 import 'package:xeats/views/Profile/Profile.dart';
 
 class SearchProductsScreen extends StatefulWidget {
   const SearchProductsScreen({
     super.key,
-    this.restaurantID,
-    required this.category,
-    required this.categoryId,
     required this.restaurantName,
   });
-  final String? restaurantID;
-
-  final String? category;
-  final String? categoryId;
   final String? restaurantName;
 
   @override
@@ -39,7 +34,8 @@ class _SearchScreenState extends State<SearchProductsScreen> {
 
         return Scaffold(
           appBar: appBar(context,
-              title: widget.category, subtitle: widget.restaurantName),
+              title: ProductsCubit.get(context).searchController.text,
+              subtitle: widget.restaurantName),
           body: Padding(
             padding: const EdgeInsets.all(15.0),
             child: Column(
@@ -60,66 +56,37 @@ class _SearchScreenState extends State<SearchProductsScreen> {
                         hintText: "Search For Products",
                         prefixIcon: Icon(Icons.search)),
                     controller: ProductsCubit.get(context).searchController,
-                    onSubmitted: (value) {
-                      // setState(() async {
-                      //   await ProductsCubit.get(context)
-                      //       .ClearProductsId()
-                      //       .then((value) async {
-                      //     await ProductsCubit.get(context).GetIdOfProducts(
-                      //       context,
-                      //       id: widget.restaurantID,
-                      //     );
-                      //     await ProductsCubit.get(context)
-                      //         .SearchOnListOfProduct(
-                      //       context,
-                      //     );
-                      //     if (ProductsCubit.get(context)
-                      //             .ArabicName
-                      //             .toString()
-                      //             .toLowerCase()
-                      //             .contains(ProductsCubit.get(context)
-                      //                 .searchController
-                      //                 .text
-                      //                 .toLowerCase()) ||
-                      //         ProductsCubit.get(context)
-                      //             .EnglishName
-                      //             .toString()
-                      //             .toLowerCase()
-                      //             .contains(ProductsCubit.get(context)
-                      //                 .searchController
-                      //                 .text
-                      //                 .toLowerCase())) {
-                      //       super.widget;
-                      //     }
-                      //     else {
-                      //       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      //         duration: const Duration(milliseconds: 1500),
-                      //         content: Text(
-                      //             "There isn't product called ${ProductsCubit.get(context).searchController.text}"),
-                      //         backgroundColor: Colors.red,
-                      //       ));
-                      //     }
-                      //   });
-                      // });
+                    onChanged: (value) {
+                      ProductsCubit.get(context)
+                          .GetSearchedProductsInRestaurant(
+                              context, widget.restaurantName!);
+
+                      AppLogger.d(ProductsCubit.get(context)
+                          .searchedProducts
+                          .length
+                          .toString());
                     },
                   ),
                 ),
                 FutureBuilder(
-                    future: ProductsCubit.get(context).getListOfProducts(
-                        context,
-                        restaurantName: widget.restaurantName,
-                        CatId: widget.categoryId,
-                        category: widget.category),
-                    builder: ((context, snapshot) {
-                      if (snapshot.hasData &&
-                          ProductsCubit.get(context).data != null) {
-                        return snapshot.data!;
-                      } else {
-                        return const Center(
-                          child: Loading(),
-                        );
-                      }
-                    })),
+                  future: ProductsCubit.get(context).getCurrentProducts(context,
+                      restaurantName: widget.restaurantName,
+                      id: ProductsCubit.get(context).searchedProducts[0]
+                          ['Restaurant'],
+                      CatId: ProductsCubit.get(context).searchedProducts[0]
+                          ['category'],
+                      image: ProductsCubit.get(context).searchedProducts[0]
+                          ['image'],
+                      category: ProductsCubit.get(context).searchedProducts[0]
+                          ['category_name']),
+                  builder: ((context, snapshot) {
+                    if (snapshot.hasData) {
+                      return snapshot.data!;
+                    } else {
+                      return const Loading();
+                    }
+                  }),
+                ),
               ],
             ),
           ),

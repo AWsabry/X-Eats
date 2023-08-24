@@ -87,49 +87,6 @@ class ProductsCubit extends Cubit<ProductsStates> {
   }
 
 // Displaying the UI when Searching on product
-  var data;
-  Future getListOfProducts(
-    BuildContext context, {
-    required String? CatId,
-    required String? category,
-    required String? restaurantName,
-  }) async {
-    await Dio()
-        .get(
-            "${AppConstants.BaseUrl}/get_products_of_restaurant_by_category/$id/$CatId")
-        .then((value) {})
-        .catchError((onError) {});
-    data = Expanded(
-      child: ListView.separated(
-          separatorBuilder: ((context, index) {
-            return const Divider();
-          }),
-          itemBuilder: (context, index) {
-            return ProductClass(
-              itemImage: image[index],
-              englishName: EnglishName[index],
-              arabicName: ArabicName[index],
-              price: price[index],
-              id: id[index],
-              description: description[index],
-              creationDate: creationDate[index],
-              restaurant: restaurant[index],
-              isBestOffer: isBestOffer[index],
-              isMostPopular: isMostPopular[index],
-              isNewProduct: isNewProduct[index],
-            ).Search(context,
-                image: image[index],
-                category: category_name[index],
-                CatId: CatId,
-                restaurantName: restaurant_name[index],
-                price: price[index]);
-          },
-          itemCount: ProductId.length),
-    );
-
-    return data;
-  }
-
   final List<double> price = [];
   final List<int> id = [];
   final List<int> restaurant = [];
@@ -142,67 +99,92 @@ class ProductsCubit extends Cubit<ProductsStates> {
   final List<int> category = [];
   final List<String> category_name = [];
   final List<String> image = [];
-  Future<void> SearchOnListOfProduct(BuildContext context) async {
-    await Future.wait(ProductId.map((productId) async {
-      try {
-        final response = await Dio()
-            .get('${AppConstants.BaseUrl}/get_products_by_id/$productId');
-        final name = response.data['Names'][0];
-
-        image.add(name['image']);
-        restaurant_name.add(name['restaurant_name']);
-        category_name.add(name['category_name']);
-        category.add(name['category']);
-        isNewProduct.add(name['New_Products']);
-        isMostPopular.add(name['Most_Popular']);
-        isBestOffer.add(name['Best_Offer']);
-        creationDate.add(name['created']);
-        description.add(name['description']);
-        restaurant.add(name['Restaurant']);
-        id.add(name['id']);
-        price.add(name['price']);
-        EnglishName.add(name['name']);
-        ArabicName.add(name['ArabicName']);
-      } catch (e) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            duration: Duration(milliseconds: 1500),
-            content: Text('Something went wrong. Please try again later.'),
-            backgroundColor: Colors.red,
-          ),
-        );
-      }
-    }));
-
-    emit(SearhOnProductSuccessfull());
-  }
-
   List<int> ProductId = [];
 
-  Future GetIdOfProducts(
-    BuildContext context, {
-    required String? id,
-  }) async {
-    await Dio()
-        .get("${AppConstants.BaseUrl}/get_products_by_restaurant_id/$id")
-        .then((value) async {
-      var products = value.data["Names"].where((product) =>
-          product["name"]
-              .toString()
-              .toLowerCase()
-              .contains(searchController.text.toLowerCase()) ||
-          product["ArabicName"]
-              .toString()
-              .toLowerCase()
-              .contains(searchController.text.toLowerCase()));
+  // Future<void> SearchOnListOfProduct(BuildContext context) async {
+  //   await Future.wait(ProductId.map((productId) async {
+  //     try {
+  //       final response = await Dio()
+  //           .get('${AppConstants.BaseUrl}/get_products_by_id/$productId');
+  //       final name = response.data['Names'][0];
 
-      ProductId = products
-          .where((product) => product["id"] is int)
-          .map<int>((product) => product["id"] as int)
-          .toList();
+  //       image.add(name['image']);
+  //       restaurant_name.add(name['restaurant_name']);
+  //       category_name.add(name['category_name']);
+  //       category.add(name['category']);
+  //       isNewProduct.add(name['New_Products']);
+  //       isMostPopular.add(name['Most_Popular']);
+  //       isBestOffer.add(name['Best_Offer']);
+  //       creationDate.add(name['created']);
+  //       description.add(name['description']);
+  //       restaurant.add(name['Restaurant']);
+  //       id.add(name['id']);
+  //       price.add(name['price']);
+  //       EnglishName.add(name['name']);
+  //       ArabicName.add(name['ArabicName']);
+  //     } catch (e) {
+  //       ScaffoldMessenger.of(context).showSnackBar(
+  //         const SnackBar(
+  //           duration: Duration(milliseconds: 1500),
+  //           content: Text('Something went wrong. Please try again later.'),
+  //           backgroundColor: Colors.red,
+  //         ),
+  //       );
+  //     }
+  //   }));
+
+  //   emit(ProductSearchSuccess());
+  // }
+
+  List<dynamic> searchedProducts = [];
+  bool? noProducts;
+  Future GetSearchedProductsInRestaurant(context, String restaurantName) async {
+    var data = "No Data";
+    emit(newProductsStateLoading());
+    AppLogger.e(restaurantName + searchController.text);
+    await Dio()
+        .get(
+            "${AppConstants.BaseUrl}/get_searched_products_in_restaurant/$restaurantName/${searchController.text}")
+        .then((value) {
+      searchedProducts = value.data['Names'];
+      // AppLogger.i(searchedProducts.toString());
+      print(searchedProducts);
+      if (searchedProducts.isEmpty) {
+        noProducts = true;
+      } else {
+        noProducts = false;
+      }
+      emit(ProductSearchSuccess());
+    }).catchError((error) {
+      emit(ProductSearchFail(error));
     });
-    emit(ProductIdSuccessful());
+    return data;
   }
+
+  // Future GetIdOfProducts(
+  //   BuildContext context, {
+  //   required String? id,
+  // }) async {
+  //   await Dio()
+  //       .get("${AppConstants.BaseUrl}/get_products_by_restaurant_id/$id")
+  //       .then((value) async {
+  //     var products = value.data["Names"].where((product) =>
+  //         product["name"]
+  //             .toString()
+  //             .toLowerCase()
+  //             .contains(searchController.text.toLowerCase()) ||
+  //         product["ArabicName"]
+  //             .toString()
+  //             .toLowerCase()
+  //             .contains(searchController.text.toLowerCase()));
+
+  //     ProductId = products
+  //         .where((product) => product["id"] is int)
+  //         .map<int>((product) => product["id"] as int)
+  //         .toList();
+  //   });
+  //   emit(ProductIdSuccessful());
+  // }
 
   Future getCurrentProducts(
     BuildContext context, {

@@ -19,7 +19,11 @@ import 'package:xeats/views/Search/SearchProducts.dart';
 import '../../controllers/Cubits/ButtomNavigationBarCubit/navigationCubit.dart';
 
 class ResturantsMenu extends StatelessWidget {
-  ResturantsMenu({super.key, required this.data, required this.RestaurantId});
+  ResturantsMenu({
+    super.key,
+    required this.data,
+    required this.RestaurantId,
+  });
   var data;
   int RestaurantId;
 
@@ -80,59 +84,10 @@ class ResturantsMenu extends StatelessWidget {
                               controller:
                                   ProductsCubit.get(context).searchController,
                               onSubmitted: (value) async {
-                                await ProductsCubit.get(context)
-                                        .GetIdOfProducts(
-                                      context,
-                                      id: RestaurantId.toString(),
-                                    ) &
-                                    ProductsCubit.get(context)
-                                        .SearchOnListOfProduct(
-                                      context,
-                                    );
-
-                                if (ProductsCubit.get(context)
-                                        .ArabicName
-                                        .toString()
-                                        .toLowerCase()
-                                        .contains(ProductsCubit.get(context)
-                                            .searchController
-                                            .text
-                                            .toLowerCase()) ||
-                                    ProductsCubit.get(context)
-                                        .EnglishName
-                                        .toString()
-                                        .toLowerCase()
-                                        .contains(ProductsCubit.get(context)
-                                            .searchController
-                                            .text
-                                            .toLowerCase())) {
-                                  Navigation(
-                                      context,
-                                      SearchProductsScreen(
-                                        restaurantID: RestaurantId.toString(),
-                                        category: ProductsCubit.get(context)
-                                            .category_name
-                                            .first
-                                            .toString(),
-                                        categoryId: ProductsCubit.get(context)
-                                            .category
-                                            .first
-                                            .toString(),
-                                        restaurantName:
-                                            ProductsCubit.get(context)
-                                                .restaurant_name
-                                                .first,
-                                      ));
-                                } else {
-                                  ScaffoldMessenger.of(context)
-                                      .showSnackBar(SnackBar(
-                                    duration:
-                                        const Duration(milliseconds: 1500),
-                                    content: Text(
-                                        "There isn't product called ${ProductsCubit.get(context).searchController.text}"),
-                                    backgroundColor: Colors.red,
-                                  ));
-                                }
+                                NavigateAndRemov(
+                                    context,
+                                    SearchProductsScreen(
+                                        restaurantName: data['Name']));
                               },
                             ),
                           ),

@@ -16,14 +16,14 @@ class ProductsFail extends SuperProductsStates {
   ProductsFail(this.error);
 }
 
-class SearhOnProductSuccessfull extends SuperProductsStates {}
+class ProductSearchSuccess extends SuperProductsStates {}
 
 class ProductIdSuccessful extends SuperProductsStates {}
 
-class SearhOnProductFail extends SuperProductsStates {
+class ProductSearchFail extends SuperProductsStates {
   final String error;
 
-  SearhOnProductFail(this.error);
+  ProductSearchFail(this.error);
 }
 
 class ClearProductId extends SuperProductsStates {}
