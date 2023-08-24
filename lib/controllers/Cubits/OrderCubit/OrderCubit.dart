@@ -852,6 +852,7 @@ class OrderCubit extends Cubit<OrderStates> {
             print("om");
           } else {
             orderExistance = true;
+            emit(OrderExistanceTrue());
           }
         });
       }

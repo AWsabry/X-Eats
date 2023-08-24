@@ -10,6 +10,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:logger/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:xeats/controllers/Components/General%20Components/Components.dart';
 import 'package:xeats/controllers/Components/ObServer/BlocObserver.dart';
 import 'package:xeats/controllers/Cubits/AuthCubit/cubit.dart';
 import 'package:xeats/controllers/Cubits/ButtomNavigationBarCubit/navigationCubit.dart';
@@ -105,8 +106,8 @@ Future<void> initializeService() async {
 
       notificationChannelId:
           notificationChannelId, // this must match with notification channel you created above.
-      initialNotificationTitle: 'AWESOME SERVICE',
-      initialNotificationContent: 'Initializing',
+      initialNotificationTitle: 'X-eats',
+      initialNotificationContent: 'Welcome to X-Eats',
       foregroundServiceNotificationId: notificationId,
     ),
     iosConfiguration: IosConfiguration(),
@@ -165,7 +166,7 @@ Future<void> onStart(ServiceInstance service) async {
               Dio().post(
                   "${AppConstants.BaseUrl}/get_time_of_first_public_order_in_location/$LocationNumber");
               print("om");
-            }
+            } else {}
 
             flutterLocalNotificationsPlugin.show(
               notificationId,

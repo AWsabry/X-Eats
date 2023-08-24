@@ -96,7 +96,9 @@ class _SplashScreenState extends State<SplashScreen> {
   Future init(context) async {
     AuthCubit.get(context).GettingUserData();
     OrderCubit.get(context).getCartID(context);
-    OrderCubit.get(context).checkOrderExistence(context);
+    Future.delayed(const Duration(seconds: 1)).then((value) {
+      OrderCubit.get(context).checkOrderExistence(context);
+    });
 
     Future.delayed(const Duration(seconds: 6)).then(
       (value) {
@@ -131,7 +133,8 @@ class _SplashScreenState extends State<SplashScreen> {
     init(context);
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (context) => OrderCubit()),
+        BlocProvider(
+            create: (context) => OrderCubit()..checkOrderExistence(context)),
         BlocProvider(create: (context) => AuthCubit()),
       ],
       child: BlocConsumer<AuthCubit, AuthStates>(
