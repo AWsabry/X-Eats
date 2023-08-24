@@ -15,6 +15,7 @@ import 'package:xeats/controllers/Cubits/ProductsCubit/ProductsCubit.dart';
 import 'package:xeats/controllers/Cubits/ProductsCubit/ProductsStates.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:xeats/core/Constants/constants.dart';
+import 'package:xeats/core/logger.dart';
 import 'package:xeats/views/Layout/Layout.dart';
 import 'package:xeats/views/Profile/Profile.dart';
 import 'package:xeats/views/ResturantsMenu/ResturantsMenu.dart';
@@ -91,6 +92,26 @@ class Restaurants extends StatelessWidget {
                     },
                     builder: (context) {
                       return Column(children: [
+                        Container(
+                          width: MediaQuery.of(context).size.width * 0.8,
+                          decoration: BoxDecoration(
+                            color: Colors.black.withOpacity(0.1),
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          child: TextField(
+                            decoration: const InputDecoration(
+                                contentPadding: EdgeInsets.symmetric(
+                                    horizontal: 20, vertical: 9),
+                                border: InputBorder.none,
+                                focusedBorder: InputBorder.none,
+                                enabledBorder: InputBorder.none,
+                                hintText: "Search For Products",
+                                prefixIcon: Icon(Icons.search)),
+                            controller:
+                                ProductsCubit.get(context).searchController,
+                            onChanged: (value) {},
+                          ),
+                        ),
                         Padding(
                           padding: const EdgeInsets.all(15.0),
                           child: Text(
