@@ -110,7 +110,7 @@ class _PaymentSummaryState extends State<PaymentSummary> {
                       Padding(
                         padding: const EdgeInsets.only(right: 18.0),
                         child: Text(
-                          "EGP ${OrderCubit.deliveryfees! / 4}",
+                          "EGP ${OrderCubit.servicefees ?? 5.00}",
                           style: GoogleFonts.poppins(
                               fontSize: 15, color: Colors.white),
                         ),

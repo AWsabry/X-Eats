@@ -523,7 +523,6 @@ class OrderCubit extends Cubit<OrderStates> {
   List<dynamic> OrdersssPendeing = [];
   String StartingOrder = "";
   String EndingOrder = "";
-
   DateTime? difference;
   int? count;
   String LastOrder = "";
@@ -808,6 +807,7 @@ class OrderCubit extends Cubit<OrderStates> {
   bool CanCancelled = true;
   var OrderIdOfExistence;
   double? totalPrice;
+  static double? servicefees;
 
   void checkOrderExistence(context) {
     emit(InitialcheckOrderExistance());
@@ -823,6 +823,7 @@ class OrderCubit extends Cubit<OrderStates> {
       } else {
         LocationNumber = value.data["Names"][0]["deliver_to"];
         totalPrice = value.data["Names"][0]["totalPrice"];
+        servicefees = value.data["Names"][0]["service_fees"];
         print("aaaaaaa$totalPrice");
         Dio()
             .get(
