@@ -575,15 +575,16 @@ class OrderCubit extends Cubit<OrderStates> {
     });
   }
 
-  void ConfirmAllPublicOrders(context) {
+  void ConfirmAllPublicOrders(context, {int? IdLocation}) {
     Dio().post(
-      "${AppConstants.BaseUrl}/get_time_of_first_public_order_in_location/${PublicLocationId! + 1}",
+      "${AppConstants.BaseUrl}/get_time_of_first_public_order_in_location/${PublicLocationId! + 1 ?? IdLocation}",
     );
   }
 
-  void confirmAllPublicOrders(context, int? seconds) {
+  void confirmAllPublicOrders(context, int? seconds, {int? IdLocation}) {
     Future.delayed(Duration(seconds: seconds!)).then((value) {
-      OrderCubit.get(context).ConfirmAllPublicOrders(context);
+      OrderCubit.get(context)
+          .ConfirmAllPublicOrders(context, IdLocation: IdLocation);
       NavigateAndRemov(context, const ThankYou());
     });
   }

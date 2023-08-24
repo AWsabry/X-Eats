@@ -54,8 +54,9 @@ class _WaitingRoomState extends State<WaitingRoom>
       interval: CustomTimerInterval.seconds,
     );
 
-    OrderCubit.get(context)
-        .confirmAllPublicOrders(context, widget.endingOrderTimeSecond);
+    OrderCubit.get(context).confirmAllPublicOrders(
+        context, widget.endingOrderTimeSecond,
+        IdLocation: widget.LocationNumber);
 
     return BlocProvider(
       create: (context) => OrderCubit()
