@@ -47,9 +47,7 @@ class LocationBar extends StatelessWidget implements PreferredSizeWidget {
                           builder: (context, state) {
                             var cubit = OrderCubit.get(context);
                             return ConditionalBuilder(
-                                condition: OrderCubit.get(context)
-                                    .LocationsNames
-                                    .isNotEmpty,
+                                condition: cubit.LocationsNames.isNotEmpty,
                                 fallback: (context) {
                                   return const SpinKitThreeInOut(
                                     color: Color.fromARGB(255, 9, 134, 211),

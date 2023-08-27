@@ -35,7 +35,7 @@ class _CartState extends State<Cart> {
         .getCurrentAvailableOrderRestauant(context);
     getCartItemsFuture = OrderCubit.get(context).getCartItems(
       context,
-      email: AuthCubit.get(context).EmailInforamtion,
+      email: AuthCubit.get(context).userEmailShared,
     );
   }
 
@@ -58,7 +58,7 @@ class _CartState extends State<Cart> {
           var cubit = AuthCubit.get(context);
           return Scaffold(
             appBar: appBar(context,
-                subtitle: "${cubit.FirstName}'s",
+                subtitle: "${cubit.firstNameShared}'s",
                 title: "Cart",
                 SameScreen: true),
             backgroundColor: Colors.white,
@@ -77,7 +77,7 @@ class _CartState extends State<Cart> {
                               child: Column(
                                 children: [
                                   Text(
-                                    "${cubit.FirstName},",
+                                    "${cubit.firstNameShared},",
                                     maxLines: 1,
                                     textAlign: TextAlign.left,
                                     style: const TextStyle(

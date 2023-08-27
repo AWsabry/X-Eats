@@ -53,13 +53,6 @@ class ResturantsMenu extends StatelessWidget {
           body: SingleChildScrollView(
             child: Column(
               children: [
-                FutureBuilder(
-                  builder: (context, snapshot) {
-                    return Container();
-                  },
-                  future: RestuarantsCubit.get(context)
-                      .getCurrentAvailableOrderRestauant(context),
-                ),
                 SafeArea(
                   child: Stack(children: [
                     Column(

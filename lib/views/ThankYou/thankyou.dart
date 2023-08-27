@@ -23,7 +23,7 @@ class ThankYou extends StatelessWidget {
         var cubit = AuthCubit.get(context);
         return Scaffold(
           appBar: appBar(context,
-              subtitle: "Thank You", title: "${cubit.FirstName}"),
+              subtitle: "Thank You", title: "${cubit.firstNameShared}"),
           body: Container(
             height: height,
             width: width,

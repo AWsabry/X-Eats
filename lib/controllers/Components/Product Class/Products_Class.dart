@@ -17,7 +17,6 @@ import 'package:xeats/controllers/Cubits/OrderCubit/OrderCubit.dart';
 import 'package:xeats/controllers/Cubits/OrderCubit/OrderStates.dart';
 import 'package:xeats/controllers/Components/General%20Components/Components.dart';
 import 'package:xeats/core/Constants/constants.dart';
-import 'package:xeats/views/HomePage/HomePage.dart';
 import 'package:xeats/views/Layout/Layout.dart';
 import 'package:xeats/views/Profile/Profile.dart';
 import 'package:xeats/views/Resturants/Resturants.dart';
@@ -102,7 +101,7 @@ class ProductClass extends StatelessWidget {
           child: Dismissible(
             onDismissed: (direction) async {
               if (direction == DismissDirection.startToEnd) {
-                NavigateAndRemov(context, HomePage());
+                NavigateAndRemov(context, Layout());
 
                 await OrderCubit.get(context)
                     .deleteCartItem(context, "$cartItemId")
@@ -112,7 +111,7 @@ class ProductClass extends StatelessWidget {
                   OrderCubit.get(context).updateCartPrice(context);
                 });
               } else {
-                NavigateAndRemov(context, HomePage());
+                NavigateAndRemov(context, Layout());
 
                 await OrderCubit.get(context)
                     .deleteCartItem(context, "$cartItemId")
@@ -558,15 +557,17 @@ class ProductClass extends StatelessWidget {
                         function: () async {
                           // OrderCubit.get(context).getPublicOrder(context);
 
-                          await OrderCubit.get(context).addToCart(context,
-                              cartItemId: cartItemId,
-                              productId: id,
-                              quantity: quantity,
-                              price: price,
-                              totalPrice: price! * quantity,
-                              restaurantId: restaurant,
-                              timeShift: currentTiming,
-                              ProductObject: this);
+                          await OrderCubit.get(context).addToCart(
+                            context,
+                            cartItemId: cartItemId,
+                            productId: id,
+                            quantity: quantity,
+                            price: price,
+                            totalPrice: price! * quantity,
+                            restaurantId: restaurant,
+                            timeShift: currentTiming,
+                            productObject: this,
+                          );
                         },
                         text: "Add to Cart")
                     : SizedBox(

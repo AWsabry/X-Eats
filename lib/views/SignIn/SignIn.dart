@@ -1,12 +1,12 @@
-// ignore_for_file: must_be_immutable
+// ignore_for_file: must_be_immutable, use_build_context_synchronously
 
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:xeats/controllers/Components/General%20Components/Components.dart';
 import 'package:xeats/controllers/Components/Global%20Components/DefaultButton.dart';
 import 'package:xeats/controllers/Components/Global%20Components/defaultFormField.dart';
+import 'package:xeats/controllers/Components/LoginPressed/LoginPressed.dart';
 import 'package:xeats/controllers/Cubits/AuthCubit/States.dart';
 import 'package:xeats/controllers/Cubits/AuthCubit/cubit.dart';
 import 'package:xeats/controllers/Cubits/OrderCubit/OrderCubit.dart';
@@ -26,12 +26,12 @@ class SignIn extends StatelessWidget {
 
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (context) => AuthCubit()..GettingUserData()),
-        BlocProvider(create: (context) => ProductsCubit()..getPoster()),
+        BlocProvider(create: (context) => AuthCubit()),
+        BlocProvider(create: (context) => ProductsCubit()),
         BlocProvider(
           create: (context) => RestuarantsCubit(),
         ),
-        BlocProvider(create: (context) => OrderCubit()..getCartID(context))
+        BlocProvider(create: (context) => OrderCubit())
       ],
       child: BlocConsumer<AuthCubit, AuthStates>(
         listener: ((context, state) {}),
@@ -103,43 +103,41 @@ class SignIn extends StatelessWidget {
                             SizedBox(
                               height: 15.h,
                             ),
-                            DefaultButton(
-                                function: () {
-                                  if (formkey.currentState!.validate()) {
-                                    cubit
-                                        .login(
-                                      context,
-                                      password: AuthCubit.password.text,
-                                      email: AuthCubit.emailController.text,
-                                    )
-                                        .then((value) async {
-                                      await cubit.getEmail(context,
+                            loginPressed == false
+                                ? DefaultButton(
+                                    function: () async {
+                                      cubit.LoginPressed();
+                                      try {
+                                        final loginResponse = await cubit.login(
+                                          context,
+                                          password: AuthCubit.password.text,
                                           email: AuthCubit.emailController.text,
-                                          password: AuthCubit.password.text);
-
-                                      NavigateAndRemov(context, const LoginSuccess());
-                                    }).catchError((e) {
-                                      var dioException = e as DioError;
-
-                                      var status =
-                                          dioException.response!.statusCode;
-                                      print(status);
-                                      if (e.runtimeType == DioError) {
-                                        // print(dioException.response!.statusCode);
-                                      }
-                                      if (status == 403) {
-                                        const snackBar = SnackBar(
-                                          backgroundColor: Colors.red,
-                                          content: Text(
-                                              'Please Put The Right Credentials'),
                                         );
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(snackBar);
+
+                                        if (loginResponse == 200) {
+                                          await cubit.getUserInforamtion(
+                                            email:
+                                                AuthCubit.emailController.text,
+                                            password: AuthCubit.password.text,
+                                          );
+
+                                          NavigateAndRemov(
+                                              context, const LoginSuccess());
+                                        } else {
+                                          const snackBar = SnackBar(
+                                            backgroundColor: Colors.red,
+                                            content: Text(
+                                                'Please Put The Right Credentials'),
+                                          );
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(snackBar);
+                                        }
+                                      } catch (error) {
+                                        print("Error While Sign In: $error");
                                       }
-                                    });
-                                  }
-                                },
-                                text: 'Login'),
+                                    },
+                                    text: 'Login')
+                                : CircularProgressIndicator(),
                             Row(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               mainAxisAlignment: MainAxisAlignment.end,

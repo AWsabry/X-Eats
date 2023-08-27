@@ -102,7 +102,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
     Future.delayed(const Duration(seconds: 6)).then(
       (value) {
-        if (AuthCubit.get(context).EmailInforamtion != null) {
+        if (AuthCubit.get(context).userEmailShared != null) {
           if (OrderCubit.get(context).orderExistance == true) {
             Logger().f(OrderCubit.get(context).LocationNumber!);
             NavigateAndRemov(
@@ -131,44 +131,37 @@ class _SplashScreenState extends State<SplashScreen> {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     init(context);
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider(
-            create: (context) => OrderCubit()..checkOrderExistence(context)),
-        BlocProvider(create: (context) => AuthCubit()),
-      ],
-      child: BlocConsumer<AuthCubit, AuthStates>(
-          listener: (context, state) {},
-          builder: (context, state) {
-            return Scaffold(
-              body: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  // Text(OrderCubit.get(context).orderExistance.toString()),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 5),
-                    child: Image(
-                      image: const AssetImage('assets/Images/logo.png'),
-                      width: width,
-                      height: height / 2,
+    return BlocConsumer<AuthCubit, AuthStates>(
+        listener: (context, state) {},
+        builder: (context, state) {
+          return Scaffold(
+            body: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                // Text(OrderCubit.get(context).orderExistance.toString()),
+                Padding(
+                  padding: const EdgeInsets.only(left: 5),
+                  child: Image(
+                    image: const AssetImage('assets/Images/logo.png'),
+                    width: width,
+                    height: height / 2,
+                  ),
+                ),
+                SizedBox(
+                  height: height / 6,
+                ),
+                const Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    SpinKitThreeInOut(
+                      color: Color.fromARGB(255, 9, 134, 211),
+                      size: 35,
                     ),
-                  ),
-                  SizedBox(
-                    height: height / 6,
-                  ),
-                  const Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      SpinKitThreeInOut(
-                        color: Color.fromARGB(255, 9, 134, 211),
-                        size: 35,
-                      ),
-                    ],
-                  )
-                ],
-              ),
-            );
-          }),
-    );
+                  ],
+                )
+              ],
+            ),
+          );
+        });
   }
 }

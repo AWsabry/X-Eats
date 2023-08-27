@@ -27,7 +27,7 @@ class Profile extends StatelessWidget {
           var navcubit = NavBarCubitcubit.get(context);
           return ConditionalBuilder(
             fallback: (context) => const Center(child: Loading()),
-            condition: AuthCubit.get(context).EmailInforamtion != null,
+            condition: AuthCubit.get(context).userEmailShared != null,
             builder: (BuildContext context) {
               return Scaffold(
                 appBar: appBar(context, subtitle: 'Your', title: 'Profile'),
@@ -48,23 +48,7 @@ class Profile extends StatelessWidget {
                                   style: const TextStyle(color: Colors.black),
                                   children: [
                                     TextSpan(
-                                      text: "Name: ${cubit.FirstName}\n",
-                                      style: const TextStyle(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.bold,
-                                          color: Color.fromARGB(
-                                              255, 201, 238, 255)),
-                                    ),
-                                    TextSpan(
-                                      text:
-                                          "Email: ${AuthCubit.get(context).EmailInforamtion}\n",
-                                      style: const TextStyle(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.lightBlue),
-                                    ),
-                                    TextSpan(
-                                      text: "Wallet: ${cubit.wallet} \n",
+                                      text: "Name: ${cubit.firstNameShared}\n",
                                       style: const TextStyle(
                                           fontSize: 14,
                                           fontWeight: FontWeight.bold,
@@ -72,7 +56,22 @@ class Profile extends StatelessWidget {
                                     ),
                                     TextSpan(
                                       text:
-                                          "Phonenumber: ${cubit.PhoneNumber} \n",
+                                          "Email: ${AuthCubit.get(context).userEmailShared}\n",
+                                      style: const TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.lightBlue),
+                                    ),
+                                    TextSpan(
+                                      text: "Wallet: ${cubit.walletShared} \n",
+                                      style: const TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.lightBlue),
+                                    ),
+                                    TextSpan(
+                                      text:
+                                          "Phonenumber: ${cubit.phoneNumberShared} \n",
                                       style: const TextStyle(
                                           fontSize: 14,
                                           fontWeight: FontWeight.bold,

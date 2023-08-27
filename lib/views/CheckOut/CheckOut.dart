@@ -7,7 +7,6 @@ import 'package:xeats/controllers/Components/Global%20Components/DefaultButton.d
 import 'package:xeats/controllers/Components/Product%20Class/Products_Class.dart';
 import 'package:xeats/controllers/Cubits/OrderCubit/OrderCubit.dart';
 import 'package:xeats/controllers/Cubits/OrderCubit/OrderStates.dart';
-import 'package:xeats/core/logger.dart';
 import 'package:xeats/views/Cart/cart.dart';
 
 class CheckOut extends StatelessWidget {
@@ -104,13 +103,15 @@ class CheckOut extends StatelessWidget {
                         "Back to cart",
                         style: TextStyle(color: Colors.black),
                       )),
-                  DefaultButton(
-                      function: () {
-                        AppLogger.i("Button pressed.");
-                        // OrderCubit.get(context).getPublicOrder(context);
-                        OrderCubit.get(context).confirmOrder(context, Private);
-                      },
-                      text: "Order Now")
+                  OrderCubit.get(context).confirmOrderPressedButton == false
+                      ? DefaultButton(
+                          function: () {
+                            OrderCubit.get(context).confirmOrderPressed();
+                            OrderCubit.get(context)
+                                .confirmOrder(context, Private);
+                          },
+                          text: "Order Now")
+                      : const CircularProgressIndicator()
                 ],
               )
             ],

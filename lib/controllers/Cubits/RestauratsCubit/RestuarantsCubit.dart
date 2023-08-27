@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:logger/logger.dart';
 import 'package:xeats/controllers/Components/Categories%20Components/CategoryCard.dart';
 import 'package:xeats/controllers/Components/General%20Components/Components.dart';
 import 'package:xeats/controllers/Components/Global%20Components/loading.dart';
@@ -28,13 +29,14 @@ class RestuarantsCubit extends Cubit<RestuarantsStates> {
     required String? restaurantName,
   }) async {
     Widget result = Container();
-    await Dio()
-        .get(
-            "${AppConstants.BaseUrl}/get_category_of_restaurants/$restaurantId")
-        .then((value) {
+
+    try {
+      var restaurantByCategoryResponse = await Dio().get(
+          "${AppConstants.BaseUrl}/get_category_of_restaurants/$restaurantId");
+
       result = ListView.separated(
           itemBuilder: ((context, index) {
-            if (value.data["Names"][index] == null) {
+            if (restaurantByCategoryResponse.data["Names"][index] == null) {
               return const Loading();
             } else {
               return SizedBox(
@@ -44,19 +46,24 @@ class RestuarantsCubit extends Cubit<RestuarantsStates> {
                     Navigation(
                       context,
                       CategoriesView(
-                          category: value.data["Names"][index]['display_name'],
-                          categoryId:
-                              value.data["Names"][index]['id'].toString(),
+                          category: restaurantByCategoryResponse.data["Names"]
+                              [index]['display_name'],
+                          categoryId: restaurantByCategoryResponse.data["Names"]
+                                  [index]['id']
+                              .toString(),
                           image: AppConstants.BaseUrl +
-                              value.data["Names"][index]["image"],
+                              restaurantByCategoryResponse.data["Names"][index]
+                                  ["image"],
                           restaurantName: restaurantName,
                           restaurantID: restaurantId),
                     );
                   },
-                  category:
-                      value.data["Names"][index]['display_name'].toString(),
+                  category: restaurantByCategoryResponse.data["Names"][index]
+                          ['display_name']
+                      .toString(),
                   image: DioHelper.dio!.options.baseUrl +
-                      value.data["Names"][index]['image'],
+                      restaurantByCategoryResponse.data["Names"][index]
+                          ['image'],
                   description: "",
                 ),
               );
@@ -69,14 +76,11 @@ class RestuarantsCubit extends Cubit<RestuarantsStates> {
               child: Divider(),
             );
           }),
-          itemCount: value.data["Names"].length);
-    }).catchError((onError) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        duration: Duration(milliseconds: 1000),
-        content: Text("Something error try again later !!"),
-        backgroundColor: Colors.red,
-      ));
-    });
+          itemCount: restaurantByCategoryResponse.data["Names"].length);
+    } catch (error) {
+      Logger().e("Error In Category Restarants");
+    }
+
     return result;
   }
 
@@ -246,29 +250,29 @@ class RestuarantsCubit extends Cubit<RestuarantsStates> {
 
 //----- Knowing the avalable order restuarants that allowed to user to show
   Future<void> getCurrentAvailableOrderRestauant(context) async {
-    await Dio()
-        .get(
-            "${AppConstants.BaseUrl}/get_user_cartItems/${AuthCubit.get(context).EmailInforamtion}")
-        .then((value) async {
-      if (value.data["Names"].length == 0) {
-        currentRestaurant = {};
-      } else {
-        final dataFromApi = await Dio().get(
-            "${AppConstants.BaseUrl}/get_restaurants_by_id/${value.data["Names"][0]["Restaurant"]}");
-        currentRestaurant = dataFromApi.data["Names"][0];
-      }
-    });
+    var getCurrentAvailableOrderRestauantResponse = await Dio().get(
+        "${AppConstants.BaseUrl}/get_user_cartItems/${AuthCubit.get(context).userEmailShared}");
+
+    if (getCurrentAvailableOrderRestauantResponse.data["Names"].length == 0) {
+      currentRestaurant = {};
+    } else {
+      final dataFromApi = await Dio().get(
+          "${AppConstants.BaseUrl}/get_restaurants_by_id/${getCurrentAvailableOrderRestauantResponse.data["Names"][0]["Restaurant"]}");
+      currentRestaurant = dataFromApi.data["Names"][0];
+    }
   }
 
   Future<String?> getRestaurantName(String id) async {
     String? restaurantName;
-    await Dio()
-        .get("${AppConstants.BaseUrl}/get_restaurants_by_id/$id")
-        .then((value) {
-      restaurantName = value.data["Names"][0]["Name"].toString();
-    }).catchError((onError) {
-      restaurantName = onError.response!.statusCode.toString();
-    });
+    try {
+      var getRestaurantNameResponse =
+          await Dio().get("${AppConstants.BaseUrl}/get_restaurants_by_id/$id");
+
+      restaurantName =
+          getRestaurantNameResponse.data["Names"][0]["Name"].toString();
+    } catch (error) {
+      Logger().e("getRestaurantName error $error");
+    }
     return restaurantName;
   }
 }

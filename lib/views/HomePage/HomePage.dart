@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:logger/logger.dart';
 import 'package:xeats/controllers/Components/General%20Components/Components.dart';
 import 'package:xeats/controllers/Components/DiscountBanner/DiscountBanner.dart';
 import 'package:xeats/controllers/Components/Global%20Components/loading.dart';
@@ -73,8 +72,7 @@ class HomePage extends StatelessWidget {
         BlocProvider(
             create: (context) => OrderCubit()
               ..getCartID(context)
-              ..getLocation(context)
-              ..getRestaurantsOfLocation(context)),
+              ..getLocation(context)),
         BlocProvider(create: (context) => ProductsCubit()..getPoster()),
         BlocProvider(
           create: (context) => RestuarantsCubit(),
@@ -87,7 +85,7 @@ class HomePage extends StatelessWidget {
           List<dynamic> MostSoldProducts = ProductsCubit.MostSold;
           var cubit = AuthCubit.get(context);
           var navcubit = NavBarCubitcubit.get(context);
-          var FirstName = cubit.FirstName ?? '';
+          var FirstName = cubit.firstNameShared ?? '';
           return SafeArea(
             child: Scaffold(
               appBar: LocationBar(context),
@@ -318,12 +316,13 @@ class HomePage extends StatelessWidget {
                                                       ),
                                                     );
                                                   },
-                                                  condition: ProductsCubit
+                                                  condition: (ProductsCubit
                                                               .NoMostSoldProducts ==
                                                           false ||
                                                       ProductsCubit
-                                                              .NoMostSoldProducts ==
-                                                          null,
+                                                                  .NoMostSoldProducts
+                                                              .toString() ==
+                                                          "null"),
                                                   builder: (context) {
                                                     return Row(
                                                       children: [

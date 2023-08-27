@@ -22,6 +22,14 @@ class initialGetEmailState extends AuthStates {}
 
 class initialGetTokenState extends AuthStates {}
 
+class successSignInState extends AuthStates {}
+
+class LoginSuccessfullState extends AuthStates {}
+
+class LoginPressedState extends AuthStates {}
+
+class getCsrfState extends AuthStates {}
+
 class CheckEmailFailed extends AuthStates {
   final String error;
 

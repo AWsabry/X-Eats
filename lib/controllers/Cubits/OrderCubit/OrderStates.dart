@@ -42,6 +42,8 @@ class getDeliveryFeesStateError extends SuperOrderStates {
 
 class getTimePublicStateSuccess extends SuperOrderStates {}
 
+class confirmOrderPressedState extends SuperOrderStates {}
+
 class getTimeStateFailier extends SuperOrderStates {
   final String error;
   getTimeStateFailier(this.error);

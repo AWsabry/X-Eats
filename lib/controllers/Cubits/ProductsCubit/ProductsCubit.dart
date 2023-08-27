@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:logger/logger.dart';
 import 'package:xeats/controllers/Components/Product%20Class/Products_Class.dart';
 import 'package:xeats/controllers/Cubits/OrderCubit/OrderCubit.dart';
 import 'package:xeats/controllers/Cubits/ProductsCubit/ProductsStates.dart';
@@ -18,42 +19,44 @@ class ProductsCubit extends Cubit<ProductsStates> {
   static List<dynamic> MostSold = [];
   Map itemImages = {};
   static bool? NoMostSoldProducts;
-  void GetMostSoldProducts(context) {
-    emit(mostSoldProductsStateLoading());
-    DioHelper.getdata(
-        url:
-            'get_products_mostSold_products/${OrderCubit.PublicLocationId! + 1}',
-        query: {}).then((value) {
-      MostSold = value.data['Names'];
+  Future<void> getMostSoldProducts(context) async {
+    try {
+      emit(mostSoldProductsStateLoading());
+      var mostSoldProductsResonse = await DioHelper.getdata(
+          url:
+              'get_products_mostSold_products/${OrderCubit.PublicLocationId! + 1}',
+          query: {});
+      MostSold = mostSoldProductsResonse.data['Names'];
       if (MostSold.isEmpty) {
         NoMostSoldProducts = true;
       } else {
         NoMostSoldProducts = false;
       }
       emit(MostSoldProductsStateSuccessfull());
-    }).catchError((error) {
-      AppLogger.i(NoMostSoldProducts.toString());
-    });
+    } catch (error) {
+      Logger().e("Error In No Most Sold Proudcts $error");
+    }
   }
 
-  List<dynamic> new_products = [];
+  static List<dynamic> new_products = [];
   static bool? NoNewProducts;
 
-  void NewProducts(context) {
-    emit(newProductsStateLoading());
-    DioHelper.getdata(
-        url: 'get_products_new_products/${OrderCubit.PublicLocationId! + 1}',
-        query: {}).then((value) {
-      new_products = value.data['Names'];
+  Future<void> getNewProducts(context) async {
+    try {
+      emit(newProductsStateLoading());
+      var NewProductsResponse = await DioHelper.getdata(
+          url: 'get_products_new_products/${OrderCubit.PublicLocationId! + 1}',
+          query: {});
+      new_products = NewProductsResponse.data['Names'];
       if (new_products.isEmpty) {
         NoNewProducts = true;
       } else {
         NoNewProducts = false;
       }
       emit(NewProductsStateSuccessfull());
-    }).catchError((error) {
-      emit(newProductsStateFailed(error));
-    });
+    } catch (error) {
+      Logger().e("Error In No New Proudcts $error");
+    }
   }
 
   static List<dynamic> getposters = [];
@@ -101,41 +104,6 @@ class ProductsCubit extends Cubit<ProductsStates> {
   final List<String> image = [];
   List<int> ProductId = [];
 
-  // Future<void> SearchOnListOfProduct(BuildContext context) async {
-  //   await Future.wait(ProductId.map((productId) async {
-  //     try {
-  //       final response = await Dio()
-  //           .get('${AppConstants.BaseUrl}/get_products_by_id/$productId');
-  //       final name = response.data['Names'][0];
-
-  //       image.add(name['image']);
-  //       restaurant_name.add(name['restaurant_name']);
-  //       category_name.add(name['category_name']);
-  //       category.add(name['category']);
-  //       isNewProduct.add(name['New_Products']);
-  //       isMostPopular.add(name['Most_Popular']);
-  //       isBestOffer.add(name['Best_Offer']);
-  //       creationDate.add(name['created']);
-  //       description.add(name['description']);
-  //       restaurant.add(name['Restaurant']);
-  //       id.add(name['id']);
-  //       price.add(name['price']);
-  //       EnglishName.add(name['name']);
-  //       ArabicName.add(name['ArabicName']);
-  //     } catch (e) {
-  //       ScaffoldMessenger.of(context).showSnackBar(
-  //         const SnackBar(
-  //           duration: Duration(milliseconds: 1500),
-  //           content: Text('Something went wrong. Please try again later.'),
-  //           backgroundColor: Colors.red,
-  //         ),
-  //       );
-  //     }
-  //   }));
-
-  //   emit(ProductSearchSuccess());
-  // }
-
   List<dynamic> searchedProducts = [];
   bool? noProducts;
   Future GetSearchedProductsInRestaurant(context, String restaurantName) async {
@@ -161,31 +129,6 @@ class ProductsCubit extends Cubit<ProductsStates> {
     return data;
   }
 
-  // Future GetIdOfProducts(
-  //   BuildContext context, {
-  //   required String? id,
-  // }) async {
-  //   await Dio()
-  //       .get("${AppConstants.BaseUrl}/get_products_by_restaurant_id/$id")
-  //       .then((value) async {
-  //     var products = value.data["Names"].where((product) =>
-  //         product["name"]
-  //             .toString()
-  //             .toLowerCase()
-  //             .contains(searchController.text.toLowerCase()) ||
-  //         product["ArabicName"]
-  //             .toString()
-  //             .toLowerCase()
-  //             .contains(searchController.text.toLowerCase()));
-
-  //     ProductId = products
-  //         .where((product) => product["id"] is int)
-  //         .map<int>((product) => product["id"] as int)
-  //         .toList();
-  //   });
-  //   emit(ProductIdSuccessful());
-  // }
-
   Future getCurrentProducts(
     BuildContext context, {
     required String? id,
@@ -195,44 +138,46 @@ class ProductsCubit extends Cubit<ProductsStates> {
     required String? restaurantName,
   }) async {
     var data;
-    await Dio()
-        .get(
-            "${AppConstants.BaseUrl}/get_products_of_restaurant_by_category/$id/$CatId")
-        .then((value) async {
-      data = Expanded(
-        child: ListView.separated(
-            itemBuilder: (context, index) {
-              return ProductClass(
-                itemImage: image,
-                englishName: value.data["Names"][index]["name"],
-                arabicName: value.data["Names"][index]["ArabicName"],
-                price: value.data["Names"][index]["price"],
-                id: value.data["Names"][index]["id"],
-                description: value.data["Names"][index]["description"],
-                creationDate: value.data["Names"][index]["created"],
-                restaurant: value.data["Names"][index]["Restaurant"],
-                isBestOffer: value.data["Names"][index]["Best_Offer"],
-                isMostPopular: value.data["Names"][index]["Most_Popular"],
-                isNewProduct: value.data["Names"][index]["New_Products"],
-              ).productsOfCategory(context,
-                  image: image,
-                  category: category,
-                  CatId: CatId,
-                  restaurantName: restaurantName,
-                  price: value.data["Names"][index]["price"]);
-            },
-            separatorBuilder: ((context, index) {
-              return const Divider();
-            }),
-            itemCount: value.data["Names"].length),
-      );
-    }).catchError((e) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        duration: Duration(milliseconds: 1500),
-        content: Text("Something error try again later !!"),
-        backgroundColor: Colors.red,
-      ));
-    });
+    var getProductsByCategoryResponse = await Dio().get(
+        "${AppConstants.BaseUrl}/get_products_of_restaurant_by_category/$id/$CatId");
+    data = Expanded(
+      child: ListView.separated(
+          itemBuilder: (context, index) {
+            return ProductClass(
+              itemImage: image,
+              englishName: getProductsByCategoryResponse.data["Names"][index]
+                  ["name"],
+              arabicName: getProductsByCategoryResponse.data["Names"][index]
+                  ["ArabicName"],
+              price: getProductsByCategoryResponse.data["Names"][index]
+                  ["price"],
+              id: getProductsByCategoryResponse.data["Names"][index]["id"],
+              description: getProductsByCategoryResponse.data["Names"][index]
+                  ["description"],
+              creationDate: getProductsByCategoryResponse.data["Names"][index]
+                  ["created"],
+              restaurant: getProductsByCategoryResponse.data["Names"][index]
+                  ["Restaurant"],
+              isBestOffer: getProductsByCategoryResponse.data["Names"][index]
+                  ["Best_Offer"],
+              isMostPopular: getProductsByCategoryResponse.data["Names"][index]
+                  ["Most_Popular"],
+              isNewProduct: getProductsByCategoryResponse.data["Names"][index]
+                  ["New_Products"],
+            ).productsOfCategory(context,
+                image: image,
+                category: category,
+                CatId: CatId,
+                restaurantName: restaurantName,
+                price: getProductsByCategoryResponse.data["Names"][index]
+                    ["price"]);
+          },
+          separatorBuilder: ((context, index) {
+            return const Divider();
+          }),
+          itemCount: getProductsByCategoryResponse.data["Names"].length),
+    );
+
     return data;
   }
 
