@@ -9,7 +9,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:logger/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:xeats/controllers/Components/General%20Components/Components.dart';
+import 'package:xeats/controllers/Components/Global%20Components/custom_navigate.dart';
 import 'package:xeats/controllers/Components/Product%20Class/Products_Class.dart';
 import 'package:xeats/controllers/Components/Requests%20Loading%20Components/RequstsLoading.dart';
 import 'package:xeats/controllers/Cubits/AuthCubit/cubit.dart';

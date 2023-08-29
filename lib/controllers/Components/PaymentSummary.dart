@@ -4,7 +4,7 @@ import 'package:conditional_builder_null_safety/conditional_builder_null_safety.
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:xeats/controllers/Components/General%20Components/Components.dart';
+import 'package:xeats/controllers/Components/Global%20Components/custom_navigate.dart';
 import 'package:xeats/controllers/Cubits/OrderCubit/OrderCubit.dart';
 import 'package:xeats/controllers/Cubits/OrderCubit/OrderStates.dart';
 import 'package:xeats/views/HomePage/HomePage.dart';

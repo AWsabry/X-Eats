@@ -3,8 +3,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:xeats/controllers/Components/General%20Components/Components.dart';
 import 'package:xeats/controllers/Components/Global%20Components/DefaultButton.dart';
+import 'package:xeats/controllers/Components/Global%20Components/custom_navigate.dart';
 import 'package:xeats/controllers/Components/Global%20Components/defaultFormField.dart';
 import 'package:xeats/controllers/Components/LoginPressed/LoginPressed.dart';
 import 'package:xeats/controllers/Cubits/AuthCubit/States.dart';

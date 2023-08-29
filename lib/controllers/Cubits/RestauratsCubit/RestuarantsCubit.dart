@@ -7,14 +7,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:logger/logger.dart';
-import 'package:xeats/controllers/Components/Categories%20Components/CategoryCard.dart';
-import 'package:xeats/controllers/Components/General%20Components/Components.dart';
+import 'package:xeats/controllers/Components/Global%20Components/custom_navigate.dart';
 import 'package:xeats/controllers/Components/Global%20Components/loading.dart';
 import 'package:xeats/controllers/Cubits/AuthCubit/cubit.dart';
 import 'package:xeats/controllers/Cubits/RestauratsCubit/RestaurantsStates.dart';
 import 'package:xeats/controllers/Dio/DioHelper.dart';
 import 'package:xeats/core/Constants/constants.dart';
-import 'package:xeats/views/CategoryView/categoryView.dart';
 import 'package:xeats/views/ResturantsMenu/ResturantsMenu.dart';
 
 class RestuarantsCubit extends Cubit<RestuarantsStates> {
@@ -22,66 +20,21 @@ class RestuarantsCubit extends Cubit<RestuarantsStates> {
   static RestuarantsCubit get(context) => BlocProvider.of(context);
 
 //--------- Get The All Resturants Inside The resturants Menu Widget --------/////////////
-  Future<Widget> getRestaurantCategories(
+  Response? restaurantByCategoryResponse;
+  String? restaurantByCategoryImage;
+  Future<Response?> getRestaurantCategories(
     BuildContext context, {
     required String? restaurantId,
     required String? image,
     required String? restaurantName,
   }) async {
-    Widget result = Container();
-
     try {
-      var restaurantByCategoryResponse = await Dio().get(
+      restaurantByCategoryResponse = await Dio().get(
           "${AppConstants.BaseUrl}/get_category_of_restaurants/$restaurantId");
-
-      result = ListView.separated(
-          itemBuilder: ((context, index) {
-            if (restaurantByCategoryResponse.data["Names"][index] == null) {
-              return const Loading();
-            } else {
-              return SizedBox(
-                height: MediaQuery.of(context).size.height / 5,
-                child: CategoryCard(
-                  press: () {
-                    Navigation(
-                      context,
-                      CategoriesView(
-                          category: restaurantByCategoryResponse.data["Names"]
-                              [index]['display_name'],
-                          categoryId: restaurantByCategoryResponse.data["Names"]
-                                  [index]['id']
-                              .toString(),
-                          image: AppConstants.BaseUrl +
-                              restaurantByCategoryResponse.data["Names"][index]
-                                  ["image"],
-                          restaurantName: restaurantName,
-                          restaurantID: restaurantId),
-                    );
-                  },
-                  category: restaurantByCategoryResponse.data["Names"][index]
-                          ['display_name']
-                      .toString(),
-                  image: DioHelper.dio!.options.baseUrl +
-                      restaurantByCategoryResponse.data["Names"][index]
-                          ['image'],
-                  description: "",
-                ),
-              );
-            }
-            // "${value.data["Names"][index]["display_name"]}")),
-          }),
-          separatorBuilder: ((context, index) {
-            return const SizedBox(
-              height: 20,
-              child: Divider(),
-            );
-          }),
-          itemCount: restaurantByCategoryResponse.data["Names"].length);
     } catch (error) {
       Logger().e("Error In Category Restarants");
     }
-
-    return result;
+    return restaurantByCategoryResponse;
   }
 
   TextEditingController searchRestaurantsController = TextEditingController();

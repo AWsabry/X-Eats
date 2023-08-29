@@ -1,16 +1,15 @@
-// ignore_for_file: use_build_context_synchronously
+// ignore_for_file: use_build_context_synchronously, prefer_interpolation_to_compose_strings
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:xeats/controllers/Components/General%20Components/Components.dart';
 import 'package:xeats/controllers/Components/DiscountBanner/DiscountBanner.dart';
+import 'package:xeats/controllers/Components/Global%20Components/custom_navigate.dart';
 import 'package:xeats/controllers/Components/Global%20Components/loading.dart';
 import 'package:xeats/controllers/Components/LocationBar/LocationBar.dart';
 import 'package:xeats/controllers/Components/Product%20Class/Products_Class.dart';
-import 'package:xeats/controllers/Components/Products%20Components/ProductView.dart';
 import 'package:xeats/controllers/Components/Restaurant%20Components/RestaurantView.dart';
 import 'package:xeats/controllers/Cubits/AuthCubit/cubit.dart';
 import 'package:xeats/controllers/Cubits/ButtomNavigationBarCubit/navigationCubit.dart';
@@ -82,7 +81,7 @@ class HomePage extends StatelessWidget {
       child: BlocConsumer<ProductsCubit, ProductsStates>(
         listener: (context, state) {},
         builder: ((context, state) {
-          List<dynamic> MostSoldProducts = ProductsCubit.MostSold;
+          List<dynamic> mostSoldProducts = ProductsCubit.MostSold;
           var cubit = AuthCubit.get(context);
           var navcubit = NavBarCubitcubit.get(context);
           var FirstName = cubit.firstNameShared ?? '';
@@ -327,47 +326,123 @@ class HomePage extends StatelessWidget {
                                                     return Row(
                                                       children: [
                                                         ...List.generate(
-                                                          MostSoldProducts
+                                                          mostSoldProducts
                                                               .length,
                                                           (index) {
-                                                            return GestureDetector(
-                                                              child:
-                                                                  ProductView(
-                                                                      image: MostSoldProducts[
-                                                                              index][
-                                                                          "image"],
-                                                                      width:
-                                                                          width /
-                                                                              2.0,
-                                                                      height:
-                                                                          height /
-                                                                              4.2,
-                                                                      data: MostSoldProducts[
-                                                                              index]
-                                                                          [
-                                                                          "name"],
-                                                                      Colors: Colors
-                                                                          .white,
-                                                                      Navigate:
-                                                                          () =>
-                                                                              {
-                                                                                Navigation(
-                                                                                    context,
-                                                                                    ProductClass().productDetails(
-                                                                                      context,
-                                                                                      productName: MostSoldProducts[index]["productName"],
-                                                                                      id: MostSoldProducts[index]["id"],
-                                                                                      restaurant: MostSoldProducts[index]["Restaurant"],
-                                                                                      image: "${AppConstants.BaseUrl}/uploads/" + MostSoldProducts[index]["image"],
-                                                                                      price: MostSoldProducts[index]['price'],
-                                                                                      englishName: MostSoldProducts[index]["name"],
-                                                                                      arabicName: MostSoldProducts[index]["ArabicName"],
-                                                                                      description: MostSoldProducts[index]["description"] ?? "No Description for this Product",
-                                                                                      restaurantName: MostSoldProducts[index]["Restaurant"].toString(),
-                                                                                    )),
-                                                                              }),
-                                                              onTap: () {},
-                                                            );
+                                                            return ProductClass(
+                                                              productName:
+                                                                  mostSoldProducts[
+                                                                          index]
+                                                                      ["name"],
+                                                              id: mostSoldProducts[
+                                                                  index]["id"],
+                                                              restaurant:
+                                                                  mostSoldProducts[
+                                                                          index]
+                                                                      [
+                                                                      "Restaurant"],
+                                                              itemImage: "${AppConstants.BaseUrl}/uploads/" +
+                                                                  mostSoldProducts[
+                                                                          index]
+                                                                      ["image"],
+                                                              price:
+                                                                  mostSoldProducts[
+                                                                          index]
+                                                                      ['price'],
+                                                              englishName:
+                                                                  mostSoldProducts[
+                                                                          index]
+                                                                      ["name"],
+                                                              arabicName:
+                                                                  mostSoldProducts[
+                                                                          index]
+                                                                      [
+                                                                      "ArabicName"],
+                                                              description: mostSoldProducts[
+                                                                          index]
+                                                                      [
+                                                                      "description"] ??
+                                                                  "No Description for this Product",
+                                                            ).MostSoldProducts(
+                                                                context,
+                                                                width: width /
+                                                                    2.0,
+                                                                height: height /
+                                                                    4.2,
+                                                                image: "${AppConstants.BaseUrl}/uploads/" +
+                                                                    mostSoldProducts[
+                                                                            index]
+                                                                        [
+                                                                        "image"],
+                                                                Colors: Colors
+                                                                    .white,
+                                                                data: mostSoldProducts[
+                                                                        index]
+                                                                    ["name"],
+                                                                restaurantName:
+                                                                    mostSoldProducts[index]
+                                                                            [
+                                                                            "Restaurant"]
+                                                                        .toString());
+
+                                                            // return ProductView(
+                                                            //   image:
+                                                            //       mostSoldProducts[
+                                                            //               index]
+                                                            //           ["image"],
+                                                            //   width:
+                                                            //       width / 2.0,
+                                                            //   height:
+                                                            //       height / 4.2,
+                                                            //   data:
+                                                            //       mostSoldProducts[
+                                                            //               index]
+                                                            //           ["name"],
+                                                            //   Colors:
+                                                            //       Colors.white,
+                                                            //   Navigate: () {
+                                                            //     Navigation(
+                                                            //         context,
+                                                            //         ProductClass()
+                                                            //             .productDetails(
+                                                            //           context,
+                                                            //           productName:
+                                                            //               mostSoldProducts[index]
+                                                            //                   [
+                                                            //                   "productName"],
+                                                            //           id: mostSoldProducts[
+                                                            //                   index]
+                                                            //               [
+                                                            //               "id"],
+                                                            //           restaurant:
+                                                            //               mostSoldProducts[index]
+                                                            //                   [
+                                                            //                   "Restaurant"],
+                                                            //           image: "${AppConstants.BaseUrl}/uploads/" +
+                                                            //               mostSoldProducts[index]
+                                                            //                   [
+                                                            //                   "image"],
+                                                            //           price: mostSoldProducts[
+                                                            //                   index]
+                                                            //               [
+                                                            //               'price'],
+                                                            //           englishName:
+                                                            //               mostSoldProducts[index]
+                                                            //                   [
+                                                            //                   "name"],
+                                                            //           arabicName:
+                                                            //               mostSoldProducts[index]
+                                                            //                   [
+                                                            //                   "ArabicName"],
+                                                            //           description:
+                                                            //               mostSoldProducts[index]["description"] ??
+                                                            //                   "No Description for this Product",
+                                                            //           restaurantName:
+                                                            //               mostSoldProducts[index]["Restaurant"]
+                                                            //                   .toString(),
+                                                            //         ));
+                                                            //   },
+                                                            // );
                                                           },
                                                         ),
                                                       ],

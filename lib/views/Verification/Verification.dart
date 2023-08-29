@@ -6,10 +6,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pinput/pinput.dart';
+import 'package:xeats/controllers/Components/Global%20Components/custom_navigate.dart';
 import 'package:xeats/controllers/Cubits/AuthCubit/States.dart';
 import 'package:xeats/controllers/Cubits/AuthCubit/cubit.dart';
 
-import 'package:xeats/controllers/Components/General%20Components/Components.dart';
 import 'package:xeats/views/CompleteProfile/Complete_Profile.dart';
 import 'package:xeats/views/SignIn/SignIn.dart';
 

@@ -1,6 +1,4 @@
 // ignore_for_file: must_be_immutable, invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
-
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -9,13 +7,14 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:logger/logger.dart';
 import 'package:xeats/controllers/Components/Global%20Components/DefaultButton.dart';
+import 'package:xeats/controllers/Components/Global%20Components/custom_navigate.dart';
 import 'package:xeats/controllers/Components/Global%20Components/loading.dart';
 import 'package:xeats/controllers/Components/AppBar/AppBarCustomized.dart';
 import 'package:xeats/controllers/Components/Requests%20Loading%20Components/RequstsLoading.dart';
 import 'package:xeats/controllers/Cubits/ButtomNavigationBarCubit/navigationCubit.dart';
 import 'package:xeats/controllers/Cubits/OrderCubit/OrderCubit.dart';
 import 'package:xeats/controllers/Cubits/OrderCubit/OrderStates.dart';
-import 'package:xeats/controllers/Components/General%20Components/Components.dart';
+import 'package:xeats/controllers/Cubits/ProductsCubit/ProductsCubit.dart';
 import 'package:xeats/core/Constants/constants.dart';
 import 'package:xeats/views/Layout/Layout.dart';
 import 'package:xeats/views/Profile/Profile.dart';
@@ -33,6 +32,7 @@ class ProductClass extends StatelessWidget {
   String? itemImage, restaurantImage;
   String? productName;
   String? cartItemId;
+  String? currentTiming;
 
   static List<Widget> CartItems = [];
 
@@ -144,16 +144,19 @@ class ProductClass extends StatelessWidget {
                 children: [
                   SizedBox(
                     width: width / 5,
-                    child: Image(
-                      width: width / 5,
-                      image: CachedNetworkImageProvider(
-                          "https://x-eats.com$itemImage"),
-                      loadingBuilder: (context, child, loadingProgress) {
-                        if (loadingProgress == null) return child;
-                        return const Center(
-                          child: Loading(),
-                        );
-                      },
+                    child: Hero(
+                      tag: englishName.toString(),
+                      child: Image(
+                        width: width / 5,
+                        image: CachedNetworkImageProvider(
+                            "https://x-eats.com$itemImage"),
+                        loadingBuilder: (context, child, loadingProgress) {
+                          if (loadingProgress == null) return child;
+                          return const Center(
+                            child: Loading(),
+                          );
+                        },
+                      ),
                     ),
                   ),
                   Column(
@@ -250,27 +253,26 @@ class ProductClass extends StatelessWidget {
           InkWell(
             onTap: () {
               Navigation(
-                  context,
-                  productDetails(context,
-                      image: '$image',
-                      id: id,
-                      restaurant: restaurant,
-                      restaurantName: restaurantName,
-                      price: price,
-                      arabicName: arabicName,
-                      description:
-                          description ?? "No Description for this Product",
-                      englishName: englishName,
-                      productName: productName),
-                  duration: const Duration(seconds: 2));
+                context,
+                productDetails(context,
+                    image: '$image',
+                    id: id,
+                    restaurant: restaurant,
+                    restaurantName: restaurantName,
+                    price: price,
+                    arabicName: arabicName,
+                    description:
+                        description ?? "No Description for this Product",
+                    englishName: englishName,
+                    productName: productName),
+              );
             },
             child: Padding(
               padding: const EdgeInsets.all(8),
               child: Row(
                 children: [
                   FutureBuilder(
-                    future: Dio()
-                        .get("https://x-eats.com/get_category_by_id/$CatId"),
+                    future: ProductsCubit.get(context).getCategoryById(CatId),
                     builder: ((context, AsyncSnapshot snapshot) {
                       if (snapshot.hasData) {
                         return Container(
@@ -285,22 +287,38 @@ class ProductClass extends StatelessWidget {
                             child: Hero(
                               tag: englishName.toString(),
                               child: Image(
-                                image: NetworkImage(
-                                  "https://x-eats.com${snapshot.data.data["Names"][0]["image"]}",
-                                ),
                                 loadingBuilder:
                                     (context, child, loadingProgress) {
-                                  if (loadingProgress == null) return child;
-                                  return const Center(
-                                    child: Loading(),
-                                  );
+                                  if (loadingProgress == null) {
+                                    return child;
+                                  } else {
+                                    return const Center(
+                                      child: Loading(),
+                                    );
+                                  }
                                 },
+                                image: CachedNetworkImageProvider(
+                                  "$image",
+                                ),
                               ),
                             ),
                           ),
                         );
                       } else {
-                        return const Loading();
+                        return Container(
+                          height: 130.h,
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                                color: const Color.fromARGB(74, 158, 158, 158)),
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Hero(
+                                tag: englishName.toString(),
+                                child: const Loading()),
+                          ),
+                        );
                       }
                     }),
                   ),
@@ -406,17 +424,17 @@ class ProductClass extends StatelessWidget {
             child: Column(
               children: [
                 Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.only(left: 8.0, right: 8.0),
                   child: SizedBox(
-                    width: double.maxFinite,
                     child: Column(
                       children: [
                         ClipRRect(
-                          borderRadius: BorderRadius.circular(300.0),
                           child: Hero(
                             tag: this.englishName.toString(),
                             child: Image(
-                              width: 200,
+                              fit: BoxFit.fill,
+                              width: double.infinity,
+                              height: 240,
                               image: CachedNetworkImageProvider(
                                 '$image',
                               ),
@@ -601,6 +619,141 @@ class ProductClass extends StatelessWidget {
         );
       },
       listener: ((context, state) {}),
+    );
+  }
+
+  Widget MostSoldProducts(
+    BuildContext context, {
+    final double raduisPadding = 8.0,
+    final double raduisButton = 10.0,
+    double height = 100,
+    double width = 100,
+    required final String? image,
+    required final Color? Colors,
+    required final String? data,
+    required String? restaurantName,
+  }) {
+    return Column(
+      children: [
+        SizedBox(
+          height: height,
+          width: width,
+          child: Padding(
+            padding: EdgeInsets.all(raduisPadding),
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors,
+                  shape: RoundedRectangleBorder(
+                      borderRadius:
+                          BorderRadius.all(Radius.circular(raduisButton)))),
+              onPressed: () {
+                Navigation(
+                  context,
+                  productDetails(context,
+                      image: '$image',
+                      id: id,
+                      restaurant: restaurant,
+                      restaurantName: restaurantName,
+                      price: price,
+                      arabicName: arabicName,
+                      description:
+                          description ?? "No Description for this Product",
+                      englishName: englishName,
+                      productName: productName),
+                );
+              },
+              child: Hero(
+                tag: englishName.toString(),
+                child: Image(
+                  image: CachedNetworkImageProvider(
+                    image!,
+                  ),
+                  loadingBuilder: (context, child, loadingProgress) {
+                    if (loadingProgress == null) return child;
+                    return const Center(
+                      child: Loading(),
+                    );
+                  },
+                ),
+              ),
+            ),
+          ),
+        ),
+        Text(
+          "${data}",
+          style: const TextStyle(
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget NewProducts(
+    BuildContext context, {
+    final double raduisPadding = 8.0,
+    final double raduisButton = 10.0,
+    double height = 100,
+    double width = 100,
+    required final String? image,
+    required final Color? Colors,
+    final String? title,
+    required String? restaurantName,
+  }) {
+    return Column(
+      children: [
+        SizedBox(
+          height: height,
+          width: width,
+          child: Padding(
+            padding: EdgeInsets.all(raduisPadding),
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors,
+                  shape: RoundedRectangleBorder(
+                      borderRadius:
+                          BorderRadius.all(Radius.circular(raduisButton)))),
+              onPressed: () {
+                Navigation(
+                  context,
+                  productDetails(context,
+                      image: '$image',
+                      id: id,
+                      restaurant: restaurant,
+                      restaurantName: restaurantName,
+                      price: price,
+                      arabicName: arabicName,
+                      description:
+                          description ?? "No Description for this Product",
+                      englishName: englishName,
+                      productName: productName),
+                );
+              },
+              child: Hero(
+                tag: englishName.toString(),
+                child: Image(
+                  width: 200,
+                  image: CachedNetworkImageProvider(
+                    image!,
+                  ),
+                  loadingBuilder: (context, child, loadingProgress) {
+                    if (loadingProgress == null) return child;
+                    return const Center(
+                      child: Loading(),
+                    );
+                  },
+                ),
+              ),
+            ),
+          ),
+        ),
+        Text(
+          "${title}",
+          style: const TextStyle(
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ],
     );
   }
 }

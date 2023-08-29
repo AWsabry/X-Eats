@@ -2,7 +2,6 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logger/logger.dart';
-import 'package:xeats/controllers/Components/Product%20Class/Products_Class.dart';
 import 'package:xeats/controllers/Cubits/OrderCubit/OrderCubit.dart';
 import 'package:xeats/controllers/Cubits/ProductsCubit/ProductsStates.dart';
 import 'package:xeats/controllers/Dio/DioHelper.dart';
@@ -129,56 +128,21 @@ class ProductsCubit extends Cubit<ProductsStates> {
     return data;
   }
 
-  Future getCurrentProducts(
+  Response? getProductsByCategoryResponse;
+  Future<Response?> getCurrentProducts(
     BuildContext context, {
     required String? id,
     required String? CatId,
-    required String? image,
-    required String? category,
-    required String? restaurantName,
   }) async {
-    var data;
-    var getProductsByCategoryResponse = await Dio().get(
-        "${AppConstants.BaseUrl}/get_products_of_restaurant_by_category/$id/$CatId");
-    data = Expanded(
-      child: ListView.separated(
-          itemBuilder: (context, index) {
-            return ProductClass(
-              itemImage: image,
-              englishName: getProductsByCategoryResponse.data["Names"][index]
-                  ["name"],
-              arabicName: getProductsByCategoryResponse.data["Names"][index]
-                  ["ArabicName"],
-              price: getProductsByCategoryResponse.data["Names"][index]
-                  ["price"],
-              id: getProductsByCategoryResponse.data["Names"][index]["id"],
-              description: getProductsByCategoryResponse.data["Names"][index]
-                  ["description"],
-              creationDate: getProductsByCategoryResponse.data["Names"][index]
-                  ["created"],
-              restaurant: getProductsByCategoryResponse.data["Names"][index]
-                  ["Restaurant"],
-              isBestOffer: getProductsByCategoryResponse.data["Names"][index]
-                  ["Best_Offer"],
-              isMostPopular: getProductsByCategoryResponse.data["Names"][index]
-                  ["Most_Popular"],
-              isNewProduct: getProductsByCategoryResponse.data["Names"][index]
-                  ["New_Products"],
-            ).productsOfCategory(context,
-                image: image,
-                category: category,
-                CatId: CatId,
-                restaurantName: restaurantName,
-                price: getProductsByCategoryResponse.data["Names"][index]
-                    ["price"]);
-          },
-          separatorBuilder: ((context, index) {
-            return const Divider();
-          }),
-          itemCount: getProductsByCategoryResponse.data["Names"].length),
-    );
-
-    return data;
+    try {
+      getProductsByCategoryResponse = await Dio().get(
+          "${AppConstants.BaseUrl}/get_products_of_restaurant_by_category/$id/$CatId");
+      emit(GetCurrentProductsSuccessful());
+    } catch (error) {
+      Logger().e("Error While Get current Products");
+      throw error;
+    }
+    return getProductsByCategoryResponse;
   }
 
   Privacy? privacy = Privacy.Public;
@@ -187,5 +151,16 @@ class ProductsCubit extends Cubit<ProductsStates> {
     print(ChangePrivacytoPublic());
     print(value);
     emit(ChangePrivacytoPublic());
+  }
+
+  Future<Response>? categoryByIdResponse;
+  Future<Response> getCategoryById(String? CatId) {
+    try {
+      categoryByIdResponse =
+          Dio().get("https://x-eats.com/get_category_by_id/$CatId");
+    } catch (error) {
+      Logger().e("Error Getting Category By Id $error");
+    }
+    return categoryByIdResponse!;
   }
 }

@@ -18,6 +18,10 @@ class ProductsFail extends SuperProductsStates {
 
 class ProductSearchSuccess extends SuperProductsStates {}
 
+class GetCurrentProductsSuccessful extends SuperProductsStates {}
+
+class GetCategoryByIdSuccefull extends SuperProductsStates {}
+
 class ProductIdSuccessful extends SuperProductsStates {}
 
 class ProductSearchFail extends SuperProductsStates {

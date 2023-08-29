@@ -5,17 +5,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:xeats/controllers/Components/General%20Components/Components.dart';
+import 'package:xeats/controllers/Components/Categories%20Components/CategoryCard.dart';
+import 'package:xeats/controllers/Components/Global%20Components/custom_navigate.dart';
 import 'package:xeats/controllers/Components/Global%20Components/loading.dart';
 import 'package:xeats/controllers/Components/AppBar/AppBarCustomized.dart';
 import 'package:xeats/controllers/Cubits/ProductsCubit/ProductsCubit.dart';
 import 'package:xeats/controllers/Cubits/RestauratsCubit/RestaurantsStates.dart';
 import 'package:xeats/controllers/Cubits/RestauratsCubit/RestuarantsCubit.dart';
-import 'package:xeats/controllers/Dio/DioHelper.dart';
+import 'package:xeats/core/Constants/constants.dart';
+import 'package:xeats/views/CategoryView/categoryView.dart';
 import 'package:xeats/views/Layout/Layout.dart';
 import 'package:xeats/views/Profile/Profile.dart';
 import 'package:xeats/views/Resturants/Resturants.dart';
-import 'package:xeats/views/Search/SearchProducts.dart';
 import '../../controllers/Cubits/ButtomNavigationBarCubit/navigationCubit.dart';
 
 class ResturantsMenu extends StatelessWidget {
@@ -47,6 +48,7 @@ class ResturantsMenu extends StatelessWidget {
     return BlocConsumer<RestuarantsCubit, RestuarantsStates>(
       listener: (context, state) {},
       builder: (context, state) {
+        // var restuarantsOfSlugListResponse = OrderCubit.restuarantsOfSlugList;
         var navcubit = NavBarCubitcubit.get(context);
         return Scaffold(
           appBar: appBar(context, subtitle: 'Products Of', title: data['Name']),
@@ -77,10 +79,11 @@ class ResturantsMenu extends StatelessWidget {
                               controller:
                                   ProductsCubit.get(context).searchController,
                               onSubmitted: (value) async {
-                                NavigateAndRemov(
-                                    context,
-                                    SearchProductsScreen(
-                                        restaurantName: data['Name']));
+                                // NavigateAndRemov(
+                                //     context,
+                                //     SearchProductsScreen(
+                                //         restaurantName: data['Name'])
+                                //         );
                               },
                             ),
                           ),
@@ -108,7 +111,7 @@ class ResturantsMenu extends StatelessWidget {
                                               BorderRadius.circular(20),
                                           child: Image(
                                             image: CachedNetworkImageProvider(
-                                                DioHelper.dio!.options.baseUrl +
+                                                AppConstants.BaseUrl +
                                                     data['logo']),
                                           ),
                                         ),
@@ -186,7 +189,66 @@ class ResturantsMenu extends StatelessWidget {
                   child: FutureBuilder(
                     builder: ((context, snapshot) {
                       if (snapshot.hasData) {
-                        return snapshot.data!;
+                        return ListView.separated(
+                            itemBuilder: ((context, index) {
+                              if (RestuarantsCubit.get(context)
+                                      .restaurantByCategoryResponse!
+                                      .data["Names"][index] ==
+                                  null) {
+                                return const CircularProgressIndicator();
+                              } else {
+                                return SizedBox(
+                                  height:
+                                      MediaQuery.of(context).size.height / 5,
+                                  child: CategoryCard(
+                                    category: RestuarantsCubit.get(context)
+                                        .restaurantByCategoryResponse!
+                                        .data["Names"][index]['display_name']
+                                        .toString(),
+                                    image: AppConstants.BaseUrl +
+                                        RestuarantsCubit.get(context)
+                                            .restaurantByCategoryResponse!
+                                            .data["Names"][index]['image'],
+                                    description: "",
+                                    press: () async {
+                                      Navigation(
+                                        context,
+                                        CategoriesView(
+                                            image: AppConstants.BaseUrl +
+                                                RestuarantsCubit.get(context)
+                                                        .restaurantByCategoryResponse!
+                                                        .data["Names"][index]
+                                                    ['image'],
+                                            category: RestuarantsCubit.get(
+                                                        context)
+                                                    .restaurantByCategoryResponse!
+                                                    .data["Names"][index]
+                                                ['display_name'],
+                                            categoryId: RestuarantsCubit.get(
+                                                    context)
+                                                .restaurantByCategoryResponse!
+                                                .data["Names"][index]['id']
+                                                .toString(),
+                                            restaurantName:
+                                                data['Name'].toString(),
+                                            restaurantID: data["id"].toString()),
+                                      );
+                                    },
+                                  ),
+                                );
+                              }
+                              // "${value.data["Names"][index]["display_name"]}")),
+                            }),
+                            separatorBuilder: ((context, index) {
+                              return const SizedBox(
+                                height: 20,
+                                child: Divider(),
+                              );
+                            }),
+                            itemCount: RestuarantsCubit.get(context)
+                                .restaurantByCategoryResponse!
+                                .data["Names"]
+                                .length);
                       } else {
                         return const Loading();
                       }
@@ -195,7 +257,7 @@ class ResturantsMenu extends StatelessWidget {
                         RestuarantsCubit.get(context).getRestaurantCategories(
                       context,
                       image: data["logo"].toString(),
-                      restaurantId: data["id"].toString(),
+                      restaurantId: RestaurantId.toString(),
                       restaurantName: data['Name'].toString(),
                     ),
                   ),

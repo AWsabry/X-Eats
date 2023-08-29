@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:logger/logger.dart';
-import 'package:xeats/controllers/Components/General%20Components/Components.dart';
+import 'package:xeats/controllers/Components/Global%20Components/custom_divider.dart';
 import 'package:xeats/controllers/Components/PaymentSummary.dart';
 import 'package:xeats/controllers/Cubits/OrderCubit/OrderCubit.dart';
 import 'package:xeats/controllers/Cubits/OrderCubit/OrderStates.dart';
@@ -123,7 +123,7 @@ class _WaitingRoomState extends State<WaitingRoom>
                                         physics:
                                             const NeverScrollableScrollPhysics(),
                                         separatorBuilder: (context, index) {
-                                          return Dividerr();
+                                          return customDivider();
                                         },
                                         shrinkWrap: true,
                                         itemBuilder: (context, index) {
@@ -176,7 +176,7 @@ class _WaitingRoomState extends State<WaitingRoom>
                                               const SizedBox(
                                                 height: 10,
                                               ),
-                                              Dividerr()
+                                              customDivider()
                                             ],
                                           ));
                                         },

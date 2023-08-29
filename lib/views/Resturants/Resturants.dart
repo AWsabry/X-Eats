@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_interpolation_to_compose_strings
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
@@ -5,7 +7,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:logger/logger.dart';
 import 'package:xeats/controllers/Components/AppBar/AppBarCustomized.dart';
-import 'package:xeats/controllers/Components/General%20Components/Components.dart';
+import 'package:xeats/controllers/Components/Global%20Components/custom_divider.dart';
+import 'package:xeats/controllers/Components/Global%20Components/custom_navigate.dart';
 import 'package:xeats/controllers/Components/Global%20Components/loading.dart';
 import 'package:xeats/controllers/Components/Product%20Class/Products_Class.dart';
 import 'package:xeats/controllers/Cubits/ButtomNavigationBarCubit/navigationCubit.dart';
@@ -18,7 +21,6 @@ import 'package:xeats/core/Constants/constants.dart';
 import 'package:xeats/views/Layout/Layout.dart';
 import 'package:xeats/views/Profile/Profile.dart';
 import 'package:xeats/views/ResturantsMenu/ResturantsMenu.dart';
-import '../../controllers/Components/Products Components/NewProducts.dart';
 
 // ignore: must_be_immutable
 class Restaurants extends StatelessWidget {
@@ -29,6 +31,8 @@ class Restaurants extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
+
     return BlocConsumer<ProductsCubit, ProductsStates>(
       listener: (context, state) {},
       builder: (context, state) {
@@ -118,55 +122,39 @@ class Restaurants extends StatelessWidget {
                                                   ["image"] !=
                                               null,
                                           builder: (context) {
-                                            return GestureDetector(
-                                              child: NewProducts(
-                                                  title: newProducts[index]
-                                                      ["name"],
-                                                  Colors: Colors.white,
-                                                  image: newProducts[index]
-                                                      ["image"],
-                                                  Navigate: () => {
-                                                        Navigation(
-                                                          context,
-                                                          ProductClass()
-                                                              .productDetails(
-                                                            context,
-                                                            image: "${AppConstants.BaseUrl}/uploads/" +
-                                                                newProducts[
-                                                                        index]
-                                                                    ["image"],
-                                                            id: newProducts[
-                                                                index]['id'],
-                                                            restaurant:
-                                                                newProducts[
-                                                                        index][
-                                                                    'Restaurant'],
-                                                            price: newProducts[
-                                                                index]['price'],
-                                                            englishName:
-                                                                newProducts[
-                                                                        index]
-                                                                    ["name"],
-                                                            arabicName:
-                                                                newProducts[
-                                                                        index][
-                                                                    "ArabicName"],
-                                                            description: newProducts[
-                                                                        index][
-                                                                    "description"] ??
-                                                                "No Description for this Product",
-                                                            restaurantName:
-                                                                newProducts[index]
-                                                                        [
-                                                                        "Restaurant"]
-                                                                    .toString(),
-                                                            productName: '',
-                                                          ),
-                                                        ),
-                                                      }),
-                                            );
-
-                                            // },
+                                            return ProductClass(
+                                              productName: newProducts[index]
+                                                  ["name"],
+                                              id: newProducts[index]["id"],
+                                              restaurant: newProducts[index]
+                                                  ["Restaurant"],
+                                              itemImage:
+                                                  "${AppConstants.BaseUrl}/uploads/" +
+                                                      newProducts[index]
+                                                          ["image"],
+                                              price: newProducts[index]
+                                                  ['price'],
+                                              englishName: newProducts[index]
+                                                  ["name"],
+                                              arabicName: newProducts[index]
+                                                  ["ArabicName"],
+                                              description: newProducts[index]
+                                                      ["description"] ??
+                                                  "No Description for this Product",
+                                            ).NewProducts(context,
+                                                height: height / 4,
+                                                width: width / 1.15,
+                                                restaurantName:
+                                                    newProducts[index]
+                                                        ["restaurant_name"],
+                                                title: newProducts[index]
+                                                    ["name"],
+                                                Colors: Colors.white,
+                                                image:
+                                                    "${AppConstants.BaseUrl}/uploads/" +
+                                                        newProducts[index]
+                                                            ["image"]);
+//  context,
                                           });
                                     },
                                   ),
@@ -333,7 +321,7 @@ class Restaurants extends StatelessWidget {
                                     }
                                   },
                                   separatorBuilder: ((context, index) =>
-                                      Dividerr()),
+                                      customDivider()),
                                   itemCount: restuarantsOfSlugListApi.length,
                                 ),
                               );

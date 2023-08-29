@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:xeats/controllers/Components/Global%20Components/loading.dart';
 
@@ -39,7 +40,7 @@ class CategoryCard extends StatelessWidget {
                         width: width / 3,
                         height: height / 3,
                         fit: BoxFit.cover,
-                        image: NetworkImage(
+                        image: CachedNetworkImageProvider(
                           image,
                         ),
                         loadingBuilder: (context, child, loadingProgress) {
@@ -59,8 +60,10 @@ class CategoryCard extends StatelessWidget {
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
                     colors: [
-                      const Color.fromARGB(255, 255, 255, 255).withOpacity(0.15),
-                      const Color.fromARGB(255, 255, 255, 255).withOpacity(0.15),
+                      const Color.fromARGB(255, 255, 255, 255)
+                          .withOpacity(0.15),
+                      const Color.fromARGB(255, 255, 255, 255)
+                          .withOpacity(0.15),
 
                       // Color(0x0489cc).withOpacity(0.4),
                     ],
