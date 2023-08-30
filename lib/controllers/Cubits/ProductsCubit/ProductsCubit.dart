@@ -157,7 +157,7 @@ class ProductsCubit extends Cubit<ProductsStates> {
   Future<Response> getCategoryById(String? CatId) {
     try {
       categoryByIdResponse =
-          Dio().get("https://x-eats.com/get_category_by_id/$CatId");
+          Dio().get("${AppConstants.BaseUrl}/get_category_by_id/$CatId");
     } catch (error) {
       Logger().e("Error Getting Category By Id $error");
     }
