@@ -3,9 +3,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:xeats/controllers/Components/Global%20Components/DefaultButton.dart';
+import 'package:xeats/controllers/Components/Global%20Components/Buttons/DefaultButton.dart';
 import 'package:xeats/controllers/Components/Global%20Components/custom_navigate.dart';
 import 'package:xeats/controllers/Components/Global%20Components/defaultFormField.dart';
+import 'package:xeats/controllers/Components/Global%20Components/loading.dart';
 import 'package:xeats/controllers/Components/LoginPressed/LoginPressed.dart';
 import 'package:xeats/controllers/Cubits/AuthCubit/States.dart';
 import 'package:xeats/controllers/Cubits/AuthCubit/cubit.dart';
@@ -137,7 +138,7 @@ class SignIn extends StatelessWidget {
                                       }
                                     },
                                     text: 'Login')
-                                : CircularProgressIndicator(),
+                                : Loading(),
                             Row(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               mainAxisAlignment: MainAxisAlignment.end,

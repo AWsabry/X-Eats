@@ -4,6 +4,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'dart:math' as math;
 import 'dart:ui';
 
+import 'package:xeats/theme.dart';
+
 class Boarding extends StatelessWidget {
   const Boarding({super.key});
 
@@ -32,11 +34,12 @@ class Boarding extends StatelessWidget {
                 Text(
                   "ON TIME!!!",
                   style: GoogleFonts.poppins(
-                      fontSize: 40, textStyle: const TextStyle(color: Colors.black)),
+                      fontSize: 40,
+                      textStyle: const TextStyle(color: Colors.black)),
                 ),
                 const Spacer(),
                 Container(
-                  color: Colors.blue,
+                  color: ThemeApp.primaryColor,
                   child: CustomPaint(
                     isComplex: true,
 
@@ -59,7 +62,7 @@ class Boarding extends StatelessWidget {
 class MyPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
-    Paint paint = Paint()..color = Colors.blue;
+    Paint paint = Paint()..color = ThemeApp.primaryColor;
     canvas.drawArc(
       Rect.fromCenter(
         center: Offset(size.height / 1.3, size.width / 30),

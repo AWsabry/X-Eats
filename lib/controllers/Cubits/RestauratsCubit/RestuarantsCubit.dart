@@ -94,9 +94,9 @@ class RestuarantsCubit extends Cubit<RestuarantsStates> {
                       child: CachedNetworkImage(
                         progressIndicatorBuilder: (context, url, progress) =>
                             Center(
-                          child: CircularProgressIndicator(
-                            value: progress.progress,
-                          ),
+                          child: Loading(
+                              // value: progress.progress,
+                              ),
                         ),
                         imageUrl:
                             'https://www.x-eats.com${imageOfRestaurant[index]}',

@@ -229,7 +229,7 @@ class _CartState extends State<Cart> {
                                               );
                                             }
                                           },
-                                          child: const Text("Check Out"),
+                                          child: const Text("Checkout"),
                                         ),
                                       )
                                     ],

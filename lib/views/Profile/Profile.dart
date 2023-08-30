@@ -10,6 +10,7 @@ import 'package:xeats/controllers/Cubits/AuthCubit/States.dart';
 import 'package:xeats/controllers/Cubits/AuthCubit/cubit.dart';
 import 'package:xeats/controllers/Cubits/ButtomNavigationBarCubit/navigationCubit.dart';
 import 'package:xeats/controllers/Cubits/OrderCubit/OrderCubit.dart';
+import 'package:xeats/theme.dart';
 import 'package:xeats/views/Layout/Layout.dart';
 import 'package:xeats/views/Resturants/Resturants.dart';
 
@@ -49,33 +50,33 @@ class Profile extends StatelessWidget {
                                   children: [
                                     TextSpan(
                                       text: "Name: ${cubit.firstNameShared}\n",
-                                      style: const TextStyle(
+                                      style: TextStyle(
                                           fontSize: 14,
                                           fontWeight: FontWeight.bold,
-                                          color: Colors.lightBlue),
+                                          color: ThemeApp.accentColor),
                                     ),
                                     TextSpan(
                                       text:
                                           "Email: ${AuthCubit.get(context).userEmailShared}\n",
-                                      style: const TextStyle(
+                                      style: TextStyle(
                                           fontSize: 14,
                                           fontWeight: FontWeight.bold,
-                                          color: Colors.lightBlue),
+                                          color: ThemeApp.accentColor),
                                     ),
                                     TextSpan(
                                       text: "Wallet: ${cubit.walletShared} \n",
-                                      style: const TextStyle(
+                                      style: TextStyle(
                                           fontSize: 14,
                                           fontWeight: FontWeight.bold,
-                                          color: Colors.lightBlue),
+                                          color: ThemeApp.accentColor),
                                     ),
                                     TextSpan(
                                       text:
                                           "Phonenumber: ${cubit.phoneNumberShared} \n",
-                                      style: const TextStyle(
+                                      style: TextStyle(
                                           fontSize: 14,
                                           fontWeight: FontWeight.bold,
-                                          color: Colors.lightBlue),
+                                          color: ThemeApp.accentColor),
                                     ),
                                   ],
                                 ),
@@ -94,19 +95,6 @@ class Profile extends StatelessWidget {
                                   press: () {},
                                 ),
                                 SizedBox(height: height / 20),
-                                // ProfileMenu(
-                                //   text: 'About Us',
-                                //   press: () async {
-                                //     // var url = Uri.parse(
-                                //     //     "https://www.x-eats.com/about_us");
-                                //     // if (await canLaunchUrl(url))
-                                //     //   await launchUrl(url);
-                                //     // else
-                                //     //   throw "Could not launch $url";
-                                //   },
-                                //   icon: "assets/icons/other.svg",
-                                // ),
-                                // SizedBox(height: height / 20),
                                 ProfileMenu(
                                   text: 'Sign Out',
                                   press: () {
@@ -124,7 +112,8 @@ class Profile extends StatelessWidget {
                 ),
                 bottomNavigationBar: BottomNavigationBar(
                   selectedLabelStyle: GoogleFonts.poppins(),
-                  backgroundColor: Colors.white,
+                  unselectedItemColor: Colors.white,
+                  backgroundColor: ThemeApp.accentColor,
                   items: navcubit.bottomitems,
                   currentIndex: 2,
                   onTap: (index) {

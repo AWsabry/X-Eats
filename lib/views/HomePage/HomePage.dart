@@ -20,6 +20,7 @@ import 'package:xeats/controllers/Cubits/ProductsCubit/ProductsStates.dart';
 import 'package:xeats/controllers/Cubits/RestauratsCubit/RestuarantsCubit.dart';
 import 'package:xeats/controllers/Dio/DioHelper.dart';
 import 'package:xeats/core/Constants/constants.dart';
+import 'package:xeats/theme.dart';
 import 'package:xeats/views/Profile/Profile.dart';
 import 'package:xeats/views/Resturants/Resturants.dart';
 import 'package:xeats/views/ResturantsMenu/ResturantsMenu.dart';
@@ -109,9 +110,7 @@ class HomePage extends StatelessWidget {
                                       height: height / 2.6,
                                     ),
                                     Center(
-                                      child: Container(
-                                          child:
-                                              const CircularProgressIndicator()),
+                                      child: Container(child: const Loading()),
                                     ),
                                   ],
                                 );
@@ -144,9 +143,7 @@ class HomePage extends StatelessWidget {
                                       height: height / 2.6,
                                     ),
                                     Center(
-                                      child: Container(
-                                          child:
-                                              const CircularProgressIndicator()),
+                                      child: Container(child: const Loading()),
                                     ),
                                   ],
                                 );
@@ -240,7 +237,7 @@ class HomePage extends StatelessWidget {
                                                                     ['Name'] ??
                                                                 const Loading(),
                                                         Colors: const Color
-                                                            .fromARGB(
+                                                                .fromARGB(
                                                             255, 5, 95, 9),
                                                         image: Image(
                                                           // loadingBuilder: (context,
@@ -469,8 +466,9 @@ class HomePage extends StatelessWidget {
                 ),
               ),
               bottomNavigationBar: BottomNavigationBar(
+                unselectedItemColor: Colors.white,
+                backgroundColor: ThemeApp.accentColor,
                 selectedLabelStyle: GoogleFonts.poppins(),
-                backgroundColor: Colors.white,
                 items: navcubit.bottomitems,
                 currentIndex: 0,
                 onTap: (index) {

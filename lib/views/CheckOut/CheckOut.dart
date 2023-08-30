@@ -2,11 +2,15 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:xeats/controllers/Components/Global%20Components/DefaultButton.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:xeats/controllers/Components/Global%20Components/Buttons/DefaultButton.dart';
+import 'package:xeats/controllers/Components/Global%20Components/Buttons/SecondryButton.dart';
 import 'package:xeats/controllers/Components/Global%20Components/custom_navigate.dart';
+import 'package:xeats/controllers/Components/Global%20Components/loading.dart';
 import 'package:xeats/controllers/Components/Product%20Class/Products_Class.dart';
 import 'package:xeats/controllers/Cubits/OrderCubit/OrderCubit.dart';
 import 'package:xeats/controllers/Cubits/OrderCubit/OrderStates.dart';
+import 'package:xeats/theme.dart';
 import 'package:xeats/views/Cart/cart.dart';
 
 class CheckOut extends StatelessWidget {
@@ -22,15 +26,20 @@ class CheckOut extends StatelessWidget {
 
       return Scaffold(
         appBar: AppBar(
-          actions: [Image.asset("assets/Images/shopping-cart.png")],
-          backgroundColor: const Color.fromARGB(255, 9, 134, 211),
+          // actions: [Image.asset("assets/Images/shopping-cart.png")],
+          backgroundColor: ThemeApp.accentColor,
           toolbarHeight: 100,
           leadingWidth: 800,
           leading: const Padding(
             padding: EdgeInsets.all(15.0),
-            child: Text(
-              "Checkout",
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            child: Center(
+              child: Text(
+                "Payment Summary",
+                style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Color.fromRGBO(113, 224, 1, 1)),
+              ),
             ),
           ),
         ),
@@ -40,10 +49,6 @@ class CheckOut extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                "Payment Summary",
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
-              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
@@ -83,26 +88,9 @@ class CheckOut extends StatelessWidget {
                   )
                 ],
               ),
-              Row(
+              Column(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  ElevatedButton(
-                      onPressed: () {
-                        Navigation(context, const Cart());
-                      },
-                      style: ButtonStyle(
-                          backgroundColor:
-                              MaterialStateProperty.all(Colors.white),
-                          shape: MaterialStateProperty.all(
-                              RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(18.0),
-                                  side: const BorderSide(
-                                      color:
-                                          Color.fromARGB(255, 9, 134, 211))))),
-                      child: const Text(
-                        "Back to cart",
-                        style: TextStyle(color: Colors.black),
-                      )),
                   OrderCubit.get(context).confirmOrderPressedButton == false
                       ? DefaultButton(
                           function: () {
@@ -111,7 +99,18 @@ class CheckOut extends StatelessWidget {
                                 .confirmOrder(context, Private);
                           },
                           text: "Order Now")
-                      : const CircularProgressIndicator()
+                      : const Loading(),
+                  SizedBox(
+                    height: 30.sp,
+                  ),
+                  OrderCubit.get(context).confirmOrderPressedButton == false
+                      ? SecondaryButton(
+                          function: () {
+                            Navigation(context, const Cart());
+                          },
+                          text: "Back to cart",
+                        )
+                      : const Loading(),
                 ],
               )
             ],

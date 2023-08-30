@@ -8,6 +8,7 @@ import 'package:xeats/controllers/Components/Global%20Components/custom_navigate
 import 'package:xeats/controllers/Cubits/AuthCubit/States.dart';
 import 'package:xeats/controllers/Cubits/AuthCubit/cubit.dart';
 import 'package:xeats/controllers/Cubits/OrderCubit/OrderCubit.dart';
+import 'package:xeats/theme.dart';
 import 'package:xeats/views/Layout/Layout.dart';
 import 'package:xeats/views/SignIn/SignIn.dart';
 import 'package:xeats/views/WaitingRoom/waitingRoom.dart';
@@ -150,11 +151,11 @@ class _SplashScreenState extends State<SplashScreen> {
                 SizedBox(
                   height: height / 6,
                 ),
-                const Column(
+                Column(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     SpinKitThreeInOut(
-                      color: Color.fromARGB(255, 9, 134, 211),
+                      color: ThemeApp.primaryColor,
                       size: 35,
                     ),
                   ],

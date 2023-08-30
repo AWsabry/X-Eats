@@ -109,7 +109,8 @@ class OrderCubit extends Cubit<OrderStates> {
       Navigation(context, const Cart());
     } catch (e) {
       print(e.toString());
-      _showErrorSnackBar(context, "Feeh Eah");
+      _showErrorSnackBar(
+          context, "You have order from different restaurant in cart");
     } finally {
       isRequestFinished = true;
       emit(ButtonPressedLoading());
@@ -147,7 +148,7 @@ class OrderCubit extends Cubit<OrderStates> {
   void _showErrorSnackBar(BuildContext context, String errorMessage) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        duration: const Duration(milliseconds: 1500),
+        duration: const Duration(milliseconds: 2500),
         backgroundColor: Colors.red,
         content: Row(
           mainAxisAlignment: MainAxisAlignment.start,

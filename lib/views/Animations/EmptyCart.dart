@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import 'package:xeats/controllers/Components/Global%20Components/Buttons/DefaultButton.dart';
 import 'package:xeats/controllers/Components/Global%20Components/custom_navigate.dart';
 import 'package:xeats/views/Layout/Layout.dart';
 
@@ -22,27 +23,37 @@ class _EmptyCartState extends State<EmptyCart> {
             child: Image.asset("assets/Images/emptyCart.gif"),
           ),
           const Text(
-            "Waiting for your orders",
+            "Cart is Empty",
             style: TextStyle(fontSize: 20),
           ),
-          ElevatedButton(
-              onPressed: () {
-                Navigation(context, Layout());
-              },
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(Colors.white),
-                shape: MaterialStateProperty.all(
-                  RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(18.0),
-                    side: const BorderSide(
-                        color: Color.fromARGB(255, 9, 134, 211)),
-                  ),
-                ),
-              ),
-              child: const Text(
-                "Continue Shopping",
-                style: TextStyle(color: Colors.black),
-              )),
+
+          DefaultButton(
+            function: () {
+              Navigation(context, Layout());
+            },
+            text: 'Continue Shopping',
+          )
+
+          //   ElevatedButton(
+          //       onPressed: () {
+
+          //       },
+          //       style:
+
+          //       ButtonStyle(
+          //         backgroundColor: MaterialStateProperty.all(Colors.white),
+          //         shape: MaterialStateProperty.all(
+          //           RoundedRectangleBorder(
+          //             borderRadius: BorderRadius.circular(18.0),
+          //             side: const BorderSide(
+          //                 color: Color.fromARGB(255, 9, 134, 211)),
+          //           ),
+          //         ),
+          //       ),
+          //       child: const Text(
+          //         "Continue Shopping",
+          //         style: TextStyle(color: Colors.black),
+          //       )),
         ],
       ),
     );

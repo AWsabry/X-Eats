@@ -18,6 +18,7 @@ import 'package:xeats/controllers/Cubits/ProductsCubit/ProductsCubit.dart';
 import 'package:xeats/controllers/Cubits/ProductsCubit/ProductsStates.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:xeats/core/Constants/constants.dart';
+import 'package:xeats/theme.dart';
 import 'package:xeats/views/Layout/Layout.dart';
 import 'package:xeats/views/Profile/Profile.dart';
 import 'package:xeats/views/ResturantsMenu/ResturantsMenu.dart';
@@ -59,8 +60,7 @@ class Restaurants extends StatelessWidget {
                             height: height / 2.6,
                           ),
                           Center(
-                            child: Container(
-                                child: const CircularProgressIndicator()),
+                            child: Container(child: const Loading()),
                           ),
                         ],
                       );
@@ -186,8 +186,8 @@ class Restaurants extends StatelessWidget {
                                 condition:
                                     restuarantsOfSlugListApi.isNotEmpty &&
                                         Connection == false,
-                                fallback: (context) => const Center(
-                                    child: CircularProgressIndicator()),
+                                fallback: (context) =>
+                                    const Center(child: Loading()),
                                 builder: (context) => ListView.separated(
                                   shrinkWrap: true,
                                   physics: const NeverScrollableScrollPhysics(),
@@ -225,15 +225,14 @@ class Restaurants extends StatelessWidget {
                                                 padding:
                                                     const EdgeInsets.all(16.0),
                                                 child: CachedNetworkImage(
-                                                  progressIndicatorBuilder:
-                                                      (context, url,
-                                                              progress) =>
-                                                          Center(
-                                                    child:
-                                                        CircularProgressIndicator(
-                                                      value: progress.progress,
-                                                    ),
-                                                  ),
+                                                  progressIndicatorBuilder: (context,
+                                                          url, progress) =>
+                                                      Center(child: Loading()
+
+                                                          //     CircularProgressIndicator(
+                                                          //   value: progress.progress,
+                                                          // ),
+                                                          ),
                                                   imageUrl:
                                                       'https://www.x-eats.com' +
                                                           restuarantsOfSlugListApi[
@@ -337,7 +336,8 @@ class Restaurants extends StatelessWidget {
           ),
           bottomNavigationBar: BottomNavigationBar(
             selectedLabelStyle: GoogleFonts.poppins(),
-            backgroundColor: Colors.white,
+            unselectedItemColor: Colors.white,
+            backgroundColor: ThemeApp.accentColor,
             items: navcubit.bottomitems,
             currentIndex: 1,
             onTap: (index) {

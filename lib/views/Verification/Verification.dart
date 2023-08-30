@@ -9,6 +9,7 @@ import 'package:pinput/pinput.dart';
 import 'package:xeats/controllers/Components/Global%20Components/custom_navigate.dart';
 import 'package:xeats/controllers/Cubits/AuthCubit/States.dart';
 import 'package:xeats/controllers/Cubits/AuthCubit/cubit.dart';
+import 'package:xeats/theme.dart';
 
 import 'package:xeats/views/CompleteProfile/Complete_Profile.dart';
 import 'package:xeats/views/SignIn/SignIn.dart';
@@ -142,12 +143,12 @@ class Verify extends StatelessWidget {
                                   'Resend Code',
                                   style: GoogleFonts.poppins(
                                       fontWeight: FontWeight.w600,
-                                      textStyle:
-                                          const TextStyle(color: Colors.blue)),
+                                      textStyle: TextStyle(
+                                          color: ThemeApp.primaryColor)),
                                 )),
                             const Spacer(),
                             FloatingActionButton(
-                              backgroundColor: Colors.black,
+                              backgroundColor: ThemeApp.accentColor,
                               onPressed: () async {
                                 PhoneAuthCredential credential =
                                     PhoneAuthProvider.credential(

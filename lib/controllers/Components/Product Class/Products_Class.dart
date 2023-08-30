@@ -6,7 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:logger/logger.dart';
-import 'package:xeats/controllers/Components/Global%20Components/DefaultButton.dart';
+import 'package:xeats/controllers/Components/Global%20Components/Buttons/DefaultButton.dart';
 import 'package:xeats/controllers/Components/Global%20Components/custom_navigate.dart';
 import 'package:xeats/controllers/Components/Global%20Components/loading.dart';
 import 'package:xeats/controllers/Components/AppBar/AppBarCustomized.dart';
@@ -16,6 +16,7 @@ import 'package:xeats/controllers/Cubits/OrderCubit/OrderCubit.dart';
 import 'package:xeats/controllers/Cubits/OrderCubit/OrderStates.dart';
 import 'package:xeats/controllers/Cubits/ProductsCubit/ProductsCubit.dart';
 import 'package:xeats/core/Constants/constants.dart';
+import 'package:xeats/theme.dart';
 import 'package:xeats/views/Layout/Layout.dart';
 import 'package:xeats/views/Profile/Profile.dart';
 import 'package:xeats/views/Resturants/Resturants.dart';
@@ -451,11 +452,49 @@ class ProductClass extends StatelessWidget {
                         const SizedBox(
                           height: 20,
                         ),
-                        Text(
-                          "$price EGP",
-                          style: const TextStyle(
-                              fontSize: 22, fontWeight: FontWeight.bold),
+                        Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    "$englishName\n",
+                                    textAlign: TextAlign.left,
+                                    style: GoogleFonts.poppins(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 14),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            // Row(
+                            //   mainAxisAlignment: MainAxisAlignment.end,
+                            //   children: [
+                            //     Padding(
+                            //       padding: const EdgeInsets.all(8.0),
+                            //       child: Text(
+                            //         maxLines: 1,
+                            //         overflow: TextOverflow.ellipsis,
+                            //         textAlign: TextAlign.right,
+                            //         "$arabicName",
+                            //         style: GoogleFonts.poppins(
+                            //             fontWeight: FontWeight.bold,
+                            //             fontSize: 14),
+                            //       ),
+                            //     ),
+                            //   ],
+                            // ),
+                          ],
                         ),
+                        // Text(
+                        //   "$price EGP",
+                        //   style: const TextStyle(
+                        //       fontSize: 22, fontWeight: FontWeight.bold),
+                        // ),
                         const SizedBox(
                           height: 30,
                         ),
@@ -464,44 +503,6 @@ class ProductClass extends StatelessWidget {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Text(
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                      "$englishName\n",
-                                      textAlign: TextAlign.left,
-                                      style: GoogleFonts.poppins(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 14),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: height / 20,
-                                  ),
-                                ],
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Text(
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                      textAlign: TextAlign.right,
-                                      "$arabicName",
-                                      style: GoogleFonts.poppins(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 14),
-                                    ),
-                                  ),
-                                ],
-                              ),
                               Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Text(
@@ -541,10 +542,9 @@ class ProductClass extends StatelessWidget {
                                                   .emit(RemoveQuantity());
                                             }
                                           },
-                                          icon: const Icon(
+                                          icon: Icon(
                                             Icons.remove,
-                                            color: Color.fromARGB(
-                                                255, 9, 134, 211),
+                                            color: ThemeApp.primaryColor,
                                           )),
                                       Text("$quantity"),
                                       IconButton(
@@ -554,10 +554,9 @@ class ProductClass extends StatelessWidget {
                                             OrderCubit.get(context)
                                                 .emit(AddQuantity());
                                           },
-                                          icon: const Icon(
+                                          icon: Icon(
                                             Icons.add,
-                                            color: Color.fromARGB(
-                                                255, 9, 134, 211),
+                                            color: ThemeApp.primaryColor,
                                           )),
                                     ],
                                   ),
@@ -569,6 +568,11 @@ class ProductClass extends StatelessWidget {
                       ],
                     ),
                   ),
+                ),
+                const SizedBox(
+                  height: 30,
+                  width: double.maxFinite,
+                  // child: AdWidget(ad: bannerAd),
                 ),
                 isRequestFinished
                     ? DefaultButton(
@@ -588,11 +592,8 @@ class ProductClass extends StatelessWidget {
                           );
                         },
                         text: "Add to Cart")
-                    : SizedBox(
-                        width: 100,
-                        child: Image.asset("assets/Images/loading2.gif"),
-                      ),
-                SizedBox(
+                    : Loading(),
+                const SizedBox(
                   height: 50,
                   width: double.maxFinite,
                   // child: AdWidget(ad: bannerAd),
@@ -602,7 +603,8 @@ class ProductClass extends StatelessWidget {
           ),
           bottomNavigationBar: BottomNavigationBar(
             selectedLabelStyle: GoogleFonts.poppins(),
-            backgroundColor: Colors.white,
+            unselectedItemColor: Colors.white,
+            backgroundColor: ThemeApp.accentColor,
             items: navcubit.bottomitems,
             currentIndex: 1,
             onTap: (index) {

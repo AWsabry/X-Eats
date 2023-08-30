@@ -6,12 +6,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:xeats/controllers/Components/AppBar/AppBarCustomized.dart';
 import 'package:xeats/controllers/Components/Global%20Components/custom_navigate.dart';
+import 'package:xeats/controllers/Components/Global%20Components/loading.dart';
 import 'package:xeats/controllers/Components/Product%20Class/Products_Class.dart';
 
 import 'package:xeats/controllers/Cubits/ButtomNavigationBarCubit/navigationCubit.dart';
 import 'package:xeats/controllers/Cubits/ProductsCubit/ProductsCubit.dart';
 import 'package:xeats/controllers/Cubits/ProductsCubit/ProductsStates.dart';
 import 'package:xeats/core/Constants/constants.dart';
+import 'package:xeats/theme.dart';
 import 'package:xeats/views/Layout/Layout.dart';
 import 'package:xeats/views/Profile/Profile.dart';
 
@@ -47,7 +49,7 @@ class CategoriesView extends StatelessWidget {
                   ConditionalBuilder(
                     fallback: (context) {
                       return const Center(
-                        child: CircularProgressIndicator(),
+                        child: Loading(),
                       );
                     },
                     condition: ProductsCubit.get(context)
@@ -118,7 +120,8 @@ class CategoriesView extends StatelessWidget {
             ),
             bottomNavigationBar: BottomNavigationBar(
               selectedLabelStyle: GoogleFonts.poppins(),
-              backgroundColor: Colors.white,
+              unselectedItemColor: Colors.white,
+              backgroundColor: ThemeApp.accentColor,
               items: navcubit.bottomitems,
               currentIndex: 1,
               onTap: (index) async {

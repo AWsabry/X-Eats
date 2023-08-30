@@ -3,6 +3,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:xeats/controllers/Components/Global%20Components/custom_navigate.dart';
 import 'package:xeats/controllers/Cubits/RestauratsCubit/RestuarantsCubit.dart';
+import 'package:xeats/theme.dart';
 import 'package:xeats/views/Cart/Cart.dart';
 
 AppBar appBar(BuildContext context,
@@ -41,8 +42,8 @@ AppBar appBar(BuildContext context,
                                         fontSize: 11, color: Colors.grey),
                                   );
                                 } else {
-                                  return const SpinKitThreeInOut(
-                                    color: Color.fromARGB(255, 9, 134, 211),
+                                  return SpinKitThreeInOut(
+                                    color: ThemeApp.primaryColor,
                                     size: 10,
                                   );
                                 }

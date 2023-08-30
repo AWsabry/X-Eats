@@ -13,6 +13,7 @@ import 'package:xeats/controllers/Cubits/OrderCubit/OrderCubit.dart';
 import 'package:xeats/controllers/Cubits/ProductsCubit/ProductsCubit.dart';
 import 'package:xeats/controllers/Cubits/RestauratsCubit/RestuarantsCubit.dart';
 import 'package:xeats/controllers/Dio/DioHelper.dart';
+import 'package:xeats/theme.dart';
 import 'package:xeats/views/Splash%20Screen/Splach%20Screen.dart';
 // import 'package:firebase_core/firebase_core.dart';
 // import 'firebase_options.dart';
@@ -93,7 +94,7 @@ class MyApp extends StatelessWidget {
               debugShowCheckedModeBanner: false,
               title: 'X-Eats',
               theme: ThemeData(
-                primarySwatch: Colors.blue,
+                primarySwatch: ThemeApp().materialColor,
                 textTheme: Typography.englishLike2018
                     .apply(fontSizeFactor: 1.sp, bodyColor: Colors.black),
               ),

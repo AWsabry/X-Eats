@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:logger/logger.dart';
 import 'package:xeats/controllers/Components/Global%20Components/custom_divider.dart';
+import 'package:xeats/controllers/Components/Global%20Components/loading.dart';
 import 'package:xeats/controllers/Components/PaymentSummary.dart';
 import 'package:xeats/controllers/Cubits/OrderCubit/OrderCubit.dart';
 import 'package:xeats/controllers/Cubits/OrderCubit/OrderStates.dart';
@@ -88,13 +89,11 @@ class _WaitingRoomState extends State<WaitingRoom>
                         height: 10,
                       ),
                       ConditionalBuilder(
-                        fallback: (context) =>
-                            const Center(child: CircularProgressIndicator()),
+                        fallback: (context) => const Center(child: Loading()),
                         condition: OrderCubit.deliveryfees != null,
                         builder: (context) {
                           if (OrderCubit.get(context).count == null) {
-                            return const Center(
-                                child: CircularProgressIndicator());
+                            return const Center(child: Loading());
                           } else {
                             return Expanded(
                               child: Column(
@@ -154,7 +153,7 @@ class _WaitingRoomState extends State<WaitingRoom>
                                                                     index + 1
                                                                 ? Colors.black
                                                                 : const Color
-                                                                    .fromARGB(
+                                                                        .fromARGB(
                                                                     255,
                                                                     9,
                                                                     134,

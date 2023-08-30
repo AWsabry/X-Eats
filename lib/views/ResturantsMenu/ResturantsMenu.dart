@@ -13,6 +13,7 @@ import 'package:xeats/controllers/Cubits/ProductsCubit/ProductsCubit.dart';
 import 'package:xeats/controllers/Cubits/RestauratsCubit/RestaurantsStates.dart';
 import 'package:xeats/controllers/Cubits/RestauratsCubit/RestuarantsCubit.dart';
 import 'package:xeats/core/Constants/constants.dart';
+import 'package:xeats/theme.dart';
 import 'package:xeats/views/CategoryView/categoryView.dart';
 import 'package:xeats/views/Layout/Layout.dart';
 import 'package:xeats/views/Profile/Profile.dart';
@@ -195,7 +196,7 @@ class ResturantsMenu extends StatelessWidget {
                                       .restaurantByCategoryResponse!
                                       .data["Names"][index] ==
                                   null) {
-                                return const CircularProgressIndicator();
+                                return const Loading();
                               } else {
                                 return SizedBox(
                                   height:
@@ -267,7 +268,8 @@ class ResturantsMenu extends StatelessWidget {
           ),
           bottomNavigationBar: BottomNavigationBar(
             selectedLabelStyle: GoogleFonts.poppins(),
-            backgroundColor: Colors.white,
+            unselectedItemColor: Colors.white,
+            backgroundColor: ThemeApp.accentColor,
             items: navcubit.bottomitems,
             currentIndex: 1,
             onTap: (index) {
