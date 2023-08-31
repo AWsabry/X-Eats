@@ -3,7 +3,6 @@
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:xeats/controllers/Components/AppBar/AppBarCustomized.dart';
 import 'package:xeats/controllers/Components/Global%20Components/custom_navigate.dart';
 import 'package:xeats/controllers/Components/Global%20Components/loading.dart';
@@ -119,9 +118,11 @@ class CategoriesView extends StatelessWidget {
               ),
             ),
             bottomNavigationBar: BottomNavigationBar(
-              selectedLabelStyle: GoogleFonts.poppins(),
               unselectedItemColor: Colors.white,
-              backgroundColor: ThemeApp.accentColor,
+              unselectedFontSize: 9,
+              selectedFontSize: 12,
+              backgroundColor: Theme.of(context).backgroundColor,
+              selectedItemColor: Theme.of(context).primaryColor,
               items: navcubit.bottomitems,
               currentIndex: 1,
               onTap: (index) async {

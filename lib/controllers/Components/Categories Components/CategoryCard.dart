@@ -24,9 +24,9 @@ class CategoryCard extends StatelessWidget {
       onTap: press,
       child: SizedBox(
         width: width / 3,
-        height: height,
+        height: height / 6,
         child: ClipRRect(
-          borderRadius: BorderRadius.circular(20),
+          // borderRadius: BorderRadius.circular(20),
           child: Stack(
             children: [
               Row(
@@ -37,9 +37,9 @@ class CategoryCard extends StatelessWidget {
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(20),
                       child: Image(
-                        width: width / 3,
-                        height: height / 3,
-                        fit: BoxFit.cover,
+                        width: width / 4,
+                        height: height / 6,
+                        fit: BoxFit.contain,
                         image: CachedNetworkImageProvider(
                           image,
                         ),
@@ -77,23 +77,13 @@ class CategoryCard extends StatelessWidget {
                     margin: EdgeInsets.only(left: width / 15),
                     child: Text.rich(
                       TextSpan(
-                        style: TextStyle(
-                          color: const Color(0x000489cc).withOpacity(1),
-                        ),
+                        style: Theme.of(context).textTheme.bodyMedium,
                         children: [
                           TextSpan(
                             text: category,
-                            style: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            ),
                           ),
                           TextSpan(
                             text: description,
-                            style: const TextStyle(
-                              fontSize: 12,
-                              color: Colors.grey,
-                            ),
                           ),
                         ],
                       ),

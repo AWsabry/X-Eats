@@ -4,6 +4,7 @@ class ThemeApp {
   static Color primaryColor = const Color.fromRGBO(113, 224, 1, 1);
   static Color accentColor = const Color.fromRGBO(0, 0, 0, 1);
   static Color whiteColor = Colors.white;
+  static Color cultured = Color.fromRGBO(249, 249, 243, 1);
   static Color greyColor = Colors.grey;
   static const integralCFFont = "IntegralCF";
   static const poppinsFont = "Poppins";
@@ -12,6 +13,7 @@ class ThemeApp {
     primaryColor: Color.fromRGBO(113, 224, 1, 1),
     backgroundColor: const Color.fromRGBO(0, 0, 0, 1),
     canvasColor: whiteColor,
+    scaffoldBackgroundColor: cultured,
     textTheme: TextTheme(
       // Poppins for products starts with display
       displaySmall: TextStyle(

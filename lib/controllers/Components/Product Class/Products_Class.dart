@@ -239,6 +239,8 @@ class ProductClass extends StatelessWidget {
     required String? restaurantName,
     required double? price,
   }) {
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
     return SafeArea(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -272,7 +274,7 @@ class ProductClass extends StatelessWidget {
                           height: 130.h,
                           decoration: BoxDecoration(
                             border: Border.all(
-                                color: const Color.fromARGB(74, 158, 158, 158)),
+                                color: Theme.of(context).primaryColor),
                             borderRadius: BorderRadius.circular(10.0),
                           ),
                           child: Padding(
@@ -302,7 +304,7 @@ class ProductClass extends StatelessWidget {
                           height: 130.h,
                           decoration: BoxDecoration(
                             border: Border.all(
-                                color: const Color.fromARGB(74, 158, 158, 158)),
+                                color: Theme.of(context).primaryColor),
                             borderRadius: BorderRadius.circular(10.0),
                           ),
                           child: Padding(
@@ -325,24 +327,27 @@ class ProductClass extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          Expanded(
-                            child: Text(
-                              englishName!,
-                              style: GoogleFonts.poppins(
-                                  fontSize: 13, fontWeight: FontWeight.bold),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                            ),
+                          Text(
+                            englishName!,
+                            style: Theme.of(context).textTheme.displayMedium,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
                           ),
                           Text(
-                            category.toString(),
-                            style: GoogleFonts.poppins(
-                                color: Colors.grey, fontSize: 11),
+                            description.toString(),
+                            style: Theme.of(context).textTheme.titleSmall,
+                            maxLines: 2,
                           ),
-                          Text(
-                            "$price  EGP",
-                            style: GoogleFonts.poppins(
-                                color: Colors.black, fontSize: 14),
+                          SizedBox(
+                            height: height / 50,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Text("$price  EGP",
+                                  style:
+                                      Theme.of(context).textTheme.bodyMedium),
+                            ],
                           ),
                         ],
                       ),
@@ -659,7 +664,7 @@ class ProductClass extends StatelessWidget {
             ),
           ),
         ),
-        Text("${data}", style: Theme.of(context).textTheme.displayMedium),
+        Text("${data}", style: Theme.of(context).textTheme.displaySmall),
       ],
     );
   }
@@ -722,7 +727,7 @@ class ProductClass extends StatelessWidget {
             ),
           ),
         ),
-        Text("${title}", style: Theme.of(context).textTheme.displayMedium),
+        Text("${title}", style: Theme.of(context).textTheme.displaySmall),
       ],
     );
   }

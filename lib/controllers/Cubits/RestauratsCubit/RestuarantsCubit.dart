@@ -57,11 +57,8 @@ class RestuarantsCubit extends Cubit<RestuarantsStates> {
           children: [
             Padding(
               padding: const EdgeInsets.all(15.0),
-              child: Text(
-                'Restaurants Founded',
-                style: GoogleFonts.poppins(
-                    fontSize: 16, fontWeight: FontWeight.bold),
-              ),
+              child: Text('Restaurants Founded',
+                  style: Theme.of(context).textTheme.titleSmall),
             ),
           ],
         ),
@@ -86,7 +83,8 @@ class RestuarantsCubit extends Cubit<RestuarantsStates> {
                     height: 130.h,
                     decoration: BoxDecoration(
                       border: Border.all(
-                          color: const Color.fromARGB(74, 158, 158, 158)),
+                        color: Theme.of(context).primaryColor,
+                      ),
                       borderRadius: BorderRadius.circular(10.0),
                     ),
                     child: Padding(

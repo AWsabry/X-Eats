@@ -96,17 +96,18 @@ class ResturantsMenu extends StatelessWidget {
                                 Row(
                                   children: [
                                     Padding(
-                                      padding: const EdgeInsets.all(0.0),
+                                      padding: EdgeInsets.all(width / 20),
                                       child: Container(
-                                        height: height / 5,
-                                        width: width / 2.4,
+                                        height: height / 9,
+                                        width: width / 5,
                                         decoration: BoxDecoration(
                                             borderRadius:
                                                 BorderRadius.circular(12),
                                             color: Colors.transparent,
                                             border: Border.all(
-                                                width: 20,
-                                                color: Colors.white)),
+                                                width: 2,
+                                                color: Theme.of(context)
+                                                    .primaryColor)),
                                         child: ClipRRect(
                                           borderRadius:
                                               BorderRadius.circular(20),
@@ -134,38 +135,39 @@ class ResturantsMenu extends StatelessWidget {
                                       padding: const EdgeInsets.all(0.0),
                                       child: Text(
                                         data['Name'] + " " + "Categories",
-                                        style:
-                                            GoogleFonts.poppins(fontSize: 12),
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .displayMedium,
                                         maxLines: 1,
                                         overflow: TextOverflow.ellipsis,
                                       ),
                                     ),
                                   ],
                                 ),
-                                Row(
-                                  children: [
-                                    SizedBox(
-                                      width: width / 7,
-                                      height: height / 13,
-                                      child: const Image(
-                                          image: AssetImage(
-                                        'assets/Images/First.png',
-                                      )),
-                                    ),
-                                    SizedBox(
-                                      width: width / 79,
-                                    ),
-                                    Text(
-                                      overflow: TextOverflow.ellipsis,
-                                      maxLines: 1,
-                                      'X-Eats Delivery',
-                                      style: GoogleFonts.poppins(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 10,
-                                      ),
-                                    )
-                                  ],
-                                ),
+                                // Row(
+                                //   children: [
+                                //     SizedBox(
+                                //       width: width / 7,
+                                //       height: height / 13,
+                                //       child: const Image(
+                                //           image: AssetImage(
+                                //         'assets/Images/First.png',
+                                //       )),
+                                //     ),
+                                //     SizedBox(
+                                //       width: width / 79,
+                                //     ),
+                                //     Text(
+                                //       overflow: TextOverflow.ellipsis,
+                                //       maxLines: 1,
+                                //       'X-Eats Delivery',
+                                //       style: GoogleFonts.poppins(
+                                //         fontWeight: FontWeight.bold,
+                                //         fontSize: 10,
+                                //       ),
+                                //     )
+                                //   ],
+                                // ),
                               ],
                             )
                           ],
@@ -267,9 +269,11 @@ class ResturantsMenu extends StatelessWidget {
             ),
           ),
           bottomNavigationBar: BottomNavigationBar(
-            selectedLabelStyle: GoogleFonts.poppins(),
             unselectedItemColor: Colors.white,
-            backgroundColor: ThemeApp.accentColor,
+            unselectedFontSize: 9,
+            selectedFontSize: 12,
+            backgroundColor: Theme.of(context).backgroundColor,
+            selectedItemColor: Theme.of(context).primaryColor,
             items: navcubit.bottomitems,
             currentIndex: 1,
             onTap: (index) {

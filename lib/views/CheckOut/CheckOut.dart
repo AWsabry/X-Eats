@@ -78,7 +78,7 @@ class CheckOut extends StatelessWidget {
                     style: Theme.of(context).textTheme.displayLarge,
                   ),
                   Text(
-                    "$deliveryFees EGP ",
+                    "EGP $deliveryFees",
                     style: Theme.of(context).textTheme.displayLarge,
                   )
                 ],
@@ -91,7 +91,7 @@ class CheckOut extends StatelessWidget {
                     style: Theme.of(context).textTheme.displayLarge,
                   ),
                   Text(
-                    "${deliveryFees + ProductClass.getSubtotal()} EGP ",
+                    "EGP ${deliveryFees + ProductClass.getSubtotal()}",
                     style: Theme.of(context).textTheme.headlineLarge,
                   ),
                 ],
