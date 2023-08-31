@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:xeats/theme.dart';
 
-class SecondaryButton extends StatefulWidget {
-  const SecondaryButton({
+class DefaultMiniButton extends StatefulWidget {
+  const DefaultMiniButton({
     Key? key,
     required this.function,
     required this.text,
@@ -16,24 +15,21 @@ class SecondaryButton extends StatefulWidget {
   final String text;
 
   @override
-  State<SecondaryButton> createState() => _SecondaryButtonState();
+  State<DefaultMiniButton> createState() => _DefaultMiniButtonState();
 }
 
-class _SecondaryButtonState extends State<SecondaryButton> {
+class _DefaultMiniButtonState extends State<DefaultMiniButton> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: MediaQuery.of(context).size.width / 1.1,
+      width: MediaQuery.of(context).size.width / 2.2,
       height: MediaQuery.of(context).size.height / 16,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-            backgroundColor: Theme.of(context).backgroundColor
-            // shape: RoundedRectangleBorder(
-            //     borderRadius: BorderRadius.circular(widget.radius)),
-            ),
+            backgroundColor: Theme.of(context).primaryColor),
         onPressed: widget.function,
         child: Text(widget.isUppercase ? widget.text : widget.text,
-            style: Theme.of(context).textTheme.headlineMedium),
+            style: Theme.of(context).textTheme.bodyMedium),
       ),
     );
   }

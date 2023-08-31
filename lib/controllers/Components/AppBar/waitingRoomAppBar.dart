@@ -6,7 +6,7 @@ import 'package:xeats/controllers/Cubits/RestauratsCubit/RestuarantsCubit.dart';
 import 'package:xeats/theme.dart';
 import 'package:xeats/views/Cart/Cart.dart';
 
-AppBar appBar(BuildContext context,
+AppBar waitingRoomAppBar(BuildContext context,
     {String? subtitle, String? title, bool? SameScreen}) {
   double width = MediaQuery.of(context).size.width;
   double height = MediaQuery.of(context).size.height;
@@ -55,15 +55,6 @@ AppBar appBar(BuildContext context,
                       Text(title ?? ' ',
                           style: Theme.of(context).textTheme.headlineMedium),
                     ]),
-              ),
-              IconButton(
-                onPressed: () {
-                  SameScreen == null ? Navigation(context, const Cart()) : null;
-                },
-                icon: Icon(
-                  Icons.shopping_cart,
-                  color: Theme.of(context).primaryColor,
-                ),
               ),
             ],
           ),

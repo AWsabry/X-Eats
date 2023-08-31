@@ -10,7 +10,7 @@ class Loading extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.all(25.0),
       child: SpinKitFadingCircle(
-        color: ThemeApp.primaryColor,
+        color: Theme.of(context).primaryColor,
         size: 30,
       ),
     );

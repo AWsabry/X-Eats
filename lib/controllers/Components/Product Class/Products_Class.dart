@@ -15,6 +15,7 @@ import 'package:xeats/controllers/Cubits/ButtomNavigationBarCubit/navigationCubi
 import 'package:xeats/controllers/Cubits/OrderCubit/OrderCubit.dart';
 import 'package:xeats/controllers/Cubits/OrderCubit/OrderStates.dart';
 import 'package:xeats/controllers/Cubits/ProductsCubit/ProductsCubit.dart';
+import 'package:xeats/controllers/Cubits/RestauratsCubit/RestuarantsCubit.dart';
 import 'package:xeats/core/Constants/constants.dart';
 import 'package:xeats/theme.dart';
 import 'package:xeats/views/Layout/Layout.dart';
@@ -167,17 +168,12 @@ class ProductClass extends StatelessWidget {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(
-                              "$englishName",
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              softWrap: true,
-                              textAlign: TextAlign.left,
-                              style: GoogleFonts.poppins(
-                                  fontSize: 11,
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold),
-                            ),
+                            Text("$englishName",
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                softWrap: true,
+                                textAlign: TextAlign.left,
+                                style: Theme.of(context).textTheme.bodyMedium),
                           ],
                         ),
                       ),
@@ -190,25 +186,21 @@ class ProductClass extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              "Price: $price",
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              textAlign: TextAlign.right,
-                              style: GoogleFonts.poppins(
-                                fontSize: 13,
-                                color: Colors.black,
-                              ),
-                            ),
-                            Text(
-                              "$arabicName",
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              textAlign: TextAlign.right,
-                              style: GoogleFonts.poppins(
-                                fontSize: 13,
-                                color: Colors.black,
-                              ),
-                            ),
+                                "${RestuarantsCubit.currentRestaurant["Name"]}",
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                textAlign: TextAlign.right,
+                                style: Theme.of(context).textTheme.bodySmall),
+                            // Text(
+                            //   "$arabicName",
+                            //   maxLines: 1,
+                            //   overflow: TextOverflow.ellipsis,
+                            //   textAlign: TextAlign.right,
+                            //   style: GoogleFonts.poppins(
+                            //     fontSize: 13,
+                            //     color: Colors.black,
+                            //   ),
+                            // ),
                           ],
                         ),
                       ),
@@ -222,8 +214,8 @@ class ProductClass extends StatelessWidget {
                           children: [
                             Text("QTY : $quantity"),
                             Text(
-                              "Total: $totalPrice EGP",
-                              style: const TextStyle(fontSize: 16),
+                              "$totalPrice EGP",
+                              style: Theme.of(context).textTheme.bodyMedium,
                             )
                           ],
                         ),
@@ -460,41 +452,34 @@ class ProductClass extends StatelessWidget {
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Text(
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    "$englishName\n",
-                                    textAlign: TextAlign.left,
-                                    style: GoogleFonts.poppins(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 14),
-                                  ),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      "$englishName\n",
+                                      textAlign: TextAlign.left,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyLarge),
                                 ),
                               ],
                             ),
-                            // Row(
-                            //   mainAxisAlignment: MainAxisAlignment.end,
-                            //   children: [
-                            //     Padding(
-                            //       padding: const EdgeInsets.all(8.0),
-                            //       child: Text(
-                            //         maxLines: 1,
-                            //         overflow: TextOverflow.ellipsis,
-                            //         textAlign: TextAlign.right,
-                            //         "$arabicName",
-                            //         style: GoogleFonts.poppins(
-                            //             fontWeight: FontWeight.bold,
-                            //             fontSize: 14),
-                            //       ),
-                            //     ),
-                            //   ],
-                            // ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      textAlign: TextAlign.right,
+                                      "$arabicName",
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium),
+                                ),
+                              ],
+                            ),
                           ],
                         ),
-                        // Text(
-                        //   "$price EGP",
-                        //   style: const TextStyle(
-                        //       fontSize: 22, fontWeight: FontWeight.bold),
-                        // ),
                         const SizedBox(
                           height: 30,
                         ),
@@ -505,62 +490,53 @@ class ProductClass extends StatelessWidget {
                             children: [
                               Padding(
                                 padding: const EdgeInsets.all(8.0),
-                                child: Text(
-                                  "Description:\n",
-                                  style: GoogleFonts.poppins(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 12),
-                                ),
+                                child: Text("$description",
+                                    style:
+                                        Theme.of(context).textTheme.titleSmall),
                               ),
                               Padding(
                                 padding: const EdgeInsets.all(8.0),
-                                child: Text(
-                                  "$description",
-                                  style: const TextStyle(
-                                      fontSize: 12, color: Colors.grey),
-                                ),
-                              ),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                children: [
-                                  Text(
-                                    "Quantity :",
-                                    style: GoogleFonts.poppins(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 12),
-                                  ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      IconButton(
-                                          onPressed: () {
-                                            if (quantity != 1) {
-                                              quantity--;
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text("EGP $price",
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyMedium),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        IconButton(
+                                            onPressed: () {
+                                              if (quantity != 1) {
+                                                quantity--;
+                                                totalPrice = quantity * price!;
+                                                OrderCubit.get(context)
+                                                    .emit(RemoveQuantity());
+                                              }
+                                            },
+                                            icon: Icon(
+                                              Icons.remove,
+                                              color: ThemeApp.primaryColor,
+                                            )),
+                                        Text("$quantity"),
+                                        IconButton(
+                                            onPressed: () {
+                                              quantity++;
                                               totalPrice = quantity * price!;
                                               OrderCubit.get(context)
-                                                  .emit(RemoveQuantity());
-                                            }
-                                          },
-                                          icon: Icon(
-                                            Icons.remove,
-                                            color: ThemeApp.primaryColor,
-                                          )),
-                                      Text("$quantity"),
-                                      IconButton(
-                                          onPressed: () {
-                                            quantity++;
-                                            totalPrice = quantity * price!;
-                                            OrderCubit.get(context)
-                                                .emit(AddQuantity());
-                                          },
-                                          icon: Icon(
-                                            Icons.add,
-                                            color: ThemeApp.primaryColor,
-                                          )),
-                                    ],
-                                  ),
-                                ],
+                                                  .emit(AddQuantity());
+                                            },
+                                            icon: Icon(
+                                              Icons.add,
+                                              color: ThemeApp.primaryColor,
+                                            )),
+                                      ],
+                                    ),
+                                  ],
+                                ),
                               ),
                             ],
                           ),
@@ -602,9 +578,11 @@ class ProductClass extends StatelessWidget {
             ),
           ),
           bottomNavigationBar: BottomNavigationBar(
-            selectedLabelStyle: GoogleFonts.poppins(),
             unselectedItemColor: Colors.white,
-            backgroundColor: ThemeApp.accentColor,
+            unselectedFontSize: 9,
+            selectedFontSize: 12,
+            backgroundColor: Theme.of(context).backgroundColor,
+            selectedItemColor: Theme.of(context).primaryColor,
             items: navcubit.bottomitems,
             currentIndex: 1,
             onTap: (index) {
@@ -681,12 +659,7 @@ class ProductClass extends StatelessWidget {
             ),
           ),
         ),
-        Text(
-          "${data}",
-          style: const TextStyle(
-            fontWeight: FontWeight.bold,
-          ),
-        ),
+        Text("${data}", style: Theme.of(context).textTheme.displayMedium),
       ],
     );
   }
@@ -749,12 +722,7 @@ class ProductClass extends StatelessWidget {
             ),
           ),
         ),
-        Text(
-          "${title}",
-          style: const TextStyle(
-            fontWeight: FontWeight.bold,
-          ),
-        ),
+        Text("${title}", style: Theme.of(context).textTheme.displayMedium),
       ],
     );
   }

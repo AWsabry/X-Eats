@@ -43,7 +43,15 @@ class Restaurants extends StatelessWidget {
         Logger().i(newProducts);
 
         return Scaffold(
-          appBar: appBar(context, subtitle: 'X-Eats', title: 'Restaurants'),
+          appBar: PreferredSize(
+            preferredSize: Size.fromHeight(
+              height / 11,
+            ), // Adjust the height here
+            child: appBar(context,
+                subtitle: 'Your Location', title: 'Restaurants'),
+          ),
+          // appBar:
+          //     appBar(context, subtitle: 'Your Location', title: 'Restaurants'),
           body: SingleChildScrollView(
             child: SafeArea(
               child: BlocBuilder<OrderCubit, OrderStates>(
@@ -74,7 +82,7 @@ class Restaurants extends StatelessWidget {
                             child: Container(
                               child: Text(
                                 AppConstants.PleaseSelectLocation,
-                                style: GoogleFonts.openSans(fontSize: 18),
+                                style: Theme.of(context).textTheme.bodyMedium,
                               ),
                             ),
                           ),
@@ -84,16 +92,6 @@ class Restaurants extends StatelessWidget {
                   },
                   builder: (context) {
                     return Column(children: [
-                      Padding(
-                        padding: const EdgeInsets.all(15.0),
-                        child: Text(
-                          'New Products',
-                          style: GoogleFonts.poppins(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
                       ConditionalBuilder(
                           condition: ProductsCubit.NoNewProducts == false,
                           fallback: (context) {
@@ -149,7 +147,8 @@ class Restaurants extends StatelessWidget {
                                                         ["restaurant_name"],
                                                 title: newProducts[index]
                                                     ["name"],
-                                                Colors: Colors.white,
+                                                Colors: Theme.of(context)
+                                                    .canvasColor,
                                                 image:
                                                     "${AppConstants.BaseUrl}/uploads/" +
                                                         newProducts[index]
@@ -335,9 +334,11 @@ class Restaurants extends StatelessWidget {
             ),
           ),
           bottomNavigationBar: BottomNavigationBar(
-            selectedLabelStyle: GoogleFonts.poppins(),
             unselectedItemColor: Colors.white,
-            backgroundColor: ThemeApp.accentColor,
+            unselectedFontSize: 9,
+            selectedFontSize: 12,
+            backgroundColor: Theme.of(context).backgroundColor,
+            selectedItemColor: Theme.of(context).primaryColor,
             items: navcubit.bottomitems,
             currentIndex: 1,
             onTap: (index) {

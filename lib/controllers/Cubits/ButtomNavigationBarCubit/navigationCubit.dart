@@ -28,6 +28,7 @@ class NavBarCubitcubit extends Cubit<NavBarCubitStates> {
       icon: Icon(
         Icons.home_filled,
         color: Colors.white,
+        size: 20,
       ),
       label: 'Home',
     ),
@@ -35,12 +36,14 @@ class NavBarCubitcubit extends Cubit<NavBarCubitStates> {
         icon: Icon(
           Icons.restaurant,
           color: Colors.white,
+          size: 20,
         ),
         label: 'Restaurants'),
     BottomNavigationBarItem(
         icon: Icon(
           Icons.account_circle,
           color: Colors.white,
+          size: 20,
         ),
         label: 'Profile'),
   ];

@@ -111,9 +111,11 @@ class Profile extends StatelessWidget {
                   ),
                 ),
                 bottomNavigationBar: BottomNavigationBar(
-                  selectedLabelStyle: GoogleFonts.poppins(),
                   unselectedItemColor: Colors.white,
-                  backgroundColor: ThemeApp.accentColor,
+                  unselectedFontSize: 9,
+                  selectedFontSize: 12,
+                  backgroundColor: Theme.of(context).backgroundColor,
+                  selectedItemColor: Theme.of(context).primaryColor,
                   items: navcubit.bottomitems,
                   currentIndex: 2,
                   onTap: (index) {

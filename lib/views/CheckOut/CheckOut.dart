@@ -23,6 +23,8 @@ class CheckOut extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<OrderCubit, OrderStates>(builder: (context, state) {
       double deliveryFees = OrderCubit.deliveryfees ?? 20;
+      double height = MediaQuery.of(context).size.height;
+      double width = MediaQuery.of(context).size.width;
 
       return Scaffold(
         appBar: AppBar(
@@ -46,50 +48,63 @@ class CheckOut extends StatelessWidget {
         body: Padding(
           padding: const EdgeInsets.all(30.0),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              Container(
+                width: width / 6,
+                height: height / 6,
+                child: Image.asset("assets/Images/tick.png"),
+              ),
+              SizedBox(
+                height: height / 50,
+              ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text(
+                  Text(
                     "Subtotal",
-                    style: TextStyle(fontSize: 20),
+                    style: Theme.of(context).textTheme.displayLarge,
                   ),
                   Text(
                     "EGP ${ProductClass.getSubtotal()}",
-                    style: const TextStyle(fontSize: 20),
+                    style: Theme.of(context).textTheme.displayLarge,
                   )
                 ],
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text(
+                  Text(
                     "Max Delivery Fee ",
-                    style: TextStyle(fontSize: 20),
+                    style: Theme.of(context).textTheme.displayLarge,
                   ),
                   Text(
                     "$deliveryFees EGP ",
-                    style: const TextStyle(fontSize: 20),
+                    style: Theme.of(context).textTheme.displayLarge,
                   )
                 ],
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text(
+                  Text(
                     "Total",
-                    style: TextStyle(fontSize: 24),
+                    style: Theme.of(context).textTheme.displayLarge,
                   ),
                   Text(
                     "${deliveryFees + ProductClass.getSubtotal()} EGP ",
-                    style: const TextStyle(fontSize: 24),
-                  )
+                    style: Theme.of(context).textTheme.headlineLarge,
+                  ),
                 ],
               ),
+              SizedBox(
+                height: height / 50,
+              ),
+              Divider(),
+              SizedBox(
+                height: height / 10,
+              ),
               Column(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   OrderCubit.get(context).confirmOrderPressedButton == false
                       ? DefaultButton(

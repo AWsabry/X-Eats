@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:logger/logger.dart';
+import 'package:xeats/controllers/Components/AppBar/waitingRoomAppBar.dart';
 import 'package:xeats/controllers/Components/Global%20Components/custom_divider.dart';
 import 'package:xeats/controllers/Components/Global%20Components/loading.dart';
 import 'package:xeats/controllers/Components/PaymentSummary.dart';
@@ -68,8 +69,16 @@ class _WaitingRoomState extends State<WaitingRoom>
       child: BlocBuilder<OrderCubit, OrderStates>(builder: (context, state) {
         Logger().f(widget.LocationNumber);
         return Scaffold(
+          appBar: PreferredSize(
+            preferredSize: Size.fromHeight(
+              height / 11,
+            ), // Adjust the height here
+            child: waitingRoomAppBar(context,
+                subtitle: 'Your', title: 'Waiting Room'),
+          ),
           body: SafeArea(
             child: RefreshIndicator(
+              color: Theme.of(context).primaryColor,
               onRefresh: () async {
                 OrderCubit.get(context).getPublicOrder(context,
                     LocationNumber: widget.LocationNumber);
@@ -81,12 +90,8 @@ class _WaitingRoomState extends State<WaitingRoom>
                   child: Column(
                     children: [
                       Container(
-                        height: 108.h,
+                        height: height / 20,
                         width: width,
-                        color: Colors.transparent,
-                      ),
-                      const SizedBox(
-                        height: 10,
                       ),
                       ConditionalBuilder(
                         fallback: (context) => const Center(child: Loading()),
@@ -108,14 +113,17 @@ class _WaitingRoomState extends State<WaitingRoom>
                                           builder: (state, time) {
                                             return Text(
                                                 "${time.minutes}:${time.seconds}",
-                                                style: const TextStyle(
-                                                    fontSize: 24.0));
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyLarge);
                                           },
                                         ),
                                       ),
                                     ],
                                   ),
-                                  SizedBox(height: 50.sp),
+                                  SizedBox(height: height / 50),
+                                  customDivider(),
+                                  SizedBox(height: height / 50),
                                   Padding(
                                     padding: const EdgeInsets.only(left: 20.0),
                                     child: ListView.separated(
@@ -129,8 +137,8 @@ class _WaitingRoomState extends State<WaitingRoom>
                                           return SizedBox(
                                               child: Column(
                                             children: [
-                                              const SizedBox(
-                                                height: 10,
+                                              SizedBox(
+                                                height: height / 100,
                                               ),
                                               Row(children: [
                                                 CircleAvatar(
@@ -138,52 +146,43 @@ class _WaitingRoomState extends State<WaitingRoom>
                                                   backgroundColor: Colors.black,
                                                   child: CircleAvatar(
                                                       radius: 30,
-                                                      backgroundColor:
-                                                          widget.count !=
-                                                                  index + 1
-                                                              ? Colors.white
-                                                              : Colors.black,
+                                                      backgroundColor: widget
+                                                                  .count !=
+                                                              index + 1
+                                                          ? Colors.white
+                                                          : Colors.black,
                                                       child: Text(
                                                           "${index + 1}",
                                                           style: TextStyle(
-                                                            fontFamily:
-                                                                "IntegralCf",
-                                                            color: widget
-                                                                        .count !=
-                                                                    index + 1
-                                                                ? Colors.black
-                                                                : const Color
-                                                                        .fromARGB(
-                                                                    255,
-                                                                    9,
-                                                                    134,
-                                                                    211),
-                                                          ))),
+                                                              fontFamily:
+                                                                  "IntegralCf",
+                                                              color: widget
+                                                                          .count !=
+                                                                      index + 1
+                                                                  ? Colors.black
+                                                                  : Theme.of(
+                                                                          context)
+                                                                      .primaryColor))),
                                                 ),
                                                 SizedBox(
                                                   width: width / 20,
                                                 ),
                                                 Text(
-                                                  widget.count != index + 1
-                                                      ? "Item ${index + 1}"
-                                                      : "Your order ${widget.count} ",
-                                                  style: const TextStyle(
-                                                    fontFamily: "IntegralCf",
-                                                  ),
-                                                ),
+                                                    widget.count != index + 1
+                                                        ? "Item ${index + 1}"
+                                                        : "Your order ${widget.count} ",
+                                                    style: Theme.of(context)
+                                                        .textTheme
+                                                        .displayLarge),
                                               ]),
-                                              const SizedBox(
-                                                height: 10,
-                                              ),
-                                              customDivider()
                                             ],
                                           ));
                                         },
                                         itemCount:
                                             OrderCubit.get(context).count!),
                                   ),
-                                  const SizedBox(
-                                    height: 50,
+                                  SizedBox(
+                                    height: height / 50,
                                   ),
                                   Column(
                                     children: [
@@ -192,26 +191,41 @@ class _WaitingRoomState extends State<WaitingRoom>
                                           Padding(
                                             padding:
                                                 EdgeInsets.only(left: 25.w),
-                                            child: const Text(
-                                              "Total Delivery fees",
-                                              style: TextStyle(
-                                                fontFamily: "IntegralCf",
-                                              ),
-                                            ),
+                                            child: Text("Total Delivery fees",
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyMedium),
                                           ),
                                           const Spacer(),
                                           Padding(
                                             padding:
                                                 EdgeInsets.only(right: 30.0.w),
                                             child: Text(
-                                              "EGP ${OrderCubit.deliveryfees}",
-                                              style: const TextStyle(
-                                                  fontFamily: "IntegralCf"),
-                                            ),
+                                                "EGP ${OrderCubit.deliveryfees}",
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyMedium),
                                           )
                                         ],
                                       ),
                                     ],
+                                  ),
+                                  SizedBox(
+                                    height: height / 50,
+                                  ),
+                                  customDivider(),
+                                  SizedBox(
+                                    height: height / 50,
+                                  ),
+                                  const Center(
+                                    child: Text(
+                                      "Slide down to refresh",
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 9,
+                                        color: Colors.red,
+                                      ),
+                                    ),
                                   ),
                                   PaymentSummary(
                                     widget: widget,

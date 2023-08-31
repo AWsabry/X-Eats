@@ -44,32 +44,21 @@ class PaymentSummary extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
-                      "Payment Summary",
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontFamily: "IntegralCf",
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold),
-                    ),
+                    Text("Payment Summary",
+                        style: Theme.of(context).textTheme.labelLarge),
                     const SizedBox(
                       height: 7,
                     ),
                     Row(
                       children: [
-                        Text(
-                          "Subtotal",
-                          style: GoogleFonts.poppins(
-                              fontSize: 15, color: Colors.white),
-                        ),
+                        Text("Subtotal",
+                            style: Theme.of(context).textTheme.labelSmall),
                         const Spacer(),
                         Padding(
                           padding: const EdgeInsets.only(right: 18.0),
                           child: Text(
-                            "EGP ${ProductClass.getSubtotal() == 0.0 ? SubTotal : ProductClass.getSubtotal()}",
-                            style: GoogleFonts.poppins(
-                                fontSize: 15, color: Colors.white),
-                          ),
+                              "EGP ${ProductClass.getSubtotal() == 0.0 ? SubTotal : ProductClass.getSubtotal()}",
+                              style: Theme.of(context).textTheme.labelSmall),
                         )
                       ],
                     ),
@@ -78,19 +67,14 @@ class PaymentSummary extends StatelessWidget {
                     ),
                     Row(
                       children: [
-                        Text(
-                          "Your Delivery Fees",
-                          style: GoogleFonts.poppins(
-                              fontSize: 15, color: Colors.white),
-                        ),
+                        Text("Your Delivery Fees",
+                            style: Theme.of(context).textTheme.labelSmall),
                         const Spacer(),
                         Padding(
                           padding: const EdgeInsets.only(right: 18.0),
                           child: Text(
-                            "EGP ${OrderCubit.deliveryfees! / widget.count}",
-                            style: GoogleFonts.poppins(
-                                fontSize: 15, color: Colors.white),
-                          ),
+                              "EGP ${OrderCubit.deliveryfees! / widget.count}",
+                              style: Theme.of(context).textTheme.labelSmall),
                         )
                       ],
                     ),
@@ -99,19 +83,13 @@ class PaymentSummary extends StatelessWidget {
                     ),
                     Row(
                       children: [
-                        Text(
-                          "Service Fees",
-                          style: GoogleFonts.poppins(
-                              fontSize: 15, color: Colors.white),
-                        ),
+                        Text("Service Fees",
+                            style: Theme.of(context).textTheme.labelSmall),
                         const Spacer(),
                         Padding(
                           padding: const EdgeInsets.only(right: 18.0),
-                          child: Text(
-                            "EGP ${OrderCubit.servicefees ?? 5.00}",
-                            style: GoogleFonts.poppins(
-                                fontSize: 15, color: Colors.white),
-                          ),
+                          child: Text("EGP ${OrderCubit.servicefees ?? 5.00}",
+                              style: Theme.of(context).textTheme.labelSmall),
                         )
                       ],
                     ),
@@ -120,25 +98,14 @@ class PaymentSummary extends StatelessWidget {
                     ),
                     Row(
                       children: [
-                        Text(
-                          "Total Amount",
-                          style: GoogleFonts.poppins(
-                            fontSize: 15,
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
+                        Text("Total Amount",
+                            style: Theme.of(context).textTheme.labelSmall),
                         const Spacer(),
                         Padding(
                           padding: const EdgeInsets.only(right: 18.0),
                           child: Text(
-                            "EGP ${(ProductClass.getSubtotal() == 0.0 ? SubTotal : ProductClass.getSubtotal())! + (OrderCubit.deliveryfees! / 4) + (OrderCubit.deliveryfees! / widget.count)}",
-                            style: GoogleFonts.poppins(
-                              fontSize: 15,
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
+                              "EGP ${(ProductClass.getSubtotal() == 0.0 ? SubTotal : ProductClass.getSubtotal())! + (OrderCubit.servicefees!) + (OrderCubit.deliveryfees! / widget.count)}",
+                              style: Theme.of(context).textTheme.labelSmall),
                         ),
                       ],
                     ),

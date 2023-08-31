@@ -93,11 +93,7 @@ class MyApp extends StatelessWidget {
             return MaterialApp(
               debugShowCheckedModeBanner: false,
               title: 'X-Eats',
-              theme: ThemeData(
-                primarySwatch: ThemeApp().materialColor,
-                textTheme: Typography.englishLike2018
-                    .apply(fontSizeFactor: 1.sp, bodyColor: Colors.black),
-              ),
+              theme: ThemeApp.lightTheme,
               home: child,
             );
           },

@@ -4,6 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:xeats/controllers/Components/AppBar/AppBarCustomized.dart';
+import 'package:xeats/controllers/Components/Global%20Components/Buttons/DefaultMiniButton.dart';
+import 'package:xeats/controllers/Components/Global%20Components/Buttons/SecondaryMiniButton.dart';
 import 'package:xeats/controllers/Components/Global%20Components/custom_divider.dart';
 import 'package:xeats/controllers/Components/Global%20Components/custom_navigate.dart';
 import 'package:xeats/controllers/Components/Global%20Components/loading.dart';
@@ -13,6 +15,7 @@ import 'package:xeats/controllers/Cubits/ProductsCubit/ProductsCubit.dart';
 import 'package:xeats/controllers/Cubits/ProductsCubit/ProductsStates.dart';
 import 'package:xeats/controllers/Cubits/RestauratsCubit/RestaurantsStates.dart';
 import 'package:xeats/controllers/Cubits/RestauratsCubit/RestuarantsCubit.dart';
+import 'package:xeats/core/Constants/constants.dart';
 import 'package:xeats/views/Animations/EmptyCart.dart';
 import 'package:xeats/views/Checkout/CheckOut.dart';
 import 'package:xeats/views/Layout/Layout.dart';
@@ -58,14 +61,19 @@ class _CartState extends State<Cart> {
         builder: (context, state) {
           var cubit = AuthCubit.get(context);
           return Scaffold(
-            appBar: appBar(context,
-                subtitle: "${cubit.firstNameShared}'s",
-                title: "Cart",
-                SameScreen: true),
-            backgroundColor: Colors.white,
+            appBar: PreferredSize(
+              preferredSize: Size.fromHeight(
+                height / 11,
+              ), // Adjust the height here
+              child: appBar(context,
+                  subtitle: "${cubit.firstNameShared}'s", title: 'Cart'),
+            ),
             body: SafeArea(
               child: Column(
                 children: [
+                  SizedBox(
+                    height: height / 20,
+                  ),
                   FutureBuilder(
                     builder: (ctx, AsyncSnapshot snapshot) {
                       if (snapshot.connectionState == ConnectionState.done &&
@@ -73,71 +81,60 @@ class _CartState extends State<Cart> {
                         return Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
-                            SizedBox(
-                              width: width / 2,
-                              child: Column(
-                                children: [
-                                  Text(
-                                    "${cubit.firstNameShared},",
-                                    maxLines: 1,
-                                    textAlign: TextAlign.left,
-                                    style: const TextStyle(
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  Container(
-                                    margin: EdgeInsets.only(left: width / 40),
-                                    child: const Text(
-                                      "You are Ordering From :",
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(0.0),
-                              child: Column(
-                                children: [
-                                  Container(
-                                    height: height / 6,
-                                    width: width / 2.4,
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(12),
-                                        color: Colors.transparent,
-                                        border: Border.all(
-                                            width: 20, color: Colors.white)),
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(20),
-                                      child: GestureDetector(
-                                        child: Image(
-                                          image: CachedNetworkImageProvider(
-                                              "https://x-eats.com${RestuarantsCubit.currentRestaurant["logo"]}"),
-                                          loadingBuilder: (context, child,
-                                              loadingProgress) {
-                                            if (loadingProgress == null) {
-                                              return child;
-                                            }
-                                            return const Center(
-                                              child: Loading(),
-                                            );
-                                          },
-                                        ),
-                                        onTap: () {},
-                                      ),
-                                    ),
-                                  ),
-                                  Text(
-                                    "${RestuarantsCubit.currentRestaurant["Name"]}",
-                                    style: const TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ],
-                              ),
+                            // SizedBox(
+                            //   width: width / 2,
+                            //   child: Column(
+                            //     children: [
+                            //       Text("${cubit.firstNameShared},",
+                            //           maxLines: 1,
+                            //           style: Theme.of(context)
+                            //               .textTheme
+                            //               .headlineMedium),
+                            //       Container(
+                            //         margin: EdgeInsets.only(left: width / 40),
+                            //         child: Text("You are Ordering From :",
+                            //             style: Theme.of(context)
+                            //                 .textTheme
+                            //                 .displaySmall),
+                            //       ),
+                            //     ],
+                            //   ),
+                            // ),
+                            Column(
+                              children: [
+                                // Container(
+                                //   height: height / 8,
+                                //   width: width / 2.4,
+                                //   decoration: BoxDecoration(
+                                //       borderRadius: BorderRadius.circular(12),
+                                //       color: Colors.transparent,
+                                //       border: Border.all(
+                                //           width: 20, color: Colors.white)),
+                                //   child: ClipRRect(
+                                //     borderRadius: BorderRadius.circular(20),
+                                //     child: GestureDetector(
+                                //       child: Image(
+                                //         image: CachedNetworkImageProvider(
+                                //             "${AppConstants.BaseUrl}${RestuarantsCubit.currentRestaurant["logo"]}"),
+                                //         loadingBuilder:
+                                //             (context, child, loadingProgress) {
+                                //           if (loadingProgress == null) {
+                                //             return child;
+                                //           }
+                                //           return const Center(
+                                //             child: Loading(),
+                                //           );
+                                //         },
+                                //       ),
+                                //       onTap: () {},
+                                //     ),
+                                //   ),
+                                // ),
+                                // Text(
+                                //     "${RestuarantsCubit.currentRestaurant["Name"]}",
+                                //     style:
+                                //         Theme.of(context).textTheme.bodyLarge),
+                              ],
                             ),
                           ],
                         );
@@ -163,7 +160,11 @@ class _CartState extends State<Cart> {
                                 children: [
                                   const Text(
                                     "Slide Left or Right to delete an Item",
-                                    style: TextStyle(color: Colors.red),
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 9,
+                                      color: Colors.red,
+                                    ),
                                   ),
                                   SizedBox(
                                     height: 8.h,
@@ -175,63 +176,39 @@ class _CartState extends State<Cart> {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceAround,
                                     children: [
-                                      ElevatedButton(
-                                          onPressed: () {
+                                      SecondaryMiniButton(
+                                          function: () {
                                             Navigation(context, Layout());
                                           },
-                                          style: ButtonStyle(
-                                            backgroundColor:
-                                                MaterialStateProperty.all(
-                                                    Colors.white),
-                                            shape: MaterialStateProperty.all(
-                                              RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(18.0),
-                                                side: const BorderSide(
-                                                    color: Color.fromARGB(
-                                                        255, 9, 134, 211)),
-                                              ),
-                                            ),
-                                          ),
-                                          child: const Text(
-                                            "Continue Shopping",
-                                            style:
-                                                TextStyle(color: Colors.black),
-                                          )),
+                                          text: 'Continue Shopping'),
                                       SizedBox(
-                                        width:
-                                            MediaQuery.of(context).size.width /
-                                                2,
-                                        height: 50.h,
-                                        child: ElevatedButton(
-                                          style: ElevatedButton.styleFrom(
-                                              shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          20))),
-                                          onPressed: () async {
-                                            await OrderCubit.get(context)
-                                                .deliveryFees(context);
-                                            if (ProductsCubit.get(context)
-                                                    .privacy ==
-                                                Privacy.Private) {
-                                              Navigation(
-                                                  context,
-                                                  CheckOut(
-                                                    Private: true,
-                                                  ));
-                                            } else {
-                                              Navigation(
-                                                context,
-                                                CheckOut(
-                                                  Private: false,
-                                                ),
-                                              );
-                                            }
-                                          },
-                                          child: const Text("Checkout"),
-                                        ),
-                                      )
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width /
+                                              2,
+                                          height: 50.h,
+                                          child: DefaultMiniButton(
+                                              function: () async {
+                                                await OrderCubit.get(context)
+                                                    .deliveryFees(context);
+                                                if (ProductsCubit.get(context)
+                                                        .privacy ==
+                                                    Privacy.Private) {
+                                                  Navigation(
+                                                      context,
+                                                      CheckOut(
+                                                        Private: true,
+                                                      ));
+                                                } else {
+                                                  Navigation(
+                                                    context,
+                                                    CheckOut(
+                                                      Private: false,
+                                                    ),
+                                                  );
+                                                }
+                                              },
+                                              text: 'Checkout'))
                                     ],
                                   ),
                                 ],
@@ -258,16 +235,16 @@ class _CartState extends State<Cart> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceAround,
                                       children: [
-                                        Text(
-                                          "Public",
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: GoogleFonts.poppins(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 14),
-                                        ),
+                                        Text("Public",
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .labelMedium),
                                         const SizedBox(width: 10),
                                         Radio<Privacy>(
+                                          activeColor:
+                                              Theme.of(context).backgroundColor,
                                           value: Privacy.Public,
                                           groupValue:
                                               ProductsCubit.get(ProductCubit)
@@ -281,25 +258,24 @@ class _CartState extends State<Cart> {
                                         const SizedBox(width: 10),
                                         Padding(
                                           padding: const EdgeInsets.all(8.0),
-                                          child: Text(
-                                            "Private",
-                                            maxLines: 1,
-                                            overflow: TextOverflow.ellipsis,
-                                            style: GoogleFonts.poppins(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 14),
-                                          ),
+                                          child: Text("Private",
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodySmall),
                                         ),
                                         const SizedBox(width: 10),
                                         Padding(
                                           padding: const EdgeInsets.all(8.0),
                                           child: Radio<Privacy>(
                                             value: Privacy.Private,
+                                            activeColor: Theme.of(context)
+                                                .backgroundColor,
                                             groupValue:
                                                 ProductsCubit.get(ProductCubit)
                                                     .privacy,
                                             onChanged: (Privacy? value) {
-                                              print("kkk$value");
                                               ProductsCubit.get(ProductCubit)
                                                   .changePrivacyOrdertoPublic(
                                                       value);

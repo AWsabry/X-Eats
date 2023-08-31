@@ -123,10 +123,10 @@ class HomePage extends StatelessWidget {
                                     Center(
                                       child: Container(
                                         child: Text(
-                                          AppConstants.PleaseSelectLocation,
-                                          style: GoogleFonts.openSans(
-                                              fontSize: 18),
-                                        ),
+                                            AppConstants.PleaseSelectLocation,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyMedium),
                                       ),
                                     ),
                                   ],
@@ -155,42 +155,14 @@ class HomePage extends StatelessWidget {
                                     children: [
                                       Padding(
                                         padding: const EdgeInsets.all(8.0),
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          children: [
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              children: [
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          left: 12, bottom: 12),
-                                                  child: Text(
-                                                    maxLines: 1,
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                    "Welcome, $FirstName",
-                                                    style: GoogleFonts.poppins(
-                                                        fontSize: 14,
-                                                        fontWeight:
-                                                            FontWeight.bold),
-                                                  ),
+                                        child: ConditionalBuilder(
+                                            condition: ProductsCubit
+                                                .getposters.isNotEmpty,
+                                            fallback: (context) => const Center(
+                                                  child: Loading(),
                                                 ),
-                                              ],
-                                            ),
-                                            ConditionalBuilder(
-                                                condition: ProductsCubit
-                                                    .getposters.isNotEmpty,
-                                                fallback: (context) =>
-                                                    const Center(
-                                                      child: Loading(),
-                                                    ),
-                                                builder: (context) =>
-                                                    const DiscountBanner()),
-                                          ],
-                                        ),
+                                            builder: (context) =>
+                                                const DiscountBanner()),
                                       ),
                                       Column(
                                         crossAxisAlignment:
@@ -200,12 +172,10 @@ class HomePage extends StatelessWidget {
                                         children: [
                                           Padding(
                                             padding: const EdgeInsets.all(15.0),
-                                            child: Text(
-                                              'Restaurant',
-                                              style: GoogleFonts.poppins(
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.bold),
-                                            ),
+                                            child: Text('Restaurants',
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyMedium),
                                           ),
                                           SingleChildScrollView(
                                             scrollDirection: Axis.horizontal,
@@ -236,9 +206,9 @@ class HomePage extends StatelessWidget {
                                                                         index]
                                                                     ['Name'] ??
                                                                 const Loading(),
-                                                        Colors: const Color
-                                                                .fromARGB(
-                                                            255, 5, 95, 9),
+                                                        // Colors: const Color
+                                                        //         .fromARGB(
+                                                        //     255, 5, 95, 9),
                                                         image: Image(
                                                           // loadingBuilder: (context,
                                                           //     child,
@@ -285,13 +255,10 @@ class HomePage extends StatelessWidget {
                                             Padding(
                                               padding:
                                                   const EdgeInsets.all(15.0),
-                                              child: Text(
-                                                'Most Ordered',
-                                                style: GoogleFonts.poppins(
-                                                    fontSize: 16,
-                                                    fontWeight:
-                                                        FontWeight.bold),
-                                              ),
+                                              child: Text('Most Ordered',
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .bodyMedium),
                                             ),
                                             SingleChildScrollView(
                                               scrollDirection: Axis.horizontal,
@@ -301,15 +268,11 @@ class HomePage extends StatelessWidget {
                                                       padding:
                                                           const EdgeInsets.all(
                                                               15.0),
-                                                      child: Text(
-                                                        'Coming Soon',
-                                                        style:
-                                                            GoogleFonts.poppins(
-                                                                fontSize: 16,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold),
-                                                      ),
+                                                      child: Text('Coming Soon',
+                                                          style:
+                                                              Theme.of(context)
+                                                                  .textTheme
+                                                                  .bodyMedium),
                                                     );
                                                   },
                                                   condition: (ProductsCubit
@@ -467,8 +430,10 @@ class HomePage extends StatelessWidget {
               ),
               bottomNavigationBar: BottomNavigationBar(
                 unselectedItemColor: Colors.white,
-                backgroundColor: ThemeApp.accentColor,
-                selectedLabelStyle: GoogleFonts.poppins(),
+                unselectedFontSize: 9,
+                selectedFontSize: 12,
+                backgroundColor: Theme.of(context).backgroundColor,
+                selectedItemColor: Theme.of(context).primaryColor,
                 items: navcubit.bottomitems,
                 currentIndex: 0,
                 onTap: (index) {
