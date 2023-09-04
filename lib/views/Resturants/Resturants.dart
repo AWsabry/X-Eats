@@ -233,7 +233,7 @@ class Restaurants extends StatelessWidget {
                                                           // ),
                                                           ),
                                                   imageUrl:
-                                                      'https://www.x-eats.com' +
+                                                      '${AppConstants.BaseUrl}' +
                                                           restuarantsOfSlugListApi[
                                                               index]['logo'],
                                                 ),

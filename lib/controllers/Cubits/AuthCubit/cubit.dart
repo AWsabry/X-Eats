@@ -59,14 +59,14 @@ class AuthCubit extends Cubit<AuthStates> {
     String? password,
     String? title,
   }) async {
-    await DioHelper.PostData(data: {
+    await Dio().post("${AppConstants.BaseUrl}/create_users_API/", data: {
       "password": password,
       "email": email,
       "first_name": first_name,
       "last_name": last_name,
       "title": title,
       "PhoneNumber": PhoneNumber,
-    }, url: "create_users_API/");
+    });
   }
 
   void LoginPressed() {
@@ -86,13 +86,11 @@ class AuthCubit extends Cubit<AuthStates> {
         "password": password,
       });
 
-      final loginViewToken = await DioHelper.PostData(
-        data: {
-          "password": password,
-          "email": email,
-        },
-        url: "login_view/",
-      );
+      final loginViewToken =
+          await Dio().post("${AppConstants.BaseUrl}/login_view/", data: {
+        "password": password,
+        "email": email,
+      });
       UserCode = loginViewToken.data["code"];
       emit(LoginSuccessfullState());
     } catch (error) {

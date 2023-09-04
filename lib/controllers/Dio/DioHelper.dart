@@ -29,22 +29,22 @@ class DioHelper {
     return await dio!.get(url, queryParameters: query);
   }
 
-  static Future<Response> PostData({
-    required url,
-    String lang = 'en',
-    String? token,
-    Map<String, dynamic>? query,
-    required Map<String, dynamic> data,
-  }) async {
-    dio!.options.headers = {
-      'lang': lang,
-      'token': token,
-      'Content-Type': 'application/json',
-    };
-    return await dio!.post(
-      url,
-      queryParameters: query,
-      data: data,
-    );
-  }
+  // static Future<Response> PostData({
+  //   required url,
+  //   String lang = 'en',
+  //   String? token,
+  //   Map<String, dynamic>? query,
+  //   required Map<String, dynamic> data,
+  // }) async {
+  //   dio!.options.headers = {
+  //     'lang': lang,
+  //     'token': token,
+  //     'Content-Type': 'application/json',
+  //   };
+  //   return await dio!.post(
+  //     url,
+  //     queryParameters: query,
+  //     data: data,
+  //   );
+  // }
 }

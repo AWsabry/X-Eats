@@ -3,6 +3,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:xeats/controllers/Components/Global%20Components/loading.dart';
 import 'package:xeats/controllers/Cubits/ProductsCubit/ProductsCubit.dart';
+import 'package:xeats/core/Constants/constants.dart';
 
 class DiscountBanner extends StatelessWidget {
   const DiscountBanner({
@@ -29,7 +30,7 @@ class DiscountBanner extends StatelessWidget {
                   );
                 },
                 image: CachedNetworkImageProvider(
-                  'https://www.x-eats.com' +
+                  '${AppConstants.BaseUrl}' +
                       dataFromApi[index]['background_image'],
                 ),
               ),

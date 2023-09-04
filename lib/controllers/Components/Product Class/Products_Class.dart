@@ -151,7 +151,7 @@ class ProductClass extends StatelessWidget {
                       },
                       width: width / 5,
                       image: CachedNetworkImageProvider(
-                          "https://x-eats.com$itemImage"),
+                          "${AppConstants.BaseUrl}$itemImage"),
                       loadingBuilder: (context, child, loadingProgress) {
                         if (loadingProgress == null) return child;
                         return const Center(

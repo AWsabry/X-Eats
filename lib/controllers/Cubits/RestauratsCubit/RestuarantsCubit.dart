@@ -97,7 +97,7 @@ class RestuarantsCubit extends Cubit<RestuarantsStates> {
                               ),
                         ),
                         imageUrl:
-                            'https://www.x-eats.com${imageOfRestaurant[index]}',
+                            '${AppConstants.BaseUrl}${imageOfRestaurant[index]}',
                       ),
                     ),
                   ),

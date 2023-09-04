@@ -231,13 +231,12 @@ class HomePage extends StatelessWidget {
                                                               //     child: Loading(),
                                                               //   );
                                                               // },
-                                                              image: CachedNetworkImageProvider(DioHelper
-                                                                      .dio!
-                                                                      .options
-                                                                      .baseUrl +
-                                                                  RestaurantsSlugApi[
-                                                                          index]
-                                                                      ['logo']),
+                                                              image: CachedNetworkImageProvider(
+                                                                  "${AppConstants.BaseUrl}/" +
+                                                                      RestaurantsSlugApi[
+                                                                              index]
+                                                                          [
+                                                                          'logo']),
                                                             ),
                                                           ),
                                                         );
