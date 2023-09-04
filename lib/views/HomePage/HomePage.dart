@@ -13,6 +13,8 @@ import 'package:xeats/controllers/Components/Product%20Class/Products_Class.dart
 import 'package:xeats/controllers/Components/Restaurant%20Components/RestaurantView.dart';
 import 'package:xeats/controllers/Cubits/AuthCubit/cubit.dart';
 import 'package:xeats/controllers/Cubits/ButtomNavigationBarCubit/navigationCubit.dart';
+import 'package:xeats/controllers/Cubits/InternetCubit/internet_cubit.dart';
+import 'package:xeats/controllers/Cubits/InternetCubit/internet_states.dart';
 import 'package:xeats/controllers/Cubits/OrderCubit/OrderCubit.dart';
 import 'package:xeats/controllers/Cubits/OrderCubit/OrderStates.dart';
 import 'package:xeats/controllers/Cubits/ProductsCubit/ProductsCubit.dart';
@@ -74,386 +76,404 @@ class HomePage extends StatelessWidget {
               ..getCartID(context)
               ..getLocation(context)),
         BlocProvider(create: (context) => ProductsCubit()..getPoster()),
-        BlocProvider(
-          create: (context) => RestuarantsCubit(),
-        ),
         BlocProvider(create: (context) => AuthCubit()..GettingUserData()),
       ],
-      child: BlocConsumer<ProductsCubit, ProductsStates>(
-        listener: (context, state) {},
-        builder: ((context, state) {
-          List<dynamic> mostSoldProducts = ProductsCubit.MostSold;
-          var cubit = AuthCubit.get(context);
-          var navcubit = NavBarCubitcubit.get(context);
-          var FirstName = cubit.firstNameShared ?? '';
-          return SafeArea(
-            child: Scaffold(
-              appBar: LocationBar(context),
-              body: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    BlocBuilder<OrderCubit, OrderStates>(
-                      builder: (Ordercontext, OrderStates) {
-                        print(" Khaled $OrderStates");
-
-                        var RestaurantsSlugApi =
-                            OrderCubit.restuarantsOfSlugList;
-                        return ConditionalBuilder(
-                            fallback: (context) {
-                              if (OrderStates
-                                  is getRestuarantSlugStateLoading) {
-                                return Column(
-                                  children: [
-                                    SizedBox(
-                                      height: height / 2.6,
-                                    ),
-                                    Center(
-                                      child: Container(child: const Loading()),
-                                    ),
-                                  ],
-                                );
-                              } else {
-                                return Column(
-                                  children: [
-                                    SizedBox(
-                                      height: height / 2.6,
-                                    ),
-                                    Center(
-                                      child: Container(
-                                        child: Text(
-                                            AppConstants.PleaseSelectLocation,
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .bodyMedium),
-                                      ),
-                                    ),
-                                  ],
-                                );
-                              }
-                            },
-                            condition: RestaurantsSlugApi.isNotEmpty,
-                            builder: (context) {
-                              if (OrderStates
-                                  is getRestuarantSlugStateLoading) {
-                                return Column(
-                                  children: [
-                                    SizedBox(
-                                      height: height / 2.6,
-                                    ),
-                                    Center(
-                                      child: Container(child: const Loading()),
-                                    ),
-                                  ],
-                                );
-                              } else {
-                                return Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: ConditionalBuilder(
-                                            condition: ProductsCubit
-                                                .getposters.isNotEmpty,
-                                            fallback: (context) => const Center(
-                                                  child: Loading(),
-                                                ),
-                                            builder: (context) =>
-                                                const DiscountBanner()),
-                                      ),
-                                      Column(
+      child: BlocBuilder<InternetCubit, InternetStates>(
+          builder: (context, internetstate) {
+        if (internetstate is NotConnectedState) {
+          return const SafeArea(
+              child: Scaffold(
+            body: Center(
+              child: Loading(),
+            ),
+          ));
+        } else if (internetstate is ConnectedState) {
+          return BlocBuilder<ProductsCubit, ProductsStates>(
+            builder: ((context, state) {
+              List<dynamic> mostSoldProducts = ProductsCubit.MostSold;
+              var cubit = AuthCubit.get(context);
+              var navcubit = NavBarCubitcubit.get(context);
+              var FirstName = cubit.firstNameShared ?? '';
+              return SafeArea(
+                child: Scaffold(
+                  appBar: LocationBar(context),
+                  body: SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        BlocBuilder<OrderCubit, OrderStates>(
+                          builder: (Ordercontext, OrderStates) {
+                            var RestaurantsSlugApi =
+                                OrderCubit.restuarantsOfSlugList;
+                            return ConditionalBuilder(
+                                fallback: (context) {
+                                  if (OrderStates
+                                      is getRestuarantSlugStateLoading) {
+                                    return Column(
+                                      children: [
+                                        SizedBox(
+                                          height: height / 2.6,
+                                        ),
+                                        Center(
+                                          child:
+                                              Container(child: const Loading()),
+                                        ),
+                                      ],
+                                    );
+                                  } else {
+                                    return Column(
+                                      children: [
+                                        SizedBox(
+                                          height: height / 2.6,
+                                        ),
+                                        Center(
+                                          child: Container(
+                                            child: Text(
+                                                AppConstants
+                                                    .PleaseSelectLocation,
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyMedium),
+                                          ),
+                                        ),
+                                      ],
+                                    );
+                                  }
+                                },
+                                condition: RestaurantsSlugApi.isNotEmpty,
+                                builder: (context) {
+                                  if (OrderStates
+                                      is getRestuarantSlugStateLoading) {
+                                    return Column(
+                                      children: [
+                                        SizedBox(
+                                          height: height / 2.6,
+                                        ),
+                                        Center(
+                                          child:
+                                              Container(child: const Loading()),
+                                        ),
+                                      ],
+                                    );
+                                  } else {
+                                    return Column(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         mainAxisAlignment:
                                             MainAxisAlignment.start,
                                         children: [
                                           Padding(
-                                            padding: const EdgeInsets.all(15.0),
-                                            child: Text('Restaurants',
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .bodyMedium),
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: ConditionalBuilder(
+                                                condition: ProductsCubit
+                                                    .getposters.isNotEmpty,
+                                                fallback: (context) =>
+                                                    const Center(
+                                                      child: Loading(),
+                                                    ),
+                                                builder: (context) =>
+                                                    const DiscountBanner()),
                                           ),
-                                          SingleChildScrollView(
-                                            scrollDirection: Axis.horizontal,
-                                            child: Row(
-                                              children: [
-                                                ...List.generate(
-                                                  OrderCubit
-                                                      .restuarantsOfSlugList
-                                                      .length,
-                                                  (index) {
-                                                    return GestureDetector(
-                                                      onTap: () {
-                                                        Navigation(
-                                                            context,
-                                                            ResturantsMenu(
-                                                                data:
-                                                                    RestaurantsSlugApi[
+                                          Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            children: [
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.all(15.0),
+                                                child: Text('Restaurants',
+                                                    style: Theme.of(context)
+                                                        .textTheme
+                                                        .bodyMedium),
+                                              ),
+                                              SingleChildScrollView(
+                                                scrollDirection:
+                                                    Axis.horizontal,
+                                                child: Row(
+                                                  children: [
+                                                    ...List.generate(
+                                                      OrderCubit
+                                                          .restuarantsOfSlugList
+                                                          .length,
+                                                      (index) {
+                                                        return GestureDetector(
+                                                          onTap: () {
+                                                            Navigation(
+                                                                context,
+                                                                ResturantsMenu(
+                                                                    data: RestaurantsSlugApi[
                                                                         index],
-                                                                RestaurantId:
-                                                                    RestaurantsSlugApi[
-                                                                            index]
-                                                                        [
-                                                                        'id']));
-                                                      },
-                                                      child: RestaurantView(
-                                                        data:
-                                                            RestaurantsSlugApi[
+                                                                    RestaurantId:
+                                                                        RestaurantsSlugApi[index]
+                                                                            [
+                                                                            'id']));
+                                                          },
+                                                          child: RestaurantView(
+                                                            data: RestaurantsSlugApi[
                                                                         index]
                                                                     ['Name'] ??
                                                                 const Loading(),
-                                                        // Colors: const Color
-                                                        //         .fromARGB(
-                                                        //     255, 5, 95, 9),
-                                                        image: Image(
-                                                          // loadingBuilder: (context,
-                                                          //     child,
-                                                          //     loadingProgress) {
-                                                          //   if (loadingProgress ==
-                                                          //       null) {
-                                                          //     return Center();
-                                                          //   }
-                                                          //   return Center(
-                                                          //     child: Loading(),
-                                                          //   );
-                                                          // },
-                                                          image: CachedNetworkImageProvider(
-                                                              DioHelper
+                                                            // Colors: const Color
+                                                            //         .fromARGB(
+                                                            //     255, 5, 95, 9),
+                                                            image: Image(
+                                                              // loadingBuilder: (context,
+                                                              //     child,
+                                                              //     loadingProgress) {
+                                                              //   if (loadingProgress ==
+                                                              //       null) {
+                                                              //     return Center();
+                                                              //   }
+                                                              //   return Center(
+                                                              //     child: Loading(),
+                                                              //   );
+                                                              // },
+                                                              image: CachedNetworkImageProvider(DioHelper
                                                                       .dio!
                                                                       .options
                                                                       .baseUrl +
                                                                   RestaurantsSlugApi[
                                                                           index]
                                                                       ['logo']),
-                                                        ),
-                                                      ),
-                                                    );
-                                                  },
+                                                            ),
+                                                          ),
+                                                        );
+                                                      },
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                              const SizedBox(
+                                                height: 10,
+                                              ),
+                                              SizedBox(
+                                                height: 50,
+                                                width: double.maxFinite,
+                                                child: AdWidget(ad: bannerAd),
+                                              )
+                                            ],
+                                          ),
+                                          Container(
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Padding(
+                                                  padding: const EdgeInsets.all(
+                                                      15.0),
+                                                  child: Text('Most Ordered',
+                                                      style: Theme.of(context)
+                                                          .textTheme
+                                                          .bodyMedium),
+                                                ),
+                                                SingleChildScrollView(
+                                                  scrollDirection:
+                                                      Axis.horizontal,
+                                                  child: ConditionalBuilder(
+                                                      fallback: (context) {
+                                                        return Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(15.0),
+                                                          child: Text(
+                                                              'Coming Soon',
+                                                              style: Theme.of(
+                                                                      context)
+                                                                  .textTheme
+                                                                  .bodyMedium),
+                                                        );
+                                                      },
+                                                      condition: (ProductsCubit
+                                                                  .NoMostSoldProducts ==
+                                                              false ||
+                                                          ProductsCubit
+                                                                      .NoMostSoldProducts
+                                                                  .toString() ==
+                                                              "null"),
+                                                      builder: (context) {
+                                                        return Row(
+                                                          children: [
+                                                            ...List.generate(
+                                                              mostSoldProducts
+                                                                  .length,
+                                                              (index) {
+                                                                return ProductClass(
+                                                                  productName:
+                                                                      mostSoldProducts[
+                                                                              index]
+                                                                          [
+                                                                          "name"],
+                                                                  id: mostSoldProducts[
+                                                                          index]
+                                                                      ["id"],
+                                                                  restaurant: mostSoldProducts[
+                                                                          index]
+                                                                      [
+                                                                      "Restaurant"],
+                                                                  itemImage: "${AppConstants.BaseUrl}/uploads/" +
+                                                                      mostSoldProducts[
+                                                                              index]
+                                                                          [
+                                                                          "image"],
+                                                                  price: mostSoldProducts[
+                                                                          index]
+                                                                      ['price'],
+                                                                  englishName:
+                                                                      mostSoldProducts[
+                                                                              index]
+                                                                          [
+                                                                          "name"],
+                                                                  arabicName: mostSoldProducts[
+                                                                          index]
+                                                                      [
+                                                                      "ArabicName"],
+                                                                  description: mostSoldProducts[
+                                                                              index]
+                                                                          [
+                                                                          "description"] ??
+                                                                      "No Description for this Product",
+                                                                ).MostSoldProducts(
+                                                                    context,
+                                                                    width:
+                                                                        width /
+                                                                            2.0,
+                                                                    height:
+                                                                        height /
+                                                                            4.2,
+                                                                    image: "${AppConstants.BaseUrl}/uploads/" +
+                                                                        mostSoldProducts[index][
+                                                                            "image"],
+                                                                    Colors: Colors
+                                                                        .white,
+                                                                    data: mostSoldProducts[
+                                                                            index]
+                                                                        [
+                                                                        "name"],
+                                                                    restaurantName:
+                                                                        mostSoldProducts[index]["Restaurant"]
+                                                                            .toString());
+
+                                                                // return ProductView(
+                                                                //   image:
+                                                                //       mostSoldProducts[
+                                                                //               index]
+                                                                //           ["image"],
+                                                                //   width:
+                                                                //       width / 2.0,
+                                                                //   height:
+                                                                //       height / 4.2,
+                                                                //   data:
+                                                                //       mostSoldProducts[
+                                                                //               index]
+                                                                //           ["name"],
+                                                                //   Colors:
+                                                                //       Colors.white,
+                                                                //   Navigate: () {
+                                                                //     Navigation(
+                                                                //         context,
+                                                                //         ProductClass()
+                                                                //             .productDetails(
+                                                                //           context,
+                                                                //           productName:
+                                                                //               mostSoldProducts[index]
+                                                                //                   [
+                                                                //                   "productName"],
+                                                                //           id: mostSoldProducts[
+                                                                //                   index]
+                                                                //               [
+                                                                //               "id"],
+                                                                //           restaurant:
+                                                                //               mostSoldProducts[index]
+                                                                //                   [
+                                                                //                   "Restaurant"],
+                                                                //           image: "${AppConstants.BaseUrl}/uploads/" +
+                                                                //               mostSoldProducts[index]
+                                                                //                   [
+                                                                //                   "image"],
+                                                                //           price: mostSoldProducts[
+                                                                //                   index]
+                                                                //               [
+                                                                //               'price'],
+                                                                //           englishName:
+                                                                //               mostSoldProducts[index]
+                                                                //                   [
+                                                                //                   "name"],
+                                                                //           arabicName:
+                                                                //               mostSoldProducts[index]
+                                                                //                   [
+                                                                //                   "ArabicName"],
+                                                                //           description:
+                                                                //               mostSoldProducts[index]["description"] ??
+                                                                //                   "No Description for this Product",
+                                                                //           restaurantName:
+                                                                //               mostSoldProducts[index]["Restaurant"]
+                                                                //                   .toString(),
+                                                                //         ));
+                                                                //   },
+                                                                // );
+                                                              },
+                                                            ),
+                                                          ],
+                                                        );
+                                                      }),
                                                 ),
                                               ],
                                             ),
                                           ),
-                                          const SizedBox(
-                                            height: 10,
-                                          ),
                                           SizedBox(
                                             height: 50,
                                             width: double.maxFinite,
-                                            child: AdWidget(ad: bannerAd),
-                                          )
-                                        ],
-                                      ),
-                                      Container(
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Padding(
-                                              padding:
-                                                  const EdgeInsets.all(15.0),
-                                              child: Text('Most Ordered',
-                                                  style: Theme.of(context)
-                                                      .textTheme
-                                                      .bodyMedium),
-                                            ),
-                                            SingleChildScrollView(
-                                              scrollDirection: Axis.horizontal,
-                                              child: ConditionalBuilder(
-                                                  fallback: (context) {
-                                                    return Padding(
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              15.0),
-                                                      child: Text('Coming Soon',
-                                                          style:
-                                                              Theme.of(context)
-                                                                  .textTheme
-                                                                  .bodyMedium),
-                                                    );
-                                                  },
-                                                  condition: (ProductsCubit
-                                                              .NoMostSoldProducts ==
-                                                          false ||
-                                                      ProductsCubit
-                                                                  .NoMostSoldProducts
-                                                              .toString() ==
-                                                          "null"),
-                                                  builder: (context) {
-                                                    return Row(
-                                                      children: [
-                                                        ...List.generate(
-                                                          mostSoldProducts
-                                                              .length,
-                                                          (index) {
-                                                            return ProductClass(
-                                                              productName:
-                                                                  mostSoldProducts[
-                                                                          index]
-                                                                      ["name"],
-                                                              id: mostSoldProducts[
-                                                                  index]["id"],
-                                                              restaurant:
-                                                                  mostSoldProducts[
-                                                                          index]
-                                                                      [
-                                                                      "Restaurant"],
-                                                              itemImage: "${AppConstants.BaseUrl}/uploads/" +
-                                                                  mostSoldProducts[
-                                                                          index]
-                                                                      ["image"],
-                                                              price:
-                                                                  mostSoldProducts[
-                                                                          index]
-                                                                      ['price'],
-                                                              englishName:
-                                                                  mostSoldProducts[
-                                                                          index]
-                                                                      ["name"],
-                                                              arabicName:
-                                                                  mostSoldProducts[
-                                                                          index]
-                                                                      [
-                                                                      "ArabicName"],
-                                                              description: mostSoldProducts[
-                                                                          index]
-                                                                      [
-                                                                      "description"] ??
-                                                                  "No Description for this Product",
-                                                            ).MostSoldProducts(
-                                                                context,
-                                                                width: width /
-                                                                    2.0,
-                                                                height: height /
-                                                                    4.2,
-                                                                image: "${AppConstants.BaseUrl}/uploads/" +
-                                                                    mostSoldProducts[
-                                                                            index]
-                                                                        [
-                                                                        "image"],
-                                                                Colors: Colors
-                                                                    .white,
-                                                                data: mostSoldProducts[
-                                                                        index]
-                                                                    ["name"],
-                                                                restaurantName:
-                                                                    mostSoldProducts[index]
-                                                                            [
-                                                                            "Restaurant"]
-                                                                        .toString());
-
-                                                            // return ProductView(
-                                                            //   image:
-                                                            //       mostSoldProducts[
-                                                            //               index]
-                                                            //           ["image"],
-                                                            //   width:
-                                                            //       width / 2.0,
-                                                            //   height:
-                                                            //       height / 4.2,
-                                                            //   data:
-                                                            //       mostSoldProducts[
-                                                            //               index]
-                                                            //           ["name"],
-                                                            //   Colors:
-                                                            //       Colors.white,
-                                                            //   Navigate: () {
-                                                            //     Navigation(
-                                                            //         context,
-                                                            //         ProductClass()
-                                                            //             .productDetails(
-                                                            //           context,
-                                                            //           productName:
-                                                            //               mostSoldProducts[index]
-                                                            //                   [
-                                                            //                   "productName"],
-                                                            //           id: mostSoldProducts[
-                                                            //                   index]
-                                                            //               [
-                                                            //               "id"],
-                                                            //           restaurant:
-                                                            //               mostSoldProducts[index]
-                                                            //                   [
-                                                            //                   "Restaurant"],
-                                                            //           image: "${AppConstants.BaseUrl}/uploads/" +
-                                                            //               mostSoldProducts[index]
-                                                            //                   [
-                                                            //                   "image"],
-                                                            //           price: mostSoldProducts[
-                                                            //                   index]
-                                                            //               [
-                                                            //               'price'],
-                                                            //           englishName:
-                                                            //               mostSoldProducts[index]
-                                                            //                   [
-                                                            //                   "name"],
-                                                            //           arabicName:
-                                                            //               mostSoldProducts[index]
-                                                            //                   [
-                                                            //                   "ArabicName"],
-                                                            //           description:
-                                                            //               mostSoldProducts[index]["description"] ??
-                                                            //                   "No Description for this Product",
-                                                            //           restaurantName:
-                                                            //               mostSoldProducts[index]["Restaurant"]
-                                                            //                   .toString(),
-                                                            //         ));
-                                                            //   },
-                                                            // );
-                                                          },
-                                                        ),
-                                                      ],
-                                                    );
-                                                  }),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: 50,
-                                        width: double.maxFinite,
-                                        child: AdWidget(ad: bannerAd2),
-                                      ),
-                                      // ListView.builder(
-                                      //   itemBuilder: (context, index) {},
-                                      // )
-                                    ]);
-                              }
-                            });
-                      },
+                                            child: AdWidget(ad: bannerAd2),
+                                          ),
+                                          // ListView.builder(
+                                          //   itemBuilder: (context, index) {},
+                                          // )
+                                        ]);
+                                  }
+                                });
+                          },
+                        ),
+                      ],
                     ),
-                  ],
+                  ),
+                  bottomNavigationBar: BottomNavigationBar(
+                    unselectedItemColor: Colors.white,
+                    unselectedFontSize: 9,
+                    selectedFontSize: 12,
+                    backgroundColor: Theme.of(context).backgroundColor,
+                    selectedItemColor: Theme.of(context).primaryColor,
+                    items: navcubit.bottomitems,
+                    currentIndex: 0,
+                    onTap: (index) {
+                      if (index == 0) {
+                        Navigator.popUntil(context, (route) => route.isCurrent);
+                      } else if (index == 1) {
+                        Navigation(
+                            context,
+                            Restaurants(
+                              currentLocation: OrderCubit.currentLocation,
+                            ));
+                      } else {
+                        Navigation(context, const Profile());
+                      }
+                    },
+                  ),
                 ),
-              ),
-              bottomNavigationBar: BottomNavigationBar(
-                unselectedItemColor: Colors.white,
-                unselectedFontSize: 9,
-                selectedFontSize: 12,
-                backgroundColor: Theme.of(context).backgroundColor,
-                selectedItemColor: Theme.of(context).primaryColor,
-                items: navcubit.bottomitems,
-                currentIndex: 0,
-                onTap: (index) {
-                  if (index == 0) {
-                    Navigator.popUntil(context, (route) => route.isCurrent);
-                  } else if (index == 1) {
-                    Navigation(
-                        context,
-                        Restaurants(
-                          currentLocation: OrderCubit.currentLocation,
-                        ));
-                  } else {
-                    Navigation(context, const Profile());
-                  }
-                },
-              ),
-            ),
+              );
+            }),
           );
-        }),
-      ),
+        } else {
+          return const SafeArea(
+              child: Scaffold(
+            body: Center(
+              child: Loading(),
+            ),
+          ));
+        }
+      }),
     );
   }
 }

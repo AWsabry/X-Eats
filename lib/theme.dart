@@ -6,6 +6,7 @@ class ThemeApp {
   static Color whiteColor = Colors.white;
   static Color cultured = Color.fromRGBO(249, 249, 243, 1);
   static Color greyColor = Colors.grey;
+  static Color redColor = Colors.red;
   static const integralCFFont = "IntegralCF";
   static const poppinsFont = "Poppins";
 

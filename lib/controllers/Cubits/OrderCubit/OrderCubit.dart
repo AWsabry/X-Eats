@@ -16,6 +16,8 @@ import 'package:xeats/controllers/Cubits/AuthCubit/cubit.dart';
 import 'package:xeats/controllers/Cubits/OrderCubit/OrderStates.dart';
 import 'package:xeats/controllers/Cubits/ProductsCubit/ProductsCubit.dart';
 import 'package:xeats/core/Constants/constants.dart';
+import 'package:xeats/core/logger.dart';
+import 'package:xeats/theme.dart';
 import 'package:xeats/views/ThankYou/thankyou.dart';
 import 'package:xeats/views/WaitingRoom/waitingRoom.dart';
 import '../../../views/Cart/cart.dart';
@@ -195,72 +197,59 @@ class OrderCubit extends Cubit<OrderStates> {
   }
 
   List<dynamic> cartItems = [];
-
+  // The Function Will Get The email of user and take it as EndPoint to show his information
+  var getUserCartItemsResponse;
   Future<List> getCartItems(
-    context, {
-    // The Function Will Get The email of user and take it as EndPoint to show his information
-    String? email,
-  }) async {
-    ProductClass.CartItems.clear();
-
-    Map itemImages = {};
-
-    await Dio()
-        .get("${AppConstants.BaseUrl}/get_user_cartItems/$email")
-        .then((value) async {
-      for (var i in value.data["Names"]) {
+    context,
+  ) async {
+    try {
+      ProductClass.CartItems.clear();
+      Map itemImages = {};
+      getUserCartItemsResponse = await Dio().get(
+          "${AppConstants.BaseUrl}/get_user_cartItems/${AuthCubit.get(context).userEmailShared}");
+      for (var proudct in getUserCartItemsResponse.data["Names"]) {
         ProductClass? theItem;
-        print(i['id']);
-        await Dio()
-            .get(
-          "${AppConstants.BaseUrl}/get_products_by_id/${i["product"]}",
-        )
-            .then((v2) async {
-          theItem = ProductClass(
-              id: i["product"],
-              quantity: i["quantity"],
-              cartItemId: i["id"].toString(),
-              englishName: v2.data["Names"][0]["name"],
-              arabicName: v2.data["Names"][0]["ArabicName"],
-              productSlug: v2.data["Names"][0]["productslug"],
-              restaurant: i["Restaurant"],
-              description: v2.data["Names"][0]["description"] ??
-                  " No description for this Product",
-              price: double.parse(v2.data["Names"][0]["price"].toString()),
-              totalPrice:
-                  double.parse(v2.data["Names"][0]["price"].toString()) *
-                      double.parse(i["quantity"].toString()),
-              category: v2.data["Names"][0]["category"],
-              isBestOffer: v2.data["Names"][0]["Best_Offer"],
-              isMostPopular: v2.data["Names"][0]["Most_Popular"],
-              isNewProduct: v2.data["Names"][0]["New_Products"],
-              creationDate: v2.data["Names"][0]["created"]);
-
-          if (!itemImages.containsKey(v2.data["Names"][0]["category"])) {
-            print("1111");
-            await Dio()
-                .get(
-                    "${AppConstants.BaseUrl}/get_category_by_id/${v2.data["Names"][0]["category"]}")
-                .then((value2) {
-              print("2222");
-              theItem!.itemImage = value2.data["Names"][0]["image"];
-              itemImages.addAll({
-                value.data["Names"][0]["category"]: value2.data["Names"][0]
-                    ["image"]
-              });
-            });
-          } else {
-            theItem!.itemImage = itemImages[v2.data["Names"][0]["category"]];
-          }
-        }).catchError((onError) {
-          print(onError);
-        });
-
-        ProductClass.CartItems.add(theItem!);
+        var getProductsResponse = await Dio().get(
+          "${AppConstants.BaseUrl}/get_products_by_id/${proudct["product"]}",
+        );
+        theItem = ProductClass(
+            id: proudct["product"],
+            quantity: proudct["quantity"],
+            cartItemId: proudct["id"].toString(),
+            englishName: getProductsResponse.data["Names"][0]["name"],
+            arabicName: getProductsResponse.data["Names"][0]["ArabicName"],
+            productSlug: getProductsResponse.data["Names"][0]["productslug"],
+            restaurant: proudct["Restaurant"],
+            description: getProductsResponse.data["Names"][0]["description"] ??
+                " No description for this Product",
+            price: double.parse(
+                getProductsResponse.data["Names"][0]["price"].toString()),
+            totalPrice: double.parse(
+                    getProductsResponse.data["Names"][0]["price"].toString()) *
+                double.parse(proudct["quantity"].toString()),
+            category: getProductsResponse.data["Names"][0]["category"],
+            isBestOffer: getProductsResponse.data["Names"][0]["Best_Offer"],
+            isMostPopular: getProductsResponse.data["Names"][0]["Most_Popular"],
+            isNewProduct: getProductsResponse.data["Names"][0]["New_Products"],
+            creationDate: getProductsResponse.data["Names"][0]["created"]);
+        if (!itemImages
+            .containsKey(getProductsResponse.data["Names"][0]["category"])) {
+          var getCategoryByIdResponse = await Dio().get(
+              "${AppConstants.BaseUrl}/get_category_by_id/${getProductsResponse.data["Names"][0]["category"]}");
+          theItem.itemImage = getCategoryByIdResponse.data["Names"][0]["image"];
+          itemImages.addAll({
+            getUserCartItemsResponse.data["Names"][0]["category"]:
+                getCategoryByIdResponse.data["Names"][0]["image"]
+          });
+        } else {
+          theItem.itemImage =
+              itemImages[getProductsResponse.data["Names"][0]["category"]];
+        }
+        ProductClass.CartItems.add(theItem);
       }
-      // ignore: avoid_print
-    }).catchError((onError) {});
-    print(ProductClass.CartItems);
+    } catch (error) {
+      AppLogger.e(error.toString());
+    }
     return ProductClass.CartItems;
   }
 
@@ -337,50 +326,56 @@ class OrderCubit extends Cubit<OrderStates> {
   //   });
   //   // NavigateAndRemov(context, const ThankYou());
   // }
+  Future<void> clearCartItems(context) async {
+    try {
+      var clearCartItemsResponse = await Dio().delete(
+          "${AppConstants.BaseUrl}/clear_user_cart/${AuthCubit.get(context).userEmailShared}");
+    } catch (error) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          duration: const Duration(seconds: 2),
+          content: Text(AppConstants.ClearItemsError),
+          backgroundColor: ThemeApp.redColor));
+    }
+  }
 
   Future<void> deleteCartItem(BuildContext context, String cartItemId) async {
-    await Dio()
-        .delete("${AppConstants.BaseUrl}/delete_cartItems/$cartItemId")
-        .then((value) {
+    try {
+      var deleteCartItemsResponse = await Dio()
+          .delete("${AppConstants.BaseUrl}/delete_cartItems_by_id/$cartItemId");
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          duration: const Duration(milliseconds: 1000),
-          backgroundColor: Colors.green,
+          duration: const Duration(seconds: 1),
+          backgroundColor: ThemeApp.primaryColor,
           content: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              const Icon(
+              Icon(
                 Icons.done_rounded,
-                color: Colors.white,
+                color: ThemeApp.whiteColor,
               ),
               Container(
                   margin: EdgeInsets.only(left: 10.w),
-                  child: const Text("Item Deleted Successfully"))
+                  child: Text(AppConstants.ItemDeletedSuccessfully))
             ],
           ),
         ),
       );
-    }).catchError((onError) {
-      print(onError);
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          duration: Duration(milliseconds: 1000),
-          backgroundColor: Colors.red,
-          content: Row(
-            children: [
-              Icon(
-                Icons.error,
-                color: Colors.white,
-              ),
-              Text(
-                "Something error happened try again !!",
-                style: TextStyle(color: Colors.white),
-              ),
-            ],
+    } catch (error) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Row(children: [
+          const Icon(
+            Icons.error,
+            color: Colors.white,
           ),
-        ),
-      );
-    });
+          Text(
+            AppConstants.DeleteCartItemsError,
+            style: TextStyle(color: ThemeApp.whiteColor),
+          ),
+        ]),
+        backgroundColor: ThemeApp.redColor,
+        duration: const Duration(seconds: 1),
+      ));
+    }
   }
 
   void postToken({
@@ -719,3 +714,72 @@ class OrderCubit extends Cubit<OrderStates> {
     }
   }
 }
+
+
+
+
+
+
+
+
+
+
+ // ProductClass.CartItems.clear();
+    // Map itemImages = {};
+    // await Dio()
+    //     .get(
+    //         "${AppConstants.BaseUrl}/get_user_cartItems/${AuthCubit.get(context).userEmailShared}")
+    //     .then((value) async {
+    //   for (var i in value.data["Names"]) {
+    //     ProductClass? theItem;
+    //     await Dio()
+    //         .get(
+    //       "${AppConstants.BaseUrl}/get_products_by_id/${i["product"]}",
+    //     )
+    //         .then((v2) async {
+    //       theItem = ProductClass(
+    //           id: i["product"],
+    //           quantity: i["quantity"],
+    //           cartItemId: i["id"].toString(),
+    //           englishName: v2.data["Names"][0]["name"],
+    //           arabicName: v2.data["Names"][0]["ArabicName"],
+    //           productSlug: v2.data["Names"][0]["productslug"],
+    //           restaurant: i["Restaurant"],
+    //           description: v2.data["Names"][0]["description"] ??
+    //               " No description for this Product",
+    //           price: double.parse(v2.data["Names"][0]["price"].toString()),
+    //           totalPrice:
+    //               double.parse(v2.data["Names"][0]["price"].toString()) *
+    //                   double.parse(i["quantity"].toString()),
+    //           category: v2.data["Names"][0]["category"],
+    //           isBestOffer: v2.data["Names"][0]["Best_Offer"],
+    //           isMostPopular: v2.data["Names"][0]["Most_Popular"],
+    //           isNewProduct: v2.data["Names"][0]["New_Products"],
+    //           creationDate: v2.data["Names"][0]["created"]);
+
+    //       if (!itemImages.containsKey(v2.data["Names"][0]["category"])) {
+    //         print("1111");
+    //         await Dio()
+    //             .get(
+    //                 "${AppConstants.BaseUrl}/get_category_by_id/${v2.data["Names"][0]["category"]}")
+    //             .then((value2) {
+    //           print("2222");
+    //           theItem!.itemImage = value2.data["Names"][0]["image"];
+    //           itemImages.addAll({
+    //             value.data["Names"][0]["category"]: value2.data["Names"][0]
+    //                 ["image"]
+    //           });
+    //         });
+    //       } else {
+    //         theItem!.itemImage = itemImages[v2.data["Names"][0]["category"]];
+    //       }
+    //     }).catchError((onError) {
+    //       print(onError);
+    //     });
+
+    //     ProductClass.CartItems.add(theItem!);
+    //   }
+    //   // ignore: avoid_print
+    // }).catchError((onError) {});
+    // print(ProductClass.CartItems);
+    // return ProductClass.CartItems;

@@ -40,6 +40,9 @@ class CategoryCard extends StatelessWidget {
                         width: width / 4,
                         height: height / 6,
                         fit: BoxFit.contain,
+                        errorBuilder: (context, error, stackTrace) {
+                          return Text(error.toString());
+                        },
                         image: CachedNetworkImageProvider(
                           image,
                         ),

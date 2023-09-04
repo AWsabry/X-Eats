@@ -8,4 +8,8 @@ class AppConstants {
   static String BaseUrl = "https://www.x-eats.com";
   static String BackToHomePage =
       "Please Select Your Current Location In HomePage";
+  static String checkConnection = "Please Check Your Connection";
+  static String ClearItemsError = "Error While Clearing Cart Items";
+  static String DeleteCartItemsError = "Error While Deleting Cart Items";
+  static String ItemDeletedSuccessfully = "Item Deleted Successfully";
 }

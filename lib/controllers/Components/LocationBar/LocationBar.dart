@@ -73,6 +73,7 @@ class LocationBar extends StatelessWidget implements PreferredSizeWidget {
                                     );
                                   }).toList(),
                                   onChanged: (dynamic value) {
+                                    cubit.clearCartItems(context);
                                     cubit.ChangeLocation(value, context);
                                     cubit.getRestaurantsOfLocation(context);
                                   },

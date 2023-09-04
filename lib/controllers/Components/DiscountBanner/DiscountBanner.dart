@@ -19,6 +19,9 @@ class DiscountBanner extends StatelessWidget {
           itemBuilder: (BuildContext context, int index, int pageViewIndex) {
             return Container(
               child: Image(
+                errorBuilder: (context, error, stackTrace) {
+                  return Text(error.toString());
+                },
                 loadingBuilder: (context, child, loadingProgress) {
                   if (loadingProgress == null) return child;
                   return const Center(

@@ -1,8 +1,6 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:xeats/controllers/Components/AppBar/AppBarCustomized.dart';
 import 'package:xeats/controllers/Components/Global%20Components/Buttons/DefaultMiniButton.dart';
 import 'package:xeats/controllers/Components/Global%20Components/Buttons/SecondaryMiniButton.dart';
@@ -15,7 +13,6 @@ import 'package:xeats/controllers/Cubits/ProductsCubit/ProductsCubit.dart';
 import 'package:xeats/controllers/Cubits/ProductsCubit/ProductsStates.dart';
 import 'package:xeats/controllers/Cubits/RestauratsCubit/RestaurantsStates.dart';
 import 'package:xeats/controllers/Cubits/RestauratsCubit/RestuarantsCubit.dart';
-import 'package:xeats/core/Constants/constants.dart';
 import 'package:xeats/views/Animations/EmptyCart.dart';
 import 'package:xeats/views/Checkout/CheckOut.dart';
 import 'package:xeats/views/Layout/Layout.dart';
@@ -39,7 +36,6 @@ class _CartState extends State<Cart> {
         .getCurrentAvailableOrderRestauant(context);
     getCartItemsFuture = OrderCubit.get(context).getCartItems(
       context,
-      email: AuthCubit.get(context).userEmailShared,
     );
   }
 
@@ -73,78 +69,6 @@ class _CartState extends State<Cart> {
                 children: [
                   SizedBox(
                     height: height / 20,
-                  ),
-                  FutureBuilder(
-                    builder: (ctx, AsyncSnapshot snapshot) {
-                      if (snapshot.connectionState == ConnectionState.done &&
-                          RestuarantsCubit.currentRestaurant["Name"] != null) {
-                        return Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            // SizedBox(
-                            //   width: width / 2,
-                            //   child: Column(
-                            //     children: [
-                            //       Text("${cubit.firstNameShared},",
-                            //           maxLines: 1,
-                            //           style: Theme.of(context)
-                            //               .textTheme
-                            //               .headlineMedium),
-                            //       Container(
-                            //         margin: EdgeInsets.only(left: width / 40),
-                            //         child: Text("You are Ordering From :",
-                            //             style: Theme.of(context)
-                            //                 .textTheme
-                            //                 .displaySmall),
-                            //       ),
-                            //     ],
-                            //   ),
-                            // ),
-                            Column(
-                              children: [
-                                // Container(
-                                //   height: height / 8,
-                                //   width: width / 2.4,
-                                //   decoration: BoxDecoration(
-                                //       borderRadius: BorderRadius.circular(12),
-                                //       color: Colors.transparent,
-                                //       border: Border.all(
-                                //           width: 20, color: Colors.white)),
-                                //   child: ClipRRect(
-                                //     borderRadius: BorderRadius.circular(20),
-                                //     child: GestureDetector(
-                                //       child: Image(
-                                //         image: CachedNetworkImageProvider(
-                                //             "${AppConstants.BaseUrl}${RestuarantsCubit.currentRestaurant["logo"]}"),
-                                //         loadingBuilder:
-                                //             (context, child, loadingProgress) {
-                                //           if (loadingProgress == null) {
-                                //             return child;
-                                //           }
-                                //           return const Center(
-                                //             child: Loading(),
-                                //           );
-                                //         },
-                                //       ),
-                                //       onTap: () {},
-                                //     ),
-                                //   ),
-                                // ),
-                                // Text(
-                                //     "${RestuarantsCubit.currentRestaurant["Name"]}",
-                                //     style:
-                                //         Theme.of(context).textTheme.bodyLarge),
-                              ],
-                            ),
-                          ],
-                        );
-                      } else {
-                        return SizedBox(
-                          height: height / 20,
-                        );
-                      }
-                    },
-                    future: FutureRestaurants,
                   ),
                   FutureBuilder(
                       future: getCartItemsFuture,

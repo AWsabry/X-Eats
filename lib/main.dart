@@ -9,6 +9,7 @@ import 'package:xeats/controllers/Components/LocalService/LocalService.dart';
 import 'package:xeats/controllers/Components/ObServer/BlocObserver.dart';
 import 'package:xeats/controllers/Cubits/AuthCubit/cubit.dart';
 import 'package:xeats/controllers/Cubits/ButtomNavigationBarCubit/navigationCubit.dart';
+import 'package:xeats/controllers/Cubits/InternetCubit/internet_cubit.dart';
 import 'package:xeats/controllers/Cubits/OrderCubit/OrderCubit.dart';
 import 'package:xeats/controllers/Cubits/ProductsCubit/ProductsCubit.dart';
 import 'package:xeats/controllers/Cubits/RestauratsCubit/RestuarantsCubit.dart';
@@ -83,7 +84,8 @@ class MyApp extends StatelessWidget {
           BlocProvider(create: (context) => AuthCubit()..GettingUserData()),
           BlocProvider(create: (context) => NavBarCubitcubit()),
           BlocProvider(create: (context) => ProductsCubit()),
-          BlocProvider(create: (context) => OrderCubit())
+          BlocProvider(create: (context) => OrderCubit()),
+          BlocProvider(create: (context) => InternetCubit()..checkConnection()),
         ],
         child: ScreenUtilInit(
           designSize: const Size(415, 900),

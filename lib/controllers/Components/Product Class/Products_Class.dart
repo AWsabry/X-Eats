@@ -2,7 +2,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:logger/logger.dart';
@@ -103,8 +102,10 @@ class ProductClass extends StatelessWidget {
           child: Dismissible(
             onDismissed: (direction) async {
               if (direction == DismissDirection.startToEnd) {
-                NavigateAndRemov(context, Layout());
-
+                if (OrderCubit.get(context).getUserCartItemsResponse.data !=
+                    null) {
+                  NavigateAndRemov(context, Layout());
+                }
                 await OrderCubit.get(context)
                     .deleteCartItem(context, "$cartItemId")
                     .then((value) {
@@ -113,8 +114,6 @@ class ProductClass extends StatelessWidget {
                   OrderCubit.get(context).updateCartPrice(context);
                 });
               } else {
-                NavigateAndRemov(context, Layout());
-
                 await OrderCubit.get(context)
                     .deleteCartItem(context, "$cartItemId")
                     .then((value) {
@@ -146,19 +145,19 @@ class ProductClass extends StatelessWidget {
                 children: [
                   SizedBox(
                     width: width / 5,
-                    child: Hero(
-                      tag: englishName.toString(),
-                      child: Image(
-                        width: width / 5,
-                        image: CachedNetworkImageProvider(
-                            "https://x-eats.com$itemImage"),
-                        loadingBuilder: (context, child, loadingProgress) {
-                          if (loadingProgress == null) return child;
-                          return const Center(
-                            child: Loading(),
-                          );
-                        },
-                      ),
+                    child: Image(
+                      errorBuilder: (context, error, stackTrace) {
+                        return Text(error.toString());
+                      },
+                      width: width / 5,
+                      image: CachedNetworkImageProvider(
+                          "https://x-eats.com$itemImage"),
+                      loadingBuilder: (context, child, loadingProgress) {
+                        if (loadingProgress == null) return child;
+                        return const Center(
+                          child: Loading(),
+                        );
+                      },
                     ),
                   ),
                   Column(
@@ -168,12 +167,15 @@ class ProductClass extends StatelessWidget {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text("$englishName",
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                softWrap: true,
-                                textAlign: TextAlign.left,
-                                style: Theme.of(context).textTheme.bodyMedium),
+                            Expanded(
+                              child: Text("$englishName",
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  softWrap: true,
+                                  textAlign: TextAlign.left,
+                                  style:
+                                      Theme.of(context).textTheme.bodyMedium),
+                            ),
                           ],
                         ),
                       ),
@@ -279,22 +281,22 @@ class ProductClass extends StatelessWidget {
                           ),
                           child: Padding(
                             padding: const EdgeInsets.all(16.0),
-                            child: Hero(
-                              tag: englishName.toString(),
-                              child: Image(
-                                loadingBuilder:
-                                    (context, child, loadingProgress) {
-                                  if (loadingProgress == null) {
-                                    return child;
-                                  } else {
-                                    return const Center(
-                                      child: Loading(),
-                                    );
-                                  }
-                                },
-                                image: CachedNetworkImageProvider(
-                                  "$image",
-                                ),
+                            child: Image(
+                              errorBuilder: (context, error, stackTrace) {
+                                return Text(error.toString());
+                              },
+                              loadingBuilder:
+                                  (context, child, loadingProgress) {
+                                if (loadingProgress == null) {
+                                  return child;
+                                } else {
+                                  return const Center(
+                                    child: Loading(),
+                                  );
+                                }
+                              },
+                              image: CachedNetworkImageProvider(
+                                "$image",
                               ),
                             ),
                           ),
@@ -307,11 +309,9 @@ class ProductClass extends StatelessWidget {
                                 color: Theme.of(context).primaryColor),
                             borderRadius: BorderRadius.circular(10.0),
                           ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(16.0),
-                            child: Hero(
-                                tag: englishName.toString(),
-                                child: const Loading()),
+                          child: const Padding(
+                            padding: EdgeInsets.all(16.0),
+                            child: Loading(),
                           ),
                         );
                       }
@@ -427,23 +427,22 @@ class ProductClass extends StatelessWidget {
                     child: Column(
                       children: [
                         ClipRRect(
-                          child: Hero(
-                            tag: this.englishName.toString(),
-                            child: Image(
-                              fit: BoxFit.fill,
-                              width: double.infinity,
-                              height: 240,
-                              image: CachedNetworkImageProvider(
-                                '$image',
-                              ),
-                              loadingBuilder:
-                                  (context, child, loadingProgress) {
-                                if (loadingProgress == null) return child;
-                                return const Center(
-                                  child: Loading(),
-                                );
-                              },
+                          child: Image(
+                            errorBuilder: (context, error, stackTrace) {
+                              return Text(error.toString());
+                            },
+                            fit: BoxFit.fill,
+                            width: double.infinity,
+                            height: 240,
+                            image: CachedNetworkImageProvider(
+                              '$image',
                             ),
+                            loadingBuilder: (context, child, loadingProgress) {
+                              if (loadingProgress == null) return child;
+                              return const Center(
+                                child: Loading(),
+                              );
+                            },
                           ),
                         ),
                         const SizedBox(
@@ -451,21 +450,13 @@ class ProductClass extends StatelessWidget {
                         ),
                         Column(
                           children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Text(
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                      "$englishName\n",
-                                      textAlign: TextAlign.left,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyLarge),
-                                ),
-                              ],
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                  overflow: TextOverflow.ellipsis,
+                                  "$englishName",
+                                  textAlign: TextAlign.left,
+                                  style: Theme.of(context).textTheme.bodyLarge),
                             ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.end,
@@ -647,19 +638,19 @@ class ProductClass extends StatelessWidget {
                       productName: productName),
                 );
               },
-              child: Hero(
-                tag: englishName.toString(),
-                child: Image(
-                  image: CachedNetworkImageProvider(
-                    image!,
-                  ),
-                  loadingBuilder: (context, child, loadingProgress) {
-                    if (loadingProgress == null) return child;
-                    return const Center(
-                      child: Loading(),
-                    );
-                  },
+              child: Image(
+                errorBuilder: (context, error, stackTrace) {
+                  return Text(error.toString());
+                },
+                image: CachedNetworkImageProvider(
+                  image!,
                 ),
+                loadingBuilder: (context, child, loadingProgress) {
+                  if (loadingProgress == null) return child;
+                  return const Center(
+                    child: Loading(),
+                  );
+                },
               ),
             ),
           ),
@@ -709,20 +700,20 @@ class ProductClass extends StatelessWidget {
                       productName: productName),
                 );
               },
-              child: Hero(
-                tag: englishName.toString(),
-                child: Image(
-                  width: 200,
-                  image: CachedNetworkImageProvider(
-                    image!,
-                  ),
-                  loadingBuilder: (context, child, loadingProgress) {
-                    if (loadingProgress == null) return child;
-                    return const Center(
-                      child: Loading(),
-                    );
-                  },
+              child: Image(
+                errorBuilder: (context, error, stackTrace) {
+                  return Text(error.toString());
+                },
+                width: 200,
+                image: CachedNetworkImageProvider(
+                  image!,
                 ),
+                loadingBuilder: (context, child, loadingProgress) {
+                  if (loadingProgress == null) return child;
+                  return const Center(
+                    child: Loading(),
+                  );
+                },
               ),
             ),
           ),

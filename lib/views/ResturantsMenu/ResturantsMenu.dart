@@ -112,6 +112,10 @@ class ResturantsMenu extends StatelessWidget {
                                           borderRadius:
                                               BorderRadius.circular(20),
                                           child: Image(
+                                            errorBuilder:
+                                                (context, error, stackTrace) {
+                                              return Text(error.toString());
+                                            },
                                             image: CachedNetworkImageProvider(
                                                 AppConstants.BaseUrl +
                                                     data['logo']),
