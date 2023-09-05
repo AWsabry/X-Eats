@@ -60,35 +60,35 @@ class ResturantsMenu extends StatelessWidget {
                   child: Stack(children: [
                     Column(
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Container(
-                            width: MediaQuery.of(context).size.width * 0.8,
-                            decoration: BoxDecoration(
-                              color: Colors.black.withOpacity(0.1),
-                              borderRadius: BorderRadius.circular(15),
-                            ),
-                            child: TextField(
-                              decoration: const InputDecoration(
-                                  contentPadding: EdgeInsets.symmetric(
-                                      horizontal: 20, vertical: 9),
-                                  border: InputBorder.none,
-                                  focusedBorder: InputBorder.none,
-                                  enabledBorder: InputBorder.none,
-                                  hintText: "Search For Products",
-                                  prefixIcon: Icon(Icons.search)),
-                              controller:
-                                  ProductsCubit.get(context).searchController,
-                              onSubmitted: (value) async {
-                                // NavigateAndRemov(
-                                //     context,
-                                //     SearchProductsScreen(
-                                //         restaurantName: data['Name'])
-                                //         );
-                              },
-                            ),
-                          ),
-                        ),
+                        // Padding(
+                        //   padding: const EdgeInsets.all(8.0),
+                        //   child: Container(
+                        //     width: MediaQuery.of(context).size.width * 0.8,
+                        //     decoration: BoxDecoration(
+                        //       color: Colors.black.withOpacity(0.1),
+                        //       borderRadius: BorderRadius.circular(15),
+                        //     ),
+                        //     child: TextField(
+                        //       decoration: const InputDecoration(
+                        //           contentPadding: EdgeInsets.symmetric(
+                        //               horizontal: 20, vertical: 9),
+                        //           border: InputBorder.none,
+                        //           focusedBorder: InputBorder.none,
+                        //           enabledBorder: InputBorder.none,
+                        //           hintText: "Search For Products",
+                        //           prefixIcon: Icon(Icons.search)),
+                        //       controller:
+                        //           ProductsCubit.get(context).searchController,
+                        //       onSubmitted: (value) async {
+                        //         // NavigateAndRemov(
+                        //         //     context,
+                        //         //     SearchProductsScreen(
+                        //         //         restaurantName: data['Name'])
+                        //         //         );
+                        //       },
+                        //     ),
+                        //   ),
+                        // ),
                         Row(
                           children: [
                             Column(

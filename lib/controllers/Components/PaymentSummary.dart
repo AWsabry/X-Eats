@@ -27,6 +27,8 @@ class PaymentSummary extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
     return BlocBuilder<OrderCubit, OrderStates>(builder: (context, state) {
       return Flexible(
         child: Column(
@@ -74,7 +76,7 @@ class PaymentSummary extends StatelessWidget {
                           padding: const EdgeInsets.only(right: 18.0),
                           child: Text(
                               "EGP ${OrderCubit.deliveryfees! / widget.count}",
-                              style: Theme.of(context).textTheme.labelSmall),
+                              style: Theme.of(context).textTheme.headlineLarge),
                         )
                       ],
                     ),
@@ -119,52 +121,41 @@ class PaymentSummary extends StatelessWidget {
                             CanCancelled == false,
                         fallback: (context) {
                           return Container(
-                            width: 353,
-                            height: 50,
-                            decoration: const BoxDecoration(
-                                color: Color.fromARGB(255, 9, 134, 211),
+                            width: width,
+                            height: height / 15,
+                            decoration: BoxDecoration(
+                                color: Theme.of(context).primaryColor,
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(5))),
                             child: ElevatedButton(
                               style: ButtonStyle(
                                   backgroundColor: MaterialStateProperty.all(
-                                      const Color.fromARGB(255, 9, 134, 211))),
+                                      Theme.of(context).primaryColor)),
                               onPressed: () {
                                 OrderCubit.get(context).clostTime(context);
                                 OrderCubit.get(context).cancelOrders(Orderid);
                                 OrderCubit.get(context).confirmOrderPressed();
                                 NavigateAndRemov(context, const HomePage());
                               },
-                              child: const Center(
-                                child: Text(
-                                  "Cancel Your Order",
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontFamily: "IntegralCf",
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 16),
-                                ),
+                              child: Center(
+                                child: Text("Cancel Your Order",
+                                    style:
+                                        Theme.of(context).textTheme.bodyLarge),
                               ),
                             ),
                           );
                         },
                         builder: (context) {
                           return Container(
-                            width: 353,
-                            height: 50,
+                            width: width,
+                            height: height / 15,
                             decoration: const BoxDecoration(
                                 color: Colors.grey,
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(5))),
-                            child: const Center(
-                              child: Text(
-                                "Cancel Your Order",
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontFamily: "IntegralCf",
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 16),
-                              ),
+                            child: Center(
+                              child: Text("Cancel Your Order",
+                                  style: Theme.of(context).textTheme.bodyLarge),
                             ),
                           );
                         },

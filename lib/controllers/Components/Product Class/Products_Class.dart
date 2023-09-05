@@ -421,6 +421,9 @@ class ProductClass extends StatelessWidget {
           body: SingleChildScrollView(
             child: Column(
               children: [
+                SizedBox(
+                  height: height / 25,
+                ),
                 Padding(
                   padding: const EdgeInsets.only(left: 8.0, right: 8.0),
                   child: SizedBox(
@@ -431,9 +434,9 @@ class ProductClass extends StatelessWidget {
                             errorBuilder: (context, error, stackTrace) {
                               return Text(error.toString());
                             },
-                            fit: BoxFit.fill,
-                            width: double.infinity,
-                            height: 240,
+                            fit: BoxFit.contain,
+                            width: width / 3,
+                            height: height / 5,
                             image: CachedNetworkImageProvider(
                               '$image',
                             ),

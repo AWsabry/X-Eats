@@ -282,7 +282,7 @@ class OrderCubit extends Cubit<OrderStates> {
     }
   }
 
-  static List<dynamic> restuarantsOfSlugList = [];
+  static List<dynamic> restaurantsInLocation = [];
   static int? PublicLocationId;
   Future<void> getRestaurantsOfLocation(context) async {
     emit(getRestuarantSlugStateLoading());
@@ -292,7 +292,7 @@ class OrderCubit extends Cubit<OrderStates> {
           final response = await Dio().get(
               "${AppConstants.BaseUrl}/get_restaurants_by_location/${slug["location_slug"]}");
 
-          restuarantsOfSlugList = response.data["Names"];
+          restaurantsInLocation = response.data["Names"];
           PublicLocationId = slug["id"] - 1;
 
           ProductsCubit.NoNewProducts = false;

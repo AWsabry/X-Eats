@@ -136,6 +136,7 @@ class _SplashScreenState extends State<SplashScreen> {
         listener: (context, state) {},
         builder: (context, state) {
           return Scaffold(
+            backgroundColor: Theme.of(context).backgroundColor,
             body: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -143,8 +144,8 @@ class _SplashScreenState extends State<SplashScreen> {
                 Padding(
                   padding: const EdgeInsets.only(left: 5),
                   child: Image(
-                    image: const AssetImage('assets/Images/logo.png'),
-                    width: width,
+                    image: const AssetImage('assets/Images/01.png'),
+                    width: width / 3,
                     height: height / 2,
                   ),
                 ),

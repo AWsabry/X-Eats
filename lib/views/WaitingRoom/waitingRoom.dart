@@ -103,23 +103,31 @@ class _WaitingRoomState extends State<WaitingRoom>
                             return Expanded(
                               child: Column(
                                 children: [
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Center(
-                                        child: CustomTimer(
-                                          controller:
-                                              OrderCubit.timerController!,
-                                          builder: (state, time) {
-                                            return Text(
-                                                "${time.minutes}:${time.seconds}",
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .bodyLarge);
-                                          },
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text("Time Remaining:",
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyMedium),
+                                        Container(
+                                          child: CustomTimer(
+                                            controller:
+                                                OrderCubit.timerController!,
+                                            builder: (state, time) {
+                                              return Text(
+                                                  "${time.minutes}:${time.seconds}",
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .bodyLarge);
+                                            },
+                                          ),
                                         ),
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   ),
                                   SizedBox(height: height / 50),
                                   customDivider(),

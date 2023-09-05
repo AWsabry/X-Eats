@@ -13,38 +13,34 @@ class DiscountBanner extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var dataFromApi = ProductsCubit.getposters;
-    return Column(
-      children: [
-        CarouselSlider.builder(
-          itemCount: dataFromApi.length,
-          itemBuilder: (BuildContext context, int index, int pageViewIndex) {
-            return Container(
-              child: Image(
-                errorBuilder: (context, error, stackTrace) {
-                  return Text(error.toString());
-                },
-                loadingBuilder: (context, child, loadingProgress) {
-                  if (loadingProgress == null) return child;
-                  return const Center(
-                    child: Loading(),
-                  );
-                },
-                image: CachedNetworkImageProvider(
-                  '${AppConstants.BaseUrl}' +
-                      dataFromApi[index]['background_image'],
-                ),
-              ),
+    return CarouselSlider.builder(
+      itemCount: dataFromApi.length,
+      itemBuilder: (BuildContext context, int index, int pageViewIndex) {
+        return Image(
+          errorBuilder: (context, error, stackTrace) {
+            return Text(error.toString());
+          },
+          loadingBuilder: (context, child, loadingProgress) {
+            if (loadingProgress == null) return child;
+            return const Center(
+              child: Loading(),
             );
           },
-          options: CarouselOptions(
-            autoPlay: false,
-            enlargeCenterPage: true,
-            viewportFraction: 0.9,
-            aspectRatio: 2.0,
-            initialPage: 2,
+          image: CachedNetworkImageProvider(
+            AppConstants.BaseUrl + dataFromApi[index]['background_image'],
+            maxWidth: MediaQuery.of(context).size.width.toInt(),
+            errorListener: () => const Text('Error Loading Image'),
           ),
-        )
-      ],
+        );
+      },
+      options: CarouselOptions(
+        autoPlay: true,
+        enlargeCenterPage: true,
+        viewportFraction: 0.8,
+        aspectRatio: 2.0,
+        initialPage: 2,
+        height: MediaQuery.of(context).size.height / 4,
+      ),
     );
   }
 }

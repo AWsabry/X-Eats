@@ -19,6 +19,7 @@ class LocationBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
+    var cubit = OrderCubit.get(context);
     return SafeArea(
       child: Container(
         color: Theme.of(context).backgroundColor,
@@ -43,7 +44,6 @@ class LocationBar extends StatelessWidget implements PreferredSizeWidget {
                       ),
                       BlocBuilder<OrderCubit, OrderStates>(
                         builder: (context, state) {
-                          var cubit = OrderCubit.get(context);
                           return ConditionalBuilder(
                               condition: cubit.LocationsNames.isNotEmpty,
                               fallback: (context) {
@@ -82,18 +82,34 @@ class LocationBar extends StatelessWidget implements PreferredSizeWidget {
                                 );
                               });
                         },
-                      )
+                      ),
                     ]),
               ),
-              IconButton(
-                onPressed: () {
-                  Navigation(context, const Cart());
-                },
-                icon: Icon(
-                  Icons.shopping_cart,
-                  color: Theme.of(context).primaryColor,
+              if (OrderCubit.currentLocation == null)
+                Row(
+                  children: [
+                    // IconButton(
+                    //   onPressed: () {
+                    //     print(OrderCubit.currentLocation);
+                    //   },
+                    //   icon: Icon(
+                    //     Icons.shopping_cart,
+                    //     color: Theme.of(context).primaryColor,
+                    //   ),
+                    // )
+                  ],
                 ),
-              )
+              if (OrderCubit.currentLocation != null)
+                IconButton(
+                  onPressed: () {
+                    Navigation(context, const Cart());
+                    // print(OrderCubit.currentLocation);
+                  },
+                  icon: Icon(
+                    Icons.shopping_cart,
+                    color: Theme.of(context).primaryColor,
+                  ),
+                )
             ],
           ),
         ),

@@ -56,7 +56,7 @@ class Restaurants extends StatelessWidget {
             child: SafeArea(
               child: BlocBuilder<OrderCubit, OrderStates>(
                   builder: (Ordercontext, Orderstate) {
-                var RestaurantsSlugApi = OrderCubit.restuarantsOfSlugList;
+                var RestaurantsSlugApi = OrderCubit.restaurantsInLocation;
                 return ConditionalBuilder(
                   condition: RestaurantsSlugApi.isNotEmpty,
                   fallback: (context) {
@@ -180,7 +180,7 @@ class Restaurants extends StatelessWidget {
                           BlocBuilder<OrderCubit, OrderStates>(
                             builder: (context, state) {
                               var restuarantsOfSlugListApi =
-                                  OrderCubit.restuarantsOfSlugList;
+                                  OrderCubit.restaurantsInLocation;
                               return ConditionalBuilder(
                                 condition:
                                     restuarantsOfSlugListApi.isNotEmpty &&
