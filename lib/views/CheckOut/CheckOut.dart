@@ -125,7 +125,7 @@ class CheckOut extends StatelessWidget {
                           },
                           text: "Back to cart",
                         )
-                      : const Loading(),
+                      : const SizedBox(),
                 ],
               )
             ],
