@@ -551,10 +551,10 @@ class ProductClass extends StatelessWidget {
                 ),
                 isRequestFinished
                     ? DefaultButton(
-                        function: () async {
+                        function: () {
                           // OrderCubit.get(context).getPublicOrder(context);
 
-                          await OrderCubit.get(context).addToCart(
+                          OrderCubit.get(context).addToCart(
                             context,
                             cartItemId: cartItemId,
                             productId: id,

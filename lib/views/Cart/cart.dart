@@ -112,9 +112,9 @@ class _CartState extends State<Cart> {
                                               2,
                                           height: 50.h,
                                           child: DefaultMiniButton(
-                                              function: () async {
-                                                await OrderCubit.get(context)
-                                                    .deliveryFees(context);
+                                              function: () {
+                                                OrderCubit.get(context)
+                                                    .deliveryFees();
                                                 if (ProductsCubit.get(context)
                                                         .privacy ==
                                                     Privacy.Private) {

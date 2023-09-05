@@ -4,6 +4,7 @@ import 'package:conditional_builder_null_safety/conditional_builder_null_safety.
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:logger/logger.dart';
 import 'package:xeats/controllers/Components/Global%20Components/custom_navigate.dart';
 import 'package:xeats/controllers/Cubits/OrderCubit/OrderCubit.dart';
 import 'package:xeats/controllers/Cubits/OrderCubit/OrderStates.dart';
@@ -30,6 +31,7 @@ class PaymentSummary extends StatelessWidget {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     return BlocBuilder<OrderCubit, OrderStates>(builder: (context, state) {
+      Logger().i(ProductClass.getSubtotal());
       return Flexible(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.end,
@@ -106,7 +108,7 @@ class PaymentSummary extends StatelessWidget {
                         Padding(
                           padding: const EdgeInsets.only(right: 18.0),
                           child: Text(
-                              "EGP ${(ProductClass.getSubtotal() == 0.0 ? SubTotal : ProductClass.getSubtotal())! + (OrderCubit.servicefees!) + (OrderCubit.deliveryfees! / widget.count)}",
+                              "EGP ${(ProductClass.getSubtotal() == 0.0 ? SubTotal : ProductClass.getSubtotal())! + (OrderCubit.servicefees ?? 5.00) + (OrderCubit.deliveryfees! / widget.count)}",
                               style: Theme.of(context).textTheme.labelSmall),
                         ),
                       ],

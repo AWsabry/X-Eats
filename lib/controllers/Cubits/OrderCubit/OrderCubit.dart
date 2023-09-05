@@ -443,16 +443,14 @@ class OrderCubit extends Cubit<OrderStates> {
 
   static double? deliveryfees;
   static String? LocationName;
-  Future<void> deliveryFees(context, {var locaionNumber}) async {
+  Future<void> deliveryFees({var locaionNumber}) async {
     try {
       var deliveryResponse =
           await Dio().get("${AppConstants.BaseUrl}/get_Delivery_Fees/");
       deliveryfees = deliveryResponse.data["Names"]
-              [PublicLocationId == null ? locaionNumber - 1 : PublicLocationId]
-          ["delivery_fees"];
+          [PublicLocationId ?? locaionNumber - 1]["delivery_fees"];
       LocationName = deliveryResponse.data["Names"]
-              [PublicLocationId == null ? locaionNumber - 1 : PublicLocationId]
-          ["location"];
+          [PublicLocationId ?? locaionNumber - 1]["location"];
 
       emit(getDeliveryFeesState());
     } catch (error) {
@@ -580,7 +578,7 @@ class OrderCubit extends Cubit<OrderStates> {
           "totalPrice": ProductClass.getSubtotal(),
           "flag": "Mobile",
           "private": private,
-          "status": "Pending",
+          "status": !private! ? "Pending" : "Received By Restaurant",
           "user": AuthCubit.get(context).userIdShared,
           "cart": cartID,
           "deliver_to": PublicLocationId! + 1
@@ -588,8 +586,8 @@ class OrderCubit extends Cubit<OrderStates> {
       );
 
       if (!private!) {
-        navigateToWaitingRoom(
-            context, createOrdersResponse.data["id"], 1200, 1);
+        navigateToWaitingRoom(context, createOrdersResponse.data["id"], 1200, 1,
+            PublicLocationId! + 1);
       } else {
         NavigateAndRemov(context, const ThankYou());
       }
@@ -613,7 +611,7 @@ class OrderCubit extends Cubit<OrderStates> {
           "totalPrice": ProductClass.getSubtotal(),
           "flag": "Mobile",
           "private": private,
-          "status": "Pending",
+          "status": !private! ? "Pending" : "Received By Restaurant",
           "user": AuthCubit.get(context).userIdShared,
           "cart": cartID,
           "deliver_to": PublicLocationId! + 1
@@ -633,7 +631,8 @@ class OrderCubit extends Cubit<OrderStates> {
             context,
             publicOrderResponse.data["Names"][0]["id"],
             endingOrderTimeSecond,
-            counter!);
+            counter!,
+            PublicLocationId! + 1);
       } else {
         NavigateAndRemov(context, const ThankYou());
       }
@@ -643,10 +642,11 @@ class OrderCubit extends Cubit<OrderStates> {
   }
 
   void navigateToWaitingRoom(BuildContext context, int orderId,
-      int endingOrderTimeSecond, int counter) {
+      int endingOrderTimeSecond, int counter, int locationNumber) {
     NavigateAndRemov(
       context,
       WaitingRoom(
+        LocationNumber: locationNumber,
         OrderId: orderId,
         endingOrderTimeSecond: endingOrderTimeSecond,
         count: counter,
