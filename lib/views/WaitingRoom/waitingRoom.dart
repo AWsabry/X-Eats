@@ -4,7 +4,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:logger/logger.dart';
 import 'package:xeats/controllers/Components/AppBar/waitingRoomAppBar.dart';
 import 'package:xeats/controllers/Components/Global%20Components/custom_divider.dart';
 import 'package:xeats/controllers/Components/Global%20Components/loading.dart';
@@ -86,11 +85,11 @@ class _WaitingRoomState extends State<WaitingRoom>
                   },
                   child: SingleChildScrollView(
                     child: SizedBox(
-                      height: height - 45.h,
+                      height: height,
                       width: width,
                       child: Column(
                         children: [
-                          Container(
+                          SizedBox(
                             height: height / 20,
                             width: width,
                           ),

@@ -1,5 +1,3 @@
-// ignore_for_file: must_be_immutable, use_build_context_synchronously
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -14,6 +12,7 @@ import 'package:xeats/theme.dart';
 import 'package:xeats/views/CompleteProfile/Complete_Profile.dart';
 import 'package:xeats/views/SignIn/SignIn.dart';
 
+// ignore: must_be_immutable
 class Verify extends StatelessWidget {
   Verify({super.key});
 
@@ -121,8 +120,8 @@ class Verify extends StatelessWidget {
                                     await FirebaseAuth.instance
                                         .verifyPhoneNumber(
                                       timeout: const Duration(seconds: 5),
-                                      phoneNumber: '+2' +
-                                          cubit.PhoneNumberController.text,
+                                      phoneNumber:
+                                          '+2${cubit.PhoneNumberController.text}',
                                       verificationCompleted:
                                           (PhoneAuthCredential credential) {},
                                       verificationFailed:

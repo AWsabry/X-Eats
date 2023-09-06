@@ -6,7 +6,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:xeats/controllers/Components/Global%20Components/custom_navigate.dart';
 import 'package:xeats/controllers/Components/LoginPressed/LoginPressed.dart';
 import 'package:xeats/controllers/Cubits/AuthCubit/States.dart';
-import 'package:xeats/controllers/Dio/DioHelper.dart';
 import 'package:xeats/core/Constants/constants.dart';
 import 'package:xeats/core/logger.dart';
 import 'package:xeats/views/SignIn/SignIn.dart';

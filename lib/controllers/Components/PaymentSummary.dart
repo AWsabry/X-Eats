@@ -3,7 +3,6 @@
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:logger/logger.dart';
 import 'package:xeats/controllers/Components/Global%20Components/custom_navigate.dart';
 import 'package:xeats/controllers/Cubits/OrderCubit/OrderCubit.dart';
@@ -92,7 +91,7 @@ class PaymentSummary extends StatelessWidget {
                         const Spacer(),
                         Padding(
                           padding: const EdgeInsets.only(right: 18.0),
-                          child: Text("EGP ${OrderCubit.servicefees ?? 5.00}",
+                          child: Text("EGP ${ProductClass.getServiceFees()}",
                               style: Theme.of(context).textTheme.labelSmall),
                         )
                       ],
@@ -108,7 +107,7 @@ class PaymentSummary extends StatelessWidget {
                         Padding(
                           padding: const EdgeInsets.only(right: 18.0),
                           child: Text(
-                              "EGP ${(ProductClass.getSubtotal() == 0.0 ? SubTotal : ProductClass.getSubtotal())! + (OrderCubit.servicefees ?? 5.00) + (OrderCubit.deliveryfees! / widget.count)}",
+                              "EGP ${(ProductClass.getSubtotal() == 0.0 ? SubTotal : ProductClass.getSubtotal())! + (ProductClass.getServiceFees()) + (OrderCubit.deliveryfees! / widget.count)}",
                               style: Theme.of(context).textTheme.labelSmall),
                         ),
                       ],
@@ -128,14 +127,15 @@ class PaymentSummary extends StatelessWidget {
                             decoration: BoxDecoration(
                                 color: Theme.of(context).primaryColor,
                                 borderRadius:
-                                    BorderRadius.all(Radius.circular(5))),
+                                    const BorderRadius.all(Radius.circular(5))),
                             child: ElevatedButton(
                               style: ButtonStyle(
                                   backgroundColor: MaterialStateProperty.all(
                                       Theme.of(context).primaryColor)),
                               onPressed: () {
                                 OrderCubit.get(context).clostTime(context);
-                                OrderCubit.get(context).cancelOrders(Orderid);
+                                OrderCubit.get(context)
+                                    .cancelOrders(Orderid, context);
                                 OrderCubit.get(context).confirmOrderPressed();
                                 NavigateAndRemov(context, const HomePage());
                               },

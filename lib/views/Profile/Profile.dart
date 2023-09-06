@@ -1,7 +1,6 @@
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:xeats/controllers/Components/AppBar/AppBarCustomized.dart';
 import 'package:xeats/controllers/Components/Auth%20Components/ProfileMenu.dart';
 import 'package:xeats/controllers/Components/Global%20Components/custom_navigate.dart';
@@ -114,7 +113,7 @@ class Profile extends StatelessWidget {
                   unselectedItemColor: Colors.white,
                   unselectedFontSize: 9,
                   selectedFontSize: 12,
-                  backgroundColor: Theme.of(context).backgroundColor,
+                  backgroundColor: Theme.of(context).colorScheme.background,
                   selectedItemColor: Theme.of(context).primaryColor,
                   items: navcubit.bottomitems,
                   currentIndex: 2,

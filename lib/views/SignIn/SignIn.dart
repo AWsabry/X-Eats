@@ -1,5 +1,3 @@
-// ignore_for_file: must_be_immutable, use_build_context_synchronously
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -16,6 +14,7 @@ import 'package:xeats/controllers/Cubits/RestauratsCubit/RestuarantsCubit.dart';
 import 'package:xeats/views/LoginSuccess/loginSuccess.dart';
 import 'package:xeats/views/SignUp/SignUp.dart';
 
+// ignore: must_be_immutable
 class SignIn extends StatelessWidget {
   SignIn({super.key});
   var formkey = GlobalKey<FormState>();
@@ -138,7 +137,7 @@ class SignIn extends StatelessWidget {
                                       }
                                     },
                                     text: 'Login')
-                                : Loading(),
+                                : const Loading(),
                             Row(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               mainAxisAlignment: MainAxisAlignment.end,

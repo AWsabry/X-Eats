@@ -18,7 +18,6 @@ import 'package:xeats/controllers/Cubits/ProductsCubit/ProductsCubit.dart';
 import 'package:xeats/controllers/Cubits/ProductsCubit/ProductsStates.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:xeats/core/Constants/constants.dart';
-import 'package:xeats/theme.dart';
 import 'package:xeats/views/Layout/Layout.dart';
 import 'package:xeats/views/Profile/Profile.dart';
 import 'package:xeats/views/ResturantsMenu/ResturantsMenu.dart';
@@ -226,16 +225,17 @@ class Restaurants extends StatelessWidget {
                                                 child: CachedNetworkImage(
                                                   progressIndicatorBuilder: (context,
                                                           url, progress) =>
-                                                      Center(child: Loading()
+                                                      const Center(
+                                                          child: Loading()
 
                                                           //     CircularProgressIndicator(
                                                           //   value: progress.progress,
                                                           // ),
                                                           ),
-                                                  imageUrl:
-                                                      '${AppConstants.BaseUrl}' +
-                                                          restuarantsOfSlugListApi[
-                                                              index]['logo'],
+                                                  imageUrl: AppConstants
+                                                          .BaseUrl +
+                                                      restuarantsOfSlugListApi[
+                                                          index]['logo'],
                                                 ),
                                               ),
                                             ),
@@ -280,8 +280,13 @@ class Restaurants extends StatelessWidget {
                                                           Axis.horizontal,
                                                       child: Row(
                                                         children: [
-                                                          const Icon(Icons
-                                                              .timer_sharp),
+                                                          Icon(
+                                                            Icons.timer_sharp,
+                                                            color: Theme.of(
+                                                                    context)
+                                                                .colorScheme
+                                                                .background,
+                                                          ),
                                                           Text(
                                                             ' 45 mins',
                                                             style: GoogleFonts
@@ -293,8 +298,13 @@ class Restaurants extends StatelessWidget {
                                                           SizedBox(
                                                             width: 25.w,
                                                           ),
-                                                          const Icon(Icons
-                                                              .delivery_dining_outlined),
+                                                          Icon(
+                                                              Icons
+                                                                  .delivery_dining_outlined,
+                                                              color: Theme.of(
+                                                                      context)
+                                                                  .colorScheme
+                                                                  .background),
                                                           SizedBox(
                                                             width: 2.w,
                                                           ),
@@ -337,7 +347,7 @@ class Restaurants extends StatelessWidget {
             unselectedItemColor: Colors.white,
             unselectedFontSize: 9,
             selectedFontSize: 12,
-            backgroundColor: Theme.of(context).backgroundColor,
+            backgroundColor: Theme.of(context).colorScheme.background,
             selectedItemColor: Theme.of(context).primaryColor,
             items: navcubit.bottomitems,
             currentIndex: 1,
@@ -345,7 +355,7 @@ class Restaurants extends StatelessWidget {
               if (index == 1) {
                 Navigator.popUntil(context, (route) => route.isCurrent);
               } else if (index == 0) {
-                Navigation(context, Layout());
+                Navigation(context, const Layout());
               } else {
                 Navigation(context, const Profile());
               }

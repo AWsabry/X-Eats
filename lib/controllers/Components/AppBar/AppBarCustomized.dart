@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:xeats/controllers/Components/Global%20Components/custom_navigate.dart';
 import 'package:xeats/controllers/Cubits/RestauratsCubit/RestuarantsCubit.dart';
 import 'package:xeats/theme.dart';
@@ -14,7 +13,7 @@ AppBar appBar(BuildContext context,
   return AppBar(
     automaticallyImplyLeading: false,
     // foregroundColor: Colors.white,
-    backgroundColor: Theme.of(context).backgroundColor,
+    backgroundColor: Theme.of(context).colorScheme.background,
     actions: [
       Container(
         color: Colors.transparent,

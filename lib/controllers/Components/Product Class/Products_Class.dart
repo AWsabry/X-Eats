@@ -1,4 +1,5 @@
-// ignore_for_file: must_be_immutable, invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
+// ignore_for_file: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -21,6 +22,7 @@ import 'package:xeats/views/Layout/Layout.dart';
 import 'package:xeats/views/Profile/Profile.dart';
 import 'package:xeats/views/Resturants/Resturants.dart';
 
+// ignore: must_be_immutable
 class ProductClass extends StatelessWidget {
   final bool? isMostPopular, isNewProduct, isBestOffer;
   final double? deliveryFee;
@@ -75,6 +77,11 @@ class ProductClass extends StatelessWidget {
     return total;
   }
 
+  static double getServiceFees() {
+    double serviceFees = (getSubtotal() * 2.5) / 100;
+    return serviceFees;
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<OrderCubit, OrderStates>(builder: (context, state) {
@@ -88,7 +95,7 @@ class ProductClass extends StatelessWidget {
               productDetails(
                 context,
                 productName: productName,
-                image: AppConstants.BaseUrl + "/" + itemImage!,
+                image: "${AppConstants.BaseUrl}/${itemImage!}",
                 id: id,
                 restaurant: restaurant,
                 price: price,
@@ -104,7 +111,7 @@ class ProductClass extends StatelessWidget {
               if (direction == DismissDirection.startToEnd) {
                 if (OrderCubit.get(context).getUserCartItemsResponse.data !=
                     null) {
-                  NavigateAndRemov(context, Layout());
+                  NavigateAndRemov(context, const Layout());
                 }
                 await OrderCubit.get(context)
                     .deleteCartItem(context, "$cartItemId")
@@ -241,7 +248,6 @@ class ProductClass extends StatelessWidget {
     required String? restaurantName,
     required double? price,
   }) {
-    double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     return SafeArea(
       child: Column(
@@ -567,7 +573,7 @@ class ProductClass extends StatelessWidget {
                           );
                         },
                         text: "Add to Cart")
-                    : Loading(),
+                    : const Loading(),
                 const SizedBox(
                   height: 50,
                   width: double.maxFinite,
@@ -580,7 +586,7 @@ class ProductClass extends StatelessWidget {
             unselectedItemColor: Colors.white,
             unselectedFontSize: 9,
             selectedFontSize: 12,
-            backgroundColor: Theme.of(context).backgroundColor,
+            backgroundColor: Theme.of(context).colorScheme.background,
             selectedItemColor: Theme.of(context).primaryColor,
             items: navcubit.bottomitems,
             currentIndex: 1,
@@ -589,7 +595,7 @@ class ProductClass extends StatelessWidget {
               if (index == 1) {
                 Navigation(context, Restaurants());
               } else if (index == 0) {
-                Navigation(context, Layout());
+                Navigation(context, const Layout());
               } else {
                 Navigation(context, const Profile());
               }
@@ -629,7 +635,7 @@ class ProductClass extends StatelessWidget {
                 Navigation(
                   context,
                   productDetails(context,
-                      image: '$image',
+                      image: image,
                       id: id,
                       restaurant: restaurant,
                       restaurantName: restaurantName,
@@ -658,7 +664,7 @@ class ProductClass extends StatelessWidget {
             ),
           ),
         ),
-        Text("${data}", style: Theme.of(context).textTheme.displaySmall),
+        Text("$data", style: Theme.of(context).textTheme.displaySmall),
       ],
     );
   }
@@ -691,7 +697,7 @@ class ProductClass extends StatelessWidget {
                 Navigation(
                   context,
                   productDetails(context,
-                      image: '$image',
+                      image: image,
                       id: id,
                       restaurant: restaurant,
                       restaurantName: restaurantName,
@@ -721,7 +727,7 @@ class ProductClass extends StatelessWidget {
             ),
           ),
         ),
-        Text("${title}", style: Theme.of(context).textTheme.displaySmall),
+        Text("$title", style: Theme.of(context).textTheme.displaySmall),
       ],
     );
   }

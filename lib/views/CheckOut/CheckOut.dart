@@ -49,7 +49,7 @@ class CheckOut extends StatelessWidget {
           padding: const EdgeInsets.all(30.0),
           child: Column(
             children: [
-              Container(
+              SizedBox(
                 width: width / 6,
                 height: height / 6,
                 child: Image.asset("assets/Images/tick.png"),
@@ -99,7 +99,7 @@ class CheckOut extends StatelessWidget {
               SizedBox(
                 height: height / 50,
               ),
-              Divider(),
+              const Divider(),
               SizedBox(
                 height: height / 10,
               ),

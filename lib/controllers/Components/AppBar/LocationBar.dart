@@ -2,7 +2,6 @@ import 'package:conditional_builder_null_safety/conditional_builder_null_safety.
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:xeats/controllers/Components/Global%20Components/custom_navigate.dart';
 import 'package:xeats/controllers/Cubits/OrderCubit/OrderCubit.dart';
 import 'package:xeats/controllers/Cubits/OrderCubit/OrderStates.dart';
@@ -22,7 +21,7 @@ class LocationBar extends StatelessWidget implements PreferredSizeWidget {
     var cubit = OrderCubit.get(context);
     return SafeArea(
       child: Container(
-        color: Theme.of(context).backgroundColor,
+        color: Theme.of(context).colorScheme.background,
         width: width,
         height: height / 8,
         child: Padding(
@@ -86,7 +85,7 @@ class LocationBar extends StatelessWidget implements PreferredSizeWidget {
                     ]),
               ),
               if (OrderCubit.currentLocation == null)
-                Row(
+                const Row(
                   children: [
                     // IconButton(
                     //   onPressed: () {

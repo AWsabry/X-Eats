@@ -6,7 +6,7 @@ import '../../controllers/Cubits/ButtomNavigationBarCubit/NavStates.dart';
 import '../../controllers/Cubits/ButtomNavigationBarCubit/navigationCubit.dart';
 
 class Layout extends StatelessWidget {
-  Layout({super.key}) {}
+  const Layout({super.key});
 
   @override
   Widget build(BuildContext context) {

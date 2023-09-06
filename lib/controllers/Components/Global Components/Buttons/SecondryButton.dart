@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:xeats/theme.dart';
 
 class SecondaryButton extends StatefulWidget {
   const SecondaryButton({
@@ -27,7 +24,7 @@ class _SecondaryButtonState extends State<SecondaryButton> {
       height: MediaQuery.of(context).size.height / 16,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-            backgroundColor: Theme.of(context).backgroundColor
+            backgroundColor: Theme.of(context).colorScheme.background
             // shape: RoundedRectangleBorder(
             //     borderRadius: BorderRadius.circular(widget.radius)),
             ),

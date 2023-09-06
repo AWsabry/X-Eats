@@ -32,8 +32,21 @@ class ProductsCubit extends Cubit<ProductsStates> {
         NoMostSoldProducts = false;
       }
       emit(MostSoldProductsStateSuccessfull());
-    } catch (error) {
-      Logger().e("Error In No Most Sold Proudcts $error");
+    } on DioException catch (e) {
+      if (e.response != null) {
+        Logger().e("Error In No Most Sold Proudcts $e");
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            duration: const Duration(seconds: 2),
+            content: Text(
+              AppConstants.checkConnection,
+              style: Theme.of(context).textTheme.headlineMedium,
+            )));
+        await getMostSoldProducts(context);
+      }
+    } catch (e) {
+      // Handle other exceptions
+      Logger().e("An unexpected error occurred: $e");
     }
   }
 
@@ -53,8 +66,21 @@ class ProductsCubit extends Cubit<ProductsStates> {
         NoNewProducts = false;
       }
       emit(NewProductsStateSuccessfull());
-    } catch (error) {
-      Logger().e("Error In No New Proudcts $error");
+    } on DioException catch (e) {
+      if (e.response != null) {
+        Logger().e("Error In No New Proudcts $e");
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            duration: const Duration(seconds: 2),
+            content: Text(
+              AppConstants.checkConnection,
+              style: Theme.of(context).textTheme.headlineMedium,
+            )));
+        await getNewProducts(context);
+      }
+    } catch (e) {
+      // Handle other exceptions
+      Logger().e("An unexpected error occurred: $e");
     }
   }
 
@@ -128,6 +154,23 @@ class ProductsCubit extends Cubit<ProductsStates> {
     return data;
   }
 
+// on DioException catch (e) {
+//       if (e.response != null) {
+//         var status = e.response!.statusCode;
+//         Logger().e("Error In No Most Sold Proudcts $e");
+//       } else {
+//         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+//             duration: const Duration(seconds: 2),
+//             content: Text(
+//               AppConstants.checkConnection,
+//               style: Theme.of(context).textTheme.headlineMedium,
+//             )));
+//         await getMostSoldProducts(context);
+//       }
+//     } catch (e) {
+//       // Handle other exceptions
+//       Logger().e("An unexpected error occurred: $e");
+//     }
   Response? getProductsByCategoryResponse;
   Future<Response?> getCurrentProducts(
     BuildContext context, {
@@ -140,7 +183,7 @@ class ProductsCubit extends Cubit<ProductsStates> {
       emit(GetCurrentProductsSuccessful());
     } catch (error) {
       Logger().e("Error While Get current Products");
-      throw error;
+      rethrow;
     }
     return getProductsByCategoryResponse;
   }

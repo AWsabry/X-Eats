@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:xeats/controllers/Cubits/OrderCubit/OrderCubit.dart';
 
 class RestaurantView extends StatefulWidget {
   const RestaurantView({
@@ -18,7 +16,6 @@ class RestaurantView extends StatefulWidget {
 class _RestaurantViewState extends State<RestaurantView> {
   @override
   Widget build(BuildContext context) {
-    var restaurants = OrderCubit.restaurantsInLocation;
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     return Row(
@@ -33,15 +30,15 @@ class _RestaurantViewState extends State<RestaurantView> {
                   height: height / 8,
                   width: width / 4,
                   alignment: Alignment.center,
-                  child: Container(
-                    child: widget.image,
-                    width: width / 5,
-                  ),
                   decoration: BoxDecoration(
                     border: Border.all(
                         color: Theme.of(context).primaryColor,
                         width: width / 120),
                     borderRadius: BorderRadius.circular(15.0),
+                  ),
+                  child: SizedBox(
+                    width: width / 5,
+                    child: widget.image,
                   ),
                 ),
               ),
@@ -60,7 +57,7 @@ class _RestaurantViewState extends State<RestaurantView> {
               ),
               if ("${widget.data!["address"]}" != "null")
                 Text(
-                  "${widget.data!["address"]}" ?? "Unknown",
+                  "${widget.data!["address"]}",
                   // semanticsLabel: data,
                   style: Theme.of(context).textTheme.titleSmall,
                   softWrap: true,

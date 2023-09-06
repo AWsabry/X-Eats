@@ -49,28 +49,24 @@ class LoginSuccess extends StatelessWidget {
                           height: width,
                         ),
                       ),
-                      Container(
-                        child: Text(
-                          'Welcome To X-Eats',
-                          style: TextStyle(
-                            fontFamily: 'UberMoveTextBold',
-                            fontSize: 25.0.sp,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black,
-                          ),
+                      Text(
+                        'Welcome To X-Eats',
+                        style: TextStyle(
+                          fontFamily: 'UberMoveTextBold',
+                          fontSize: 25.0.sp,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
                         ),
                       ),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: Container(
-                          child: Text(
-                            'We are so glad to see you using the First Version of our app, hope you enjoy it & we are looking forward to have many updates & have all your love & support support & always remember.. EAT MORE, PAY LESS.',
-                            style: TextStyle(
-                                fontFamily: 'UberMoveTextBold',
-                                fontSize: 14.0.sp,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.grey),
-                          ),
+                        child: Text(
+                          'We are so glad to see you using the First Version of our app, hope you enjoy it & we are looking forward to have many updates & have all your love & support support & always remember.. EAT MORE, PAY LESS.',
+                          style: TextStyle(
+                              fontFamily: 'UberMoveTextBold',
+                              fontSize: 14.0.sp,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.grey),
                         ),
                       ),
                       Row(
@@ -78,26 +74,22 @@ class LoginSuccess extends StatelessWidget {
                         children: [
                           Column(
                             children: [
-                              Container(
-                                child: Image(
-                                  image: const AssetImage(
-                                      'assets/Images/First.png'),
-                                  width: width / 3,
-                                  height: width / 3,
-                                ),
+                              Image(
+                                image:
+                                    const AssetImage('assets/Images/First.png'),
+                                width: width / 3,
+                                height: width / 3,
                               ),
                               Padding(
                                 padding: const EdgeInsets.all(8.0),
-                                child: Container(
-                                  child: Text(
-                                    'X-Eats Team',
-                                    style: TextStyle(
-                                        fontFamily: 'UberMoveTextBold',
-                                        fontSize: 14.0.sp,
-                                        fontWeight: FontWeight.bold,
-                                        color: const Color.fromARGB(
-                                            255, 9, 134, 211)),
-                                  ),
+                                child: Text(
+                                  'X-Eats Team',
+                                  style: TextStyle(
+                                      fontFamily: 'UberMoveTextBold',
+                                      fontSize: 14.0.sp,
+                                      fontWeight: FontWeight.bold,
+                                      color: const Color.fromARGB(
+                                          255, 9, 134, 211)),
                                 ),
                               ),
                             ],

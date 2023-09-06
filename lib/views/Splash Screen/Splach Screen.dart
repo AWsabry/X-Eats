@@ -99,6 +99,7 @@ class _SplashScreenState extends State<SplashScreen> {
     OrderCubit.get(context).getCartID(context);
     Future.delayed(const Duration(seconds: 1)).then((value) {
       OrderCubit.get(context).checkOrderExistence(context);
+      Logger().e(OrderCubit.get(context).orderExistance);
     });
 
     Future.delayed(const Duration(seconds: 6)).then(
@@ -117,8 +118,10 @@ class _SplashScreenState extends State<SplashScreen> {
                   subtotal: OrderCubit.get(context).totalPrice,
                   OrderId: OrderCubit.get(context).OrderIdOfExistence,
                 ));
+          } else if (OrderCubit.get(context).orderExistance == null) {
+            Navigation(context, const SplashScreen());
           } else {
-            NavigateAndRemov(context, Layout());
+            NavigateAndRemov(context, const Layout());
           }
         } else {
           NavigateAndRemov(context, SignIn());
@@ -136,7 +139,7 @@ class _SplashScreenState extends State<SplashScreen> {
         listener: (context, state) {},
         builder: (context, state) {
           return Scaffold(
-            backgroundColor: Theme.of(context).backgroundColor,
+            backgroundColor: Theme.of(context).colorScheme.background,
             body: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [

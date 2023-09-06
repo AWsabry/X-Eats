@@ -85,6 +85,8 @@ class InitialcheckTimeExistence extends SuperOrderStates {}
 
 class OrderExistanceTrue extends SuperOrderStates {}
 
+class OrderExistanceFalse extends SuperOrderStates {}
+
 class RunningBackgroundState extends SuperOrderStates {}
 
 class CompletedBackgroundState extends SuperOrderStates {}

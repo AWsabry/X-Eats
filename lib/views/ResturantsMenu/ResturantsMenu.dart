@@ -1,25 +1,21 @@
-// ignore_for_file: use_build_context_synchronously, must_be_immutable
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:xeats/controllers/Components/Categories%20Components/CategoryCard.dart';
 import 'package:xeats/controllers/Components/Global%20Components/custom_navigate.dart';
 import 'package:xeats/controllers/Components/Global%20Components/loading.dart';
 import 'package:xeats/controllers/Components/AppBar/AppBarCustomized.dart';
-import 'package:xeats/controllers/Cubits/ProductsCubit/ProductsCubit.dart';
 import 'package:xeats/controllers/Cubits/RestauratsCubit/RestaurantsStates.dart';
 import 'package:xeats/controllers/Cubits/RestauratsCubit/RestuarantsCubit.dart';
 import 'package:xeats/core/Constants/constants.dart';
-import 'package:xeats/theme.dart';
 import 'package:xeats/views/CategoryView/categoryView.dart';
 import 'package:xeats/views/Layout/Layout.dart';
 import 'package:xeats/views/Profile/Profile.dart';
 import 'package:xeats/views/Resturants/Resturants.dart';
 import '../../controllers/Cubits/ButtomNavigationBarCubit/navigationCubit.dart';
 
+// ignore: must_be_immutable
 class ResturantsMenu extends StatelessWidget {
   ResturantsMenu({
     super.key,
@@ -276,7 +272,7 @@ class ResturantsMenu extends StatelessWidget {
             unselectedItemColor: Colors.white,
             unselectedFontSize: 9,
             selectedFontSize: 12,
-            backgroundColor: Theme.of(context).backgroundColor,
+            backgroundColor: Theme.of(context).colorScheme.background,
             selectedItemColor: Theme.of(context).primaryColor,
             items: navcubit.bottomitems,
             currentIndex: 1,

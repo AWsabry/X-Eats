@@ -4,15 +4,14 @@ class ThemeApp {
   static Color primaryColor = const Color.fromRGBO(113, 224, 1, 1);
   static Color accentColor = const Color.fromRGBO(0, 0, 0, 1);
   static Color whiteColor = Colors.white;
-  static Color cultured = Color.fromRGBO(249, 249, 243, 1);
+  static Color cultured = const Color.fromRGBO(249, 249, 243, 1);
   static Color greyColor = Colors.grey;
   static Color redColor = Colors.red;
   static const integralCFFont = "IntegralCF";
   static const poppinsFont = "Poppins";
 
   static final ThemeData lightTheme = ThemeData(
-    primaryColor: Color.fromRGBO(113, 224, 1, 1),
-    backgroundColor: const Color.fromRGBO(0, 0, 0, 1),
+    primaryColor: const Color.fromRGBO(113, 224, 1, 1),
     canvasColor: whiteColor,
     scaffoldBackgroundColor: cultured,
     textTheme: TextTheme(
@@ -103,5 +102,49 @@ class ThemeApp {
       ),
       // Define more text styles here if needed
     ),
+    colorScheme: ColorScheme(
+        background: const Color.fromRGBO(0, 0, 0, 1),
+        brightness: Brightness.dark,
+        primary: primaryColor,
+        onPrimary: primaryColor,
+        secondary: primaryColor,
+        onSecondary: primaryColor,
+        error: redColor,
+        onError: redColor,
+        onBackground: Colors.black,
+        surface: const Color.fromRGBO(0, 0, 0, 1),
+        onSurface: const Color.fromRGBO(0, 0, 0, 1)),
   );
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  // colorScheme: ColorScheme(
+  //       background: const Color.fromRGBO(0, 0, 0, 1),
+  //       brightness: Brightness.dark,
+  //       primary: primaryColor,
+  //       onPrimary: primaryColor,
+  //       secondary: accentColor,
+  //       onSecondary: accentColor,
+  //       error: redColor,
+  //       onError: redColor,
+  //       onBackground: const Color.fromRGBO(0, 0, 0, 1),
+  //       surface: const Color.fromRGBO(0, 0, 0, 1),
+  //       onSurface: const Color.fromRGBO(0, 0, 0, 1)),

@@ -1,5 +1,3 @@
-// ignore_for_file: use_build_context_synchronously, prefer_interpolation_to_compose_strings
-
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -12,7 +10,6 @@ import 'package:xeats/controllers/Cubits/ButtomNavigationBarCubit/navigationCubi
 import 'package:xeats/controllers/Cubits/ProductsCubit/ProductsCubit.dart';
 import 'package:xeats/controllers/Cubits/ProductsCubit/ProductsStates.dart';
 import 'package:xeats/core/Constants/constants.dart';
-import 'package:xeats/theme.dart';
 import 'package:xeats/views/Layout/Layout.dart';
 import 'package:xeats/views/Profile/Profile.dart';
 
@@ -92,8 +89,7 @@ class CategoriesView extends StatelessWidget {
                                     .getProductsByCategoryResponse!
                                     .data["Names"][index]["New_Products"],
                               ).productsOfCategory(context,
-                                  image: AppConstants.BaseUrl +
-                                      "/uploads/" +
+                                  image: "${AppConstants.BaseUrl}/uploads/" +
                                       ProductsCubit.get(context)
                                           .getProductsByCategoryResponse!
                                           .data["Names"][index]["image"],
@@ -121,7 +117,7 @@ class CategoriesView extends StatelessWidget {
               unselectedItemColor: Colors.white,
               unselectedFontSize: 9,
               selectedFontSize: 12,
-              backgroundColor: Theme.of(context).backgroundColor,
+              backgroundColor: Theme.of(context).colorScheme.background,
               selectedItemColor: Theme.of(context).primaryColor,
               items: navcubit.bottomitems,
               currentIndex: 1,
@@ -132,7 +128,7 @@ class CategoriesView extends StatelessWidget {
                   await ProductsCubit.get(context).ClearProductsId();
                 } else if (index == 0) {
                   await ProductsCubit.get(context).ClearProductsId();
-                  Navigation(context, Layout());
+                  Navigation(context, const Layout());
                 } else {
                   await ProductsCubit.get(context).ClearProductsId();
                   Navigation(context, const Profile());

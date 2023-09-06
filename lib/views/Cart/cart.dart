@@ -42,7 +42,6 @@ class _CartState extends State<Cart> {
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
-    double width = MediaQuery.of(context).size.width;
     return MultiBlocProvider(
       providers: [
         BlocProvider(
@@ -102,7 +101,7 @@ class _CartState extends State<Cart> {
                                     children: [
                                       SecondaryMiniButton(
                                           function: () {
-                                            Navigation(context, Layout());
+                                            Navigation(context, const Layout());
                                           },
                                           text: 'Continue Shopping'),
                                       SizedBox(
@@ -112,8 +111,8 @@ class _CartState extends State<Cart> {
                                               2,
                                           height: 50.h,
                                           child: DefaultMiniButton(
-                                              function: () {
-                                                OrderCubit.get(context)
+                                              function: () async {
+                                                await OrderCubit.get(context)
                                                     .deliveryFees();
                                                 if (ProductsCubit.get(context)
                                                         .privacy ==
@@ -167,8 +166,14 @@ class _CartState extends State<Cart> {
                                                 .labelMedium),
                                         const SizedBox(width: 10),
                                         Radio<Privacy>(
-                                          activeColor:
-                                              Theme.of(context).backgroundColor,
+                                          focusColor: Colors.black,
+                                          fillColor: MaterialStatePropertyAll(
+                                              Theme.of(context)
+                                                  .colorScheme
+                                                  .background),
+                                          activeColor: Theme.of(context)
+                                              .colorScheme
+                                              .background,
                                           value: Privacy.Public,
                                           groupValue:
                                               ProductsCubit.get(ProductCubit)
@@ -194,8 +199,13 @@ class _CartState extends State<Cart> {
                                           padding: const EdgeInsets.all(8.0),
                                           child: Radio<Privacy>(
                                             value: Privacy.Private,
+                                            fillColor: MaterialStatePropertyAll(
+                                                Theme.of(context)
+                                                    .colorScheme
+                                                    .background),
                                             activeColor: Theme.of(context)
-                                                .backgroundColor,
+                                                .colorScheme
+                                                .background,
                                             groupValue:
                                                 ProductsCubit.get(ProductCubit)
                                                     .privacy,

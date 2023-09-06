@@ -29,7 +29,7 @@ class _EmptyCartState extends State<EmptyCart> {
 
           DefaultButton(
             function: () {
-              Navigation(context, Layout());
+              Navigation(context, const Layout());
             },
             text: 'Continue Shopping',
           )

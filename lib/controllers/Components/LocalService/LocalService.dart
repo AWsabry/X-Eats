@@ -21,7 +21,7 @@ class LocalService {
       'X-EATS', // title
       description:
           'This channel is used for important notifications.', // description
-      importance: Importance.low, // importance must be at low or higher level
+      importance: Importance.high, // importance must be at low or higher level
     );
     final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
         FlutterLocalNotificationsPlugin();
@@ -57,17 +57,23 @@ class LocalService {
 
       final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
           FlutterLocalNotificationsPlugin();
-
       // bring to foreground
-      Timer.periodic(const Duration(seconds: 1), (timer) async {
+      int? endingOrderTimeSecond;
+      Timer.periodic(
+          Duration(
+              // ignore: unnecessary_null_comparison
+              seconds: endingOrderTimeSecond != null
+                  ? endingOrderTimeSecond - 3
+                  : 1), (timer) async {
         if (service is AndroidServiceInstance) {
           if (await service.isForegroundService()) {
             try {
               var orderExistenceresponse = await Dio().get(
-                  "${AppConstants.BaseUrl}/check_order_existence/${EmailInforamtion}");
+                  "${AppConstants.BaseUrl}/check_order_existence/$EmailInforamtion");
               if (orderExistenceresponse.data["Names"] == "[]" ||
                   orderExistenceresponse.data["Names"][0]["status"] !=
                       "Pending") {
+                service.stopSelf();
               } else {
                 var LocationNumber =
                     orderExistenceresponse.data["Names"][0]["deliver_to"];
@@ -77,7 +83,7 @@ class LocalService {
                 var EndingOrder = publicOrderResponse.data["end_on"];
                 var endingOrderTime = DateTime.parse(EndingOrder);
 
-                var endingOrderTimeSecond =
+                endingOrderTimeSecond =
                     endingOrderTime.difference(DateTime.now()).inSeconds;
 
                 bool CheckingDifference = DateTime.now()
@@ -85,17 +91,16 @@ class LocalService {
                 if (CheckingDifference == false) {
                   Dio().post(
                       "${AppConstants.BaseUrl}/get_time_of_first_public_order_in_location/$LocationNumber");
-
-                  Timer.periodic(Duration(seconds: 5), (timer) {
-                    service.stopSelf();
-                  });
-                  print("om");
+                  service.stopSelf();
+                  timer.cancel();
                 } else {}
 
                 flutterLocalNotificationsPlugin.show(
                   notificationId,
                   ' ${CheckingDifference == true ? 'Your Order still in progress' : 'Your Order Now is Recived by Restaurant'}',
-                  '${CheckingDifference == true ? 'Remaining $endingOrderTimeSecond seconds for your order' : 'Thank you for using X-Eats'}',
+                  CheckingDifference == true
+                      ? 'Remaining $endingOrderTimeSecond seconds for your order'
+                      : 'Thank you for using X-Eats',
                   const NotificationDetails(
                     android: AndroidNotificationDetails(
                         notificationChannelId, 'X-EATS',
@@ -107,6 +112,7 @@ class LocalService {
               }
             } catch (error) {
               service.stopSelf();
+              timer.cancel();
             }
           }
         }

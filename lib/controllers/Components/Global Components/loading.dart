@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:xeats/theme.dart';
 
 class Loading extends StatelessWidget {
   const Loading({super.key});
@@ -8,7 +7,7 @@ class Loading extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.all(25.0),
+      padding: const EdgeInsets.all(25.0),
       child: SpinKitFadingCircle(
         color: Theme.of(context).primaryColor,
         size: 30,

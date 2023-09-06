@@ -16,7 +16,6 @@ import 'package:xeats/controllers/Cubits/AuthCubit/cubit.dart';
 import 'package:xeats/controllers/Cubits/OrderCubit/OrderStates.dart';
 import 'package:xeats/controllers/Cubits/ProductsCubit/ProductsCubit.dart';
 import 'package:xeats/core/Constants/constants.dart';
-import 'package:xeats/core/logger.dart';
 import 'package:xeats/theme.dart';
 import 'package:xeats/views/ThankYou/thankyou.dart';
 import 'package:xeats/views/WaitingRoom/waitingRoom.dart';
@@ -175,25 +174,36 @@ class OrderCubit extends Cubit<OrderStates> {
     );
   }
 
-  void updateCartPrice(context) async {
-    await Dio()
-        .get("${AppConstants.BaseUrl}/get_Delivery_Fees")
-        .then((value) async {
+  Future<void> updateCartPrice(context) async {
+    try {
+      final deliveryFeesResponse =
+          await Dio().get("${AppConstants.BaseUrl}/get_Delivery_Fees");
+      final deliveryFees =
+          deliveryFeesResponse.data["Names"][0]["delivery_fees"];
+      final totalAfterDelivery = deliveryFees + ProductClass.getSubtotal();
       await Dio().put(
-          "${AppConstants.BaseUrl}/get_carts_by_id/${AuthCubit.get(context).userEmailShared}}",
+          "${AppConstants.BaseUrl}/get_carts_by_id/${AuthCubit.get(context).userEmailShared}",
           data: {
             "total_price": ProductClass.getSubtotal(),
-            "total_after_delivery": (value.data["Names"][0]["delivery_fees"] +
-                    ProductClass.getSubtotal())
-                .toDouble()
-          }).then((value) {
-        print(value);
-      }).catchError((e) {
-        var dioException = e as DioError;
-        var status = dioException.response!.statusCode;
-        print("CARTITEM ERROR" " " '$status');
-      });
-    });
+            "total_after_delivery": totalAfterDelivery.toDouble(),
+          });
+      print("Cart price updated successfully.");
+    } on DioException catch (e) {
+      if (e.response != null) {
+        var status = e.response!.statusCode;
+        print("CARTITEM ERROR: $status");
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            duration: const Duration(seconds: 2),
+            content: Text(
+              AppConstants.checkConnection,
+              style: Theme.of(context).textTheme.headlineMedium,
+            )));
+      }
+    } catch (e) {
+      // Handle other exceptions
+      Logger().e("An unexpected error occurred: $e");
+    }
   }
 
   List<dynamic> cartItems = [];
@@ -247,8 +257,16 @@ class OrderCubit extends Cubit<OrderStates> {
         }
         ProductClass.CartItems.add(theItem);
       }
-    } catch (error) {
-      AppLogger.e(error.toString());
+    } on DioException catch (error) {
+      if (error.response == null) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            duration: const Duration(seconds: 2),
+            content: Text(
+              AppConstants.checkConnection,
+              style: Theme.of(context).textTheme.headlineMedium,
+            )));
+      }
+      Logger().e(error.toString());
     }
     return ProductClass.CartItems;
   }
@@ -265,7 +283,7 @@ class OrderCubit extends Cubit<OrderStates> {
   static List<dynamic> LocationSlugList = [];
   static List<dynamic> LocationId = [];
   static List<dynamic> LocationsStatic = [];
-  void getLocation(context) async {
+  void getLocation(context, widget) async {
     try {
       var locationsResponse =
           await Dio().get("${AppConstants.BaseUrl}/get_locations/");
@@ -277,8 +295,20 @@ class OrderCubit extends Cubit<OrderStates> {
         LocationId.add(location["id"]);
       }
       emit(GetLocationNamesStatesSuccefully());
-    } catch (LocationError) {
-      Logger().e("Error While Getting LocationNames $LocationError");
+    } on DioException catch (error) {
+      if (error.response == null) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            duration: const Duration(seconds: 2),
+            content: Text(
+              AppConstants.checkConnection,
+              style: Theme.of(context).textTheme.headlineMedium,
+            )));
+        Timer.periodic(const Duration(seconds: 5), (timer) {
+          Navigation(context, widget);
+          timer.cancel();
+        });
+      }
+      Logger().e(error.toString());
     }
   }
 
@@ -301,9 +331,16 @@ class OrderCubit extends Cubit<OrderStates> {
           ProductsCubit.get(context).getMostSoldProducts(context);
 
           emit(getRestuarantsOfSlugStates());
-        } catch (error) {
-          // Handle error here
-          print("Errorrrr: $error");
+        } on DioException catch (error) {
+          if (error.response == null) {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                duration: const Duration(seconds: 2),
+                content: Text(
+                  AppConstants.checkConnection,
+                  style: Theme.of(context).textTheme.headlineMedium,
+                )));
+          }
+          Logger().e(error.toString());
         }
       }
     }
@@ -389,7 +426,7 @@ class OrderCubit extends Cubit<OrderStates> {
         )
         .then((value) => print("WELCOMEEEEEE" "${value.data}"))
         .catchError((e) {
-          var dioException = e as DioError;
+          var dioException = e as DioException;
 
           print(dioException.response!.statusCode);
           if (dioException.response!.statusCode == 200) {
@@ -433,11 +470,18 @@ class OrderCubit extends Cubit<OrderStates> {
       emit(getTimeStateSuccess());
 
       return response;
-    } catch (error) {
-      print("7a7a $error");
-      print(PublicLocationId! + 1);
+    } on DioException catch (error) {
+      if (error.response == null) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            duration: const Duration(seconds: 2),
+            content: Text(
+              AppConstants.checkConnection,
+              style: Theme.of(context).textTheme.headlineMedium,
+            )));
+      }
+      Logger().e(error.toString());
       emit(getTimeStateFailier(error.toString()));
-      throw error;
+      rethrow;
     }
   }
 
@@ -485,42 +529,56 @@ class OrderCubit extends Cubit<OrderStates> {
     emit(timeFinishedState());
   }
 
-  void cancelOrders(
-    Orderid,
-  ) async {
+  void cancelOrders(Orderid, context) async {
     try {
       var cancelOrderResponse =
           await Dio().post("${AppConstants.BaseUrl}/cancel_order/$Orderid");
-    } catch (e) {
-      print(e);
+    } on DioException catch (error) {
+      if (error.response == null) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            duration: const Duration(seconds: 2),
+            content: Text(
+              AppConstants.checkConnection,
+              style: Theme.of(context).textTheme.headlineMedium,
+            )));
+      }
+      Logger().e(error.toString());
     }
   }
 
-  void switchOrderToPrivate(context) {
-    try {
-      Dio().post(
-          "${AppConstants.BaseUrl}/create_orders/${AuthCubit.get(context).userEmailShared}",
-          data: {
-            "first_name": AuthCubit.get(context).firstNameShared,
-            "last_name": AuthCubit.get(context).lastNameShared,
-            "phone_number": AuthCubit.get(context).phoneNumberShared,
-            "email": AuthCubit.get(context).userEmailShared,
-            "location_name": LocationName,
-            "total_price_after_delivery":
-                deliveryfees! + ProductClass.getSubtotal(),
-            "totalPrice": ProductClass.getSubtotal(),
-            "flag": "Mobile",
-            "private": true,
-            "status": "Pending",
-            "user": AuthCubit.get(context).userIdShared,
-            "cart": cartID,
-            "deliver_to": PublicLocationId! + 1
-          });
-      NavigateAndRemov(context, const ThankYou());
-    } catch (error) {
-      print("Error While Swithching to private $error");
-    }
-  }
+  // void switchOrderToPrivate(context) {
+  //   try {
+  //     Dio().post(
+  //         "${AppConstants.BaseUrl}/create_orders/${AuthCubit.get(context).userEmailShared}",
+  //         data: {
+  //           "first_name": AuthCubit.get(context).firstNameShared,
+  //           "last_name": AuthCubit.get(context).lastNameShared,
+  //           "phone_number": AuthCubit.get(context).phoneNumberShared,
+  //           "email": AuthCubit.get(context).userEmailShared,
+  //           "location_name": LocationName,
+  //           "total_price_after_delivery":
+  //               deliveryfees! + ProductClass.getSubtotal(),
+  //           "totalPrice": ProductClass.getSubtotal(),
+  //           "flag": "Mobile",
+  //           "private": true,
+  //           "status": "Pending",
+  //           "user": AuthCubit.get(context).userIdShared,
+  //           "cart": cartID,
+  //           "deliver_to": PublicLocationId! + 1
+  //         });
+  //     NavigateAndRemov(context, const ThankYou());
+  //   } on DioException catch (error) {
+  //     if (error.response == null) {
+  //       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+  //           duration: const Duration(seconds: 2),
+  //           content: Text(
+  //             AppConstants.checkConnection,
+  //             style: Theme.of(context).textTheme.headlineMedium,
+  //           )));
+  //     }
+  //     Logger().e(error.toString());
+  //   }
+  // }
 
   bool clikable = true;
 
@@ -585,14 +643,23 @@ class OrderCubit extends Cubit<OrderStates> {
         },
       );
 
-      if (!private!) {
+      if (!private) {
         navigateToWaitingRoom(context, createOrdersResponse.data["id"], 1200, 1,
             PublicLocationId! + 1);
       } else {
         NavigateAndRemov(context, const ThankYou());
       }
-    } catch (e) {
-      await createOrders(context, private);
+    } on DioException catch (error) {
+      if (error.response == null) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            duration: const Duration(seconds: 2),
+            content: Text(
+              AppConstants.checkConnection,
+              style: Theme.of(context).textTheme.headlineMedium,
+            )));
+        confirmOrderPressed();
+      }
+      Logger().e(error.toString());
     }
   }
 
@@ -618,7 +685,7 @@ class OrderCubit extends Cubit<OrderStates> {
         },
       );
 
-      if (!private!) {
+      if (!private) {
         var publicOrderResponse = await getPublicOrder(context);
         var endingOrderTime = DateTime.parse(EndingOrder);
         var timeOfLastOrder = DateTime.parse(LastOrder);
@@ -636,8 +703,17 @@ class OrderCubit extends Cubit<OrderStates> {
       } else {
         NavigateAndRemov(context, const ThankYou());
       }
-    } catch (error) {
-      Logger().e(error);
+    } on DioException catch (error) {
+      if (error.response == null) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            duration: const Duration(seconds: 2),
+            content: Text(
+              AppConstants.checkConnection,
+              style: Theme.of(context).textTheme.headlineMedium,
+            )));
+        confirmOrderPressed();
+      }
+      Logger().e(error.toString());
     }
   }
 
@@ -669,11 +745,13 @@ class OrderCubit extends Cubit<OrderStates> {
       emit(InitialcheckOrderExistance());
       var orderExistenceresponse = await Dio().get(
           "${AppConstants.BaseUrl}/check_order_existence/${AuthCubit.get(context).userEmailShared}");
-
-      Logger().i("Response of Order Existence $orderExistenceresponse");
-      if (orderExistenceresponse.data["Names"] == "[]" ||
-          orderExistenceresponse.data["Names"][0]["status"] != "Pending") {
+      List data = orderExistenceresponse.data["Names"];
+      if (data.isEmpty) {
         orderExistance = false;
+        emit(OrderExistanceFalse());
+      } else if (data.isNotEmpty && data[0]["status"] != "Pending") {
+        orderExistance = false;
+        emit(OrderExistanceFalse());
       } else {
         LocationNumber = orderExistenceresponse.data["Names"][0]["deliver_to"];
         totalPrice = orderExistenceresponse.data["Names"][0]["totalPrice"];
@@ -709,7 +787,17 @@ class OrderCubit extends Cubit<OrderStates> {
         }
       }
       emit(checkOrderExistanceSuccessfuly());
-    } catch (error) {
+    } on DioException catch (error) {
+      if (error.response == null) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            backgroundColor: ThemeApp.redColor,
+            duration: const Duration(seconds: 2),
+            content: Text(
+              AppConstants.checkConnection,
+              style: Theme.of(context).textTheme.headlineMedium,
+            )));
+      }
+      Logger().e(error.toString());
       emit(checkOrderExistanceFailed(error.toString()));
     }
   }

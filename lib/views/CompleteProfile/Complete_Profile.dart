@@ -1,5 +1,3 @@
-// ignore_for_file: camel_case_types, must_be_immutable
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -10,6 +8,7 @@ import 'package:xeats/controllers/Cubits/AuthCubit/cubit.dart';
 import 'package:xeats/views/Verification/Verification.dart';
 import '../../controllers/Components/Global Components/defaultFormField.dart';
 
+// ignore: camel_case_types, must_be_immutable
 class Complete_Profile extends StatelessWidget {
   Complete_Profile({super.key});
   static String verify = "";
@@ -121,8 +120,8 @@ class Complete_Profile extends StatelessWidget {
                                   if (formkey.currentState!.validate()) {
                                     await FirebaseAuth.instance
                                         .verifyPhoneNumber(
-                                      phoneNumber: '+2' +
-                                          cubit.PhoneNumberController.text,
+                                      phoneNumber:
+                                          '+2${cubit.PhoneNumberController.text}',
                                       verificationCompleted:
                                           (PhoneAuthCredential credential) {},
                                       verificationFailed:
