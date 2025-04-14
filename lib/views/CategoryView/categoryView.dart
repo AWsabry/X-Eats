@@ -7,12 +7,10 @@ import 'package:xeats/controllers/Components/AppBar/AppBarCustomized.dart';
 import 'package:xeats/controllers/Components/Global%20Components/custom_navigate.dart';
 import 'package:xeats/controllers/Components/Global%20Components/loading.dart';
 import 'package:xeats/controllers/Components/Product%20Class/Products_Class.dart';
-
 import 'package:xeats/controllers/Cubits/ButtomNavigationBarCubit/navigationCubit.dart';
 import 'package:xeats/controllers/Cubits/ProductsCubit/ProductsCubit.dart';
 import 'package:xeats/controllers/Cubits/ProductsCubit/ProductsStates.dart';
 import 'package:xeats/core/Constants/constants.dart';
-import 'package:xeats/theme.dart';
 import 'package:xeats/views/Layout/Layout.dart';
 import 'package:xeats/views/Profile/Profile.dart';
 
@@ -121,7 +119,7 @@ class CategoriesView extends StatelessWidget {
               unselectedItemColor: Colors.white,
               unselectedFontSize: 9,
               selectedFontSize: 12,
-              backgroundColor: Theme.of(context).backgroundColor,
+              backgroundColor: Theme.of(context).scaffoldBackgroundColor,
               selectedItemColor: Theme.of(context).primaryColor,
               items: navcubit.bottomitems,
               currentIndex: 1,

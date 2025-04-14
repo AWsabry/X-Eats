@@ -167,8 +167,8 @@ class _CartState extends State<Cart> {
                                                 .labelMedium),
                                         const SizedBox(width: 10),
                                         Radio<Privacy>(
-                                          activeColor:
-                                              Theme.of(context).backgroundColor,
+                                          activeColor: Theme.of(context)
+                                              .scaffoldBackgroundColor,
                                           value: Privacy.Public,
                                           groupValue:
                                               ProductsCubit.get(ProductCubit)
@@ -195,7 +195,8 @@ class _CartState extends State<Cart> {
                                           child: Radio<Privacy>(
                                             value: Privacy.Private,
                                             activeColor: Theme.of(context)
-                                                .backgroundColor,
+                                                .colorScheme
+                                                .surface,
                                             groupValue:
                                                 ProductsCubit.get(ProductCubit)
                                                     .privacy,

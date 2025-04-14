@@ -29,7 +29,7 @@ class DiscountBanner extends StatelessWidget {
           image: CachedNetworkImageProvider(
             AppConstants.BaseUrl + dataFromApi[index]['background_image'],
             maxWidth: MediaQuery.of(context).size.width.toInt(),
-            errorListener: () => const Text('Error Loading Image'),
+            errorListener: (error) => const Text('Error Loading Image'),
           ),
         );
       },

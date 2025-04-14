@@ -1,14 +1,12 @@
 // ignore_for_file: must_be_immutable, invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:logger/logger.dart';
+import 'package:xeats/controllers/Components/AppBar/AppBarCustomized.dart';
 import 'package:xeats/controllers/Components/Global%20Components/Buttons/DefaultButton.dart';
 import 'package:xeats/controllers/Components/Global%20Components/custom_navigate.dart';
 import 'package:xeats/controllers/Components/Global%20Components/loading.dart';
-import 'package:xeats/controllers/Components/AppBar/AppBarCustomized.dart';
 import 'package:xeats/controllers/Components/Requests%20Loading%20Components/RequstsLoading.dart';
 import 'package:xeats/controllers/Cubits/ButtomNavigationBarCubit/navigationCubit.dart';
 import 'package:xeats/controllers/Cubits/OrderCubit/OrderCubit.dart';
@@ -88,7 +86,7 @@ class ProductClass extends StatelessWidget {
               productDetails(
                 context,
                 productName: productName,
-                image: AppConstants.BaseUrl + "/" + itemImage!,
+                image: "${AppConstants.BaseUrl}/${itemImage!}",
                 id: id,
                 restaurant: restaurant,
                 price: price,
@@ -374,19 +372,19 @@ class ProductClass extends StatelessWidget {
       required String? englishName,
       required int? id,
       required int? restaurant}) {
-    final BannerAd bannerAd = BannerAd(
-        size: AdSize.banner,
-        adUnitId: "ca-app-pub-5674432343391353/3216382829",
-        listener: BannerAdListener(
-          // Called when an ad is successfully received.
-          onAdLoaded: (Ad ad) => Logger().d('Ad loaded.'),
-          // Called when an ad request failed.
-          onAdFailedToLoad: (Ad ad, LoadAdError error) {
-            // Dispose the ad here to free resources.
-          },
-        ),
-        request: const AdRequest());
-    bannerAd.load();
+    // final BannerAd bannerAd = BannerAd(
+    //     size: AdSize.banner,
+    //     adUnitId: "ca-app-pub-5674432343391353/3216382829",
+    //     listener: BannerAdListener(
+    //       // Called when an ad is successfully received.
+    //       onAdLoaded: (Ad ad) => Logger().d('Ad loaded.'),
+    //       // Called when an ad request failed.
+    //       onAdFailedToLoad: (Ad ad, LoadAdError error) {
+    //         // Dispose the ad here to free resources.
+    //       },
+    //     ),
+    //     request: const AdRequest());
+    // bannerAd.load();
 
     return BlocConsumer<OrderCubit, OrderStates>(
       builder: (context, state) {
@@ -567,7 +565,7 @@ class ProductClass extends StatelessWidget {
                           );
                         },
                         text: "Add to Cart")
-                    : Loading(),
+                    : const Loading(),
                 const SizedBox(
                   height: 50,
                   width: double.maxFinite,
@@ -580,7 +578,7 @@ class ProductClass extends StatelessWidget {
             unselectedItemColor: Colors.white,
             unselectedFontSize: 9,
             selectedFontSize: 12,
-            backgroundColor: Theme.of(context).backgroundColor,
+            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
             selectedItemColor: Theme.of(context).primaryColor,
             items: navcubit.bottomitems,
             currentIndex: 1,
@@ -629,7 +627,7 @@ class ProductClass extends StatelessWidget {
                 Navigation(
                   context,
                   productDetails(context,
-                      image: '$image',
+                      image: image,
                       id: id,
                       restaurant: restaurant,
                       restaurantName: restaurantName,
@@ -658,7 +656,7 @@ class ProductClass extends StatelessWidget {
             ),
           ),
         ),
-        Text("${data}", style: Theme.of(context).textTheme.displaySmall),
+        Text("$data", style: Theme.of(context).textTheme.displaySmall),
       ],
     );
   }
@@ -691,7 +689,7 @@ class ProductClass extends StatelessWidget {
                 Navigation(
                   context,
                   productDetails(context,
-                      image: '$image',
+                      image: image,
                       id: id,
                       restaurant: restaurant,
                       restaurantName: restaurantName,
@@ -721,7 +719,7 @@ class ProductClass extends StatelessWidget {
             ),
           ),
         ),
-        Text("${title}", style: Theme.of(context).textTheme.displaySmall),
+        Text("$title", style: Theme.of(context).textTheme.displaySmall),
       ],
     );
   }

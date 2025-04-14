@@ -3,21 +3,19 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
+// import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:xeats/controllers/Components/AppBar/AppBarCustomized.dart';
 import 'package:xeats/controllers/Components/Categories%20Components/CategoryCard.dart';
 import 'package:xeats/controllers/Components/Global%20Components/custom_navigate.dart';
 import 'package:xeats/controllers/Components/Global%20Components/loading.dart';
-import 'package:xeats/controllers/Components/AppBar/AppBarCustomized.dart';
-import 'package:xeats/controllers/Cubits/ProductsCubit/ProductsCubit.dart';
 import 'package:xeats/controllers/Cubits/RestauratsCubit/RestaurantsStates.dart';
 import 'package:xeats/controllers/Cubits/RestauratsCubit/RestuarantsCubit.dart';
 import 'package:xeats/core/Constants/constants.dart';
-import 'package:xeats/theme.dart';
 import 'package:xeats/views/CategoryView/categoryView.dart';
 import 'package:xeats/views/Layout/Layout.dart';
 import 'package:xeats/views/Profile/Profile.dart';
 import 'package:xeats/views/Resturants/Resturants.dart';
+
 import '../../controllers/Cubits/ButtomNavigationBarCubit/navigationCubit.dart';
 
 class ResturantsMenu extends StatelessWidget {
@@ -33,19 +31,19 @@ class ResturantsMenu extends StatelessWidget {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
-    final BannerAd bannerAd = BannerAd(
-        size: AdSize.banner,
-        adUnitId: "ca-app-pub-5674432343391353/4524475505",
-        listener: BannerAdListener(
-          // Called when an ad is successfully received.
-          onAdLoaded: (Ad ad) => print('Ad loaded.'),
-          // Called when an ad request failed.
-          onAdFailedToLoad: (Ad ad, LoadAdError error) {
-            // Dispose the ad here to free resources.
-          },
-        ),
-        request: const AdRequest());
-    bannerAd.load();
+    // final BannerAd bannerAd = BannerAd(
+    //     size: AdSize.banner,
+    //     adUnitId: "ca-app-pub-5674432343391353/4524475505",
+    //     listener: BannerAdListener(
+    //       // Called when an ad is successfully received.
+    //       onAdLoaded: (Ad ad) => print('Ad loaded.'),
+    //       // Called when an ad request failed.
+    //       onAdFailedToLoad: (Ad ad, LoadAdError error) {
+    //         // Dispose the ad here to free resources.
+    //       },
+    //     ),
+    //     request: const AdRequest());
+    // bannerAd.load();
     return BlocConsumer<RestuarantsCubit, RestuarantsStates>(
       listener: (context, state) {},
       builder: (context, state) {
@@ -180,11 +178,11 @@ class ResturantsMenu extends StatelessWidget {
                     )
                   ]),
                 ),
-                SizedBox(
-                  height: 50,
-                  width: double.maxFinite,
-                  child: AdWidget(ad: bannerAd),
-                ),
+                // SizedBox(
+                //   height: 50,
+                //   width: double.maxFinite,
+                //   child: AdWidget(ad: bannerAd),
+                // ),
                 SizedBox(
                   height: height / 75.6,
                 ),
@@ -276,7 +274,7 @@ class ResturantsMenu extends StatelessWidget {
             unselectedItemColor: Colors.white,
             unselectedFontSize: 9,
             selectedFontSize: 12,
-            backgroundColor: Theme.of(context).backgroundColor,
+            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
             selectedItemColor: Theme.of(context).primaryColor,
             items: navcubit.bottomitems,
             currentIndex: 1,

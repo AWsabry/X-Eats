@@ -136,7 +136,7 @@ class _SplashScreenState extends State<SplashScreen> {
         listener: (context, state) {},
         builder: (context, state) {
           return Scaffold(
-            backgroundColor: Theme.of(context).backgroundColor,
+            backgroundColor: Theme.of(context).colorScheme.background,
             body: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [

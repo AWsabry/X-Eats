@@ -26,6 +26,8 @@ class successSignInState extends AuthStates {}
 
 class LoginSuccessfullState extends AuthStates {}
 
+class RegisterSuccessfullState extends AuthStates {}
+
 class LoginPressedState extends AuthStates {}
 
 class getCsrfState extends AuthStates {}

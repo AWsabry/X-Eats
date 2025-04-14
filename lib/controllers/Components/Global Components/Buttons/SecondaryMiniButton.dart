@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class SecondaryMiniButton extends StatefulWidget {
   const SecondaryMiniButton({
@@ -26,7 +24,7 @@ class _SecondaryMiniButtonState extends State<SecondaryMiniButton> {
       height: MediaQuery.of(context).size.height / 16,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-          backgroundColor: Theme.of(context).backgroundColor,
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         ),
         onPressed: widget.function,
         child: Text(widget.isUppercase ? widget.text : widget.text,

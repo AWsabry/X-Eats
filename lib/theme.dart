@@ -4,15 +4,14 @@ class ThemeApp {
   static Color primaryColor = const Color.fromRGBO(113, 224, 1, 1);
   static Color accentColor = const Color.fromRGBO(0, 0, 0, 1);
   static Color whiteColor = Colors.white;
-  static Color cultured = Color.fromRGBO(249, 249, 243, 1);
+  static Color cultured = const Color.fromRGBO(249, 249, 243, 1);
   static Color greyColor = Colors.grey;
   static Color redColor = Colors.red;
   static const integralCFFont = "IntegralCF";
   static const poppinsFont = "Poppins";
 
   static final ThemeData lightTheme = ThemeData(
-    primaryColor: Color.fromRGBO(113, 224, 1, 1),
-    backgroundColor: const Color.fromRGBO(0, 0, 0, 1),
+    primaryColor: const Color.fromRGBO(113, 224, 1, 1),
     canvasColor: whiteColor,
     scaffoldBackgroundColor: cultured,
     textTheme: TextTheme(

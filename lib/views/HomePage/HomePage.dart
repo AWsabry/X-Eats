@@ -3,12 +3,10 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:xeats/controllers/Components/AppBar/location_bar.dart';
 import 'package:xeats/controllers/Components/DiscountBanner/DiscountBanner.dart';
 import 'package:xeats/controllers/Components/Global%20Components/custom_navigate.dart';
 import 'package:xeats/controllers/Components/Global%20Components/loading.dart';
-import 'package:xeats/controllers/Components/AppBar/LocationBar.dart';
 import 'package:xeats/controllers/Components/Product%20Class/Products_Class.dart';
 import 'package:xeats/controllers/Components/Restaurant%20Components/RestaurantView.dart';
 import 'package:xeats/controllers/Cubits/AuthCubit/cubit.dart';
@@ -19,10 +17,7 @@ import 'package:xeats/controllers/Cubits/OrderCubit/OrderCubit.dart';
 import 'package:xeats/controllers/Cubits/OrderCubit/OrderStates.dart';
 import 'package:xeats/controllers/Cubits/ProductsCubit/ProductsCubit.dart';
 import 'package:xeats/controllers/Cubits/ProductsCubit/ProductsStates.dart';
-import 'package:xeats/controllers/Cubits/RestauratsCubit/RestuarantsCubit.dart';
-import 'package:xeats/controllers/Dio/DioHelper.dart';
 import 'package:xeats/core/Constants/constants.dart';
-import 'package:xeats/theme.dart';
 import 'package:xeats/views/Profile/Profile.dart';
 import 'package:xeats/views/Resturants/Resturants.dart';
 import 'package:xeats/views/ResturantsMenu/ResturantsMenu.dart';
@@ -44,30 +39,30 @@ class HomePage extends StatelessWidget {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
 
-    final BannerAd bannerAd = BannerAd(
-        size: AdSize.banner,
-        adUnitId: "ca-app-pub-5674432343391353/7700576837",
-        listener: BannerAdListener(
-          // Called when an ad is successfully received.
-          // Called when an ad request failed.
-          onAdFailedToLoad: (Ad ad, LoadAdError error) {
-            // Dispose the ad here to free resources.
-          },
-        ),
-        request: const AdRequest());
-    final BannerAd bannerAd2 = BannerAd(
-        size: AdSize.banner,
-        adUnitId: "ca-app-pub-5674432343391353/4883815579",
-        listener: BannerAdListener(
-          // Called when an ad is successfully received.
-          // Called when an ad request failed.
-          onAdFailedToLoad: (Ad ad, LoadAdError error) {
-            // Dispose the ad here to free resources.
-          },
-        ),
-        request: const AdRequest());
-    bannerAd.load();
-    bannerAd2.load();
+    // final BannerAd bannerAd = BannerAd(
+    //     size: AdSize.banner,
+    //     adUnitId: "ca-app-pub-5674432343391353/7700576837",
+    //     listener: BannerAdListener(
+    //       // Called when an ad is successfully received.
+    //       // Called when an ad request failed.
+    //       onAdFailedToLoad: (Ad ad, LoadAdError error) {
+    //         // Dispose the ad here to free resources.
+    //       },
+    //     ),
+    //     request: const AdRequest());
+    // final BannerAd bannerAd2 = BannerAd(
+    //     size: AdSize.banner,
+    //     adUnitId: "ca-app-pub-5674432343391353/4883815579",
+    //     listener: BannerAdListener(
+    //       // Called when an ad is successfully received.
+    //       // Called when an ad request failed.
+    //       onAdFailedToLoad: (Ad ad, LoadAdError error) {
+    //         // Dispose the ad here to free resources.
+    //       },
+    //     ),
+    //     request: const AdRequest());
+    // bannerAd.load();
+    // bannerAd2.load();
 
     return MultiBlocProvider(
       providers: [
@@ -228,7 +223,7 @@ class HomePage extends StatelessWidget {
                                                               ),
                                                             ),
                                                           ),
-                                                          Divider(),
+                                                          const Divider(),
                                                         ],
                                                       );
                                                     },
@@ -238,11 +233,11 @@ class HomePage extends StatelessWidget {
                                               // const SizedBox(
                                               //   height: 10,
                                               // ),
-                                              SizedBox(
-                                                height: height / 50,
-                                                width: double.maxFinite,
-                                                child: AdWidget(ad: bannerAd),
-                                              )
+                                              // SizedBox(
+                                              //   height: height / 50,
+                                              //   width: double.maxFinite,
+                                              //   child: AdWidget(ad: bannerAd),
+                                              // )
                                             ],
                                           ),
                                           Column(
@@ -414,11 +409,11 @@ class HomePage extends StatelessWidget {
                                               ),
                                             ],
                                           ),
-                                          SizedBox(
-                                            height: height / 40,
-                                            width: double.maxFinite,
-                                            child: AdWidget(ad: bannerAd2),
-                                          ),
+                                          // SizedBox(
+                                          //   height: height / 40,
+                                          //   width: double.maxFinite,
+                                          //   child: AdWidget(ad: bannerAd2),
+                                          // ),
                                           // ListView.builder(
                                           //   itemBuilder: (context, index) {},
                                           // )
@@ -434,7 +429,7 @@ class HomePage extends StatelessWidget {
                     unselectedItemColor: Colors.white,
                     unselectedFontSize: 9,
                     selectedFontSize: 12,
-                    backgroundColor: Theme.of(context).backgroundColor,
+                    backgroundColor: Theme.of(context).scaffoldBackgroundColor,
                     selectedItemColor: Theme.of(context).primaryColor,
                     items: navcubit.bottomitems,
                     currentIndex: 0,

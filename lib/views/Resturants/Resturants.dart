@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:logger/logger.dart';
 import 'package:xeats/controllers/Components/AppBar/AppBarCustomized.dart';
@@ -16,9 +17,7 @@ import 'package:xeats/controllers/Cubits/OrderCubit/OrderCubit.dart';
 import 'package:xeats/controllers/Cubits/OrderCubit/OrderStates.dart';
 import 'package:xeats/controllers/Cubits/ProductsCubit/ProductsCubit.dart';
 import 'package:xeats/controllers/Cubits/ProductsCubit/ProductsStates.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:xeats/core/Constants/constants.dart';
-import 'package:xeats/theme.dart';
 import 'package:xeats/views/Layout/Layout.dart';
 import 'package:xeats/views/Profile/Profile.dart';
 import 'package:xeats/views/ResturantsMenu/ResturantsMenu.dart';
@@ -226,16 +225,17 @@ class Restaurants extends StatelessWidget {
                                                 child: CachedNetworkImage(
                                                   progressIndicatorBuilder: (context,
                                                           url, progress) =>
-                                                      Center(child: Loading()
+                                                      const Center(
+                                                          child: Loading()
 
                                                           //     CircularProgressIndicator(
                                                           //   value: progress.progress,
                                                           // ),
                                                           ),
-                                                  imageUrl:
-                                                      '${AppConstants.BaseUrl}' +
-                                                          restuarantsOfSlugListApi[
-                                                              index]['logo'],
+                                                  imageUrl: AppConstants
+                                                          .BaseUrl +
+                                                      restuarantsOfSlugListApi[
+                                                          index]['logo'],
                                                 ),
                                               ),
                                             ),
@@ -337,7 +337,7 @@ class Restaurants extends StatelessWidget {
             unselectedItemColor: Colors.white,
             unselectedFontSize: 9,
             selectedFontSize: 12,
-            backgroundColor: Theme.of(context).backgroundColor,
+            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
             selectedItemColor: Theme.of(context).primaryColor,
             items: navcubit.bottomitems,
             currentIndex: 1,
